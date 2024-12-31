@@ -1,2 +1,2 @@
-# CardanoLMS
-A code repo for cardanoLMS.
+# CardanoLRS
+A code repo for cardanoLRS.
