@@ -1,0 +1,60 @@
+.wallet-container {
+  background-color: #d8f3f8;
+  border-radius: 10px;
+  /* padding: 20px; */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.Outer-wallet-container {
+  display: flex;
+  height: 90vh;
+  width: 90%;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+
+.wallet-title {
+  font-family: "Inika";
+  font-size: 45px;
+  margin: 10px 0;
+  padding: 0px;
+  font-weight: bold;
+  color: #000;
+}
+
+.wallet-description {
+  font-family: "Inika";
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.wallet-button {
+  background-color: #18a7b8;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  font-family: "Inika";
+  color: #000;
+  font-weight: bold;
+  box-shadow: 0px 6px 5px #00000066;
+  /* padding-top: 20px; */
+}
+
+.wallet-button:hover {
+  background-color: #18cbdf;
+}
+
+.wallet-button:active {
+  transform: scale(0.98);
+}

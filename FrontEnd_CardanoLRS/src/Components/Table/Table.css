@@ -1,0 +1,98 @@
+.table-container-customer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  height: auto; /* Allow the container to expand with content */
+  padding-bottom: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.table thead {
+  background-color: #f4f4f4;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.status-active {
+  color: #28a745; /* Green for active */
+  font-weight: bold;
+}
+
+.status-inactive {
+  color: #dc3545; /* Red for inactive */
+  font-weight: bold;
+}
+
+.edit-btn {
+  color: #000000;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 4px;
+  border: none;
+}
+
+.edit-btn:hover {
+  background-color: transparent;
+}
+
+.delete-btn {
+  color: #ff0000;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+}
+
+.delete-btn:hover {
+  background-color: transparent;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.page-btn,
+.next-btn-customer {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: transparent;
+  color: black;
+}
+
+.page-btn.active {
+  background-color: #f0c6c6;
+  font-weight: bold;
+}
+
+.next-btn-customer:hover,
+.page-btn:hover {
+  background-color: #fdf1f1;
+}
+
+.table.button {
+  background-color: transparent;
+}

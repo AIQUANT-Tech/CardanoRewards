@@ -1,0 +1,17 @@
+.FirstSetup-css {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.FirstSetup-main-body {
+  flex: 1;
+  width: 70%;
+  height: fit-content;
+  /* padding: 20px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  box-sizing: border-box; */
+}

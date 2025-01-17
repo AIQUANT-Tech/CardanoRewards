@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  font-family: "Inika", serif;
+}
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #ffffff;
+  font-family: "Inika", sans-serif;
+  box-sizing: border-box;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 85%;
+  background-color: #ffffff;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* Button Container */
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.btn {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-business {
+  color: black;
+  font-size: 30px;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.btn-continue {
+  background-color: #da9c9c;
+  color: black;
+  width: 200px;
+  height: 50px;
+  font-size: 27px;
+  border-radius: 15px;
+  font-family: "Inika", serif;
+  margin-bottom: 10px;
+}
+
+.btn-continue:hover {
+  background-color: #a97979;
+}
+
+/* ========================SignIn Page CSS======================== */
+
+.SignIn-Container {
+  display: flex;
+  flex-direction: row;
+
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #ffffff;
+  font-family: "Inika", sans-serif;
+  box-sizing: border-box;
+}
+
+.First-Div {
+  width: 50%;
+  background-color: #ffffff;
+}
+
+.Image-SignIn-img {
+  height: 400px;
+  width: 530px;
+  padding-top: 30px;
+}
+
+.Second-Div {
+  width: 50%;
+  background-color: white;
+}
+
+.Welcome-Back {
+  color: black;
+  font-size: 45px;
+  text-align: center;
+  font-weight: 100;
+}
+
+.Sign-In {
+  color: black;
+  text-align: center;
+  font-weight: bold;
+}

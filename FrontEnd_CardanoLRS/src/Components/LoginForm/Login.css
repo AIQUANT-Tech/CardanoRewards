@@ -1,0 +1,127 @@
+.login-form-container {
+  display: flex;
+  padding-top: 20px;
+  flex-direction: column;
+  gap: 30px;
+  width: 500px;
+  font-family: Inika, sans-serif;
+}
+
+.input-group-signin {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 20px;
+}
+
+.input-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  min-width: 120px;
+}
+
+.input-field {
+  flex: 1;
+  padding: 15px;
+  padding-right: 50px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  font-size: 16px;
+  position: relative;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  outline: none;
+}
+
+.toggle-password:hover {
+  background-color: transparent;
+}
+.toggle-password:focus {
+  outline: none;
+}
+
+.eye-icon {
+  width: 30px;
+  height: 30px;
+  color: black;
+}
+
+.eye-icon:hover {
+  color: #ff8b8b;
+}
+
+.toggle-password:hover {
+  color: #ff8b8b;
+}
+
+.signin-button {
+  padding: 10px 20px;
+  background-color: #d9999b;
+  color: black;
+  border: none;
+  width: fit-content;
+
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 200px;
+  font-family: Inika;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+}
+
+.signin-button:focus {
+  outline: none;
+}
+.signin-button:hover {
+  background-color: #f3aeae;
+}
+
+.additional-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  margin-left: 25px;
+  font-size: 14px;
+  padding: 0;
+}
+
+.forgot-password-link {
+  color: #d9999b;
+  text-decoration: none;
+}
+
+.create-account-link {
+  color: blue;
+}
+
+.forgot-password-link:hover,
+.create-account-link:hover {
+  text-decoration: underline;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #d9999b;
+  background-color: #fff;
+}

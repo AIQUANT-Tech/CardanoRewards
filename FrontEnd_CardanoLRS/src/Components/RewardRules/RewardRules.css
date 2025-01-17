@@ -1,0 +1,232 @@
+/* html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: auto;
+  font-family: Inika, sans-serif;
+} */
+
+.reward-rules {
+  background-color: #f8d7da;
+  padding: 20px;
+  border-radius: 10px;
+  width: 95%;
+  margin: auto;
+  font-family: Inika;
+  color: #000000;
+  height: fit-content;
+  margin-bottom: 50px;
+}
+
+.reward-rules-container {
+  padding-bottom: 20px;
+  overflow-y: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.row-layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-group-cur {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group-percentage {
+  display: flex;
+  flex-direction: column;
+  width: 50px;
+}
+
+.input-group-amount {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+
+.input-group-tier {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+
+.currency-input-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.input-prefix {
+  padding: 8px;
+  background-color: #f1f1f1;
+  border-right: 1px solid #ccc;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+input,
+select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 20px;
+}
+
+button.add-button,
+button.remove-button {
+  /* padding: 8px; */
+  background-color: #ddd;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.add-button:hover,
+button.remove-button:hover {
+  background-color: #ccc;
+}
+
+button.remove-button {
+  background-color: white; /* Red color for remove button */
+  color: black;
+}
+
+button.add-button {
+  background-color: white; /* Green color for add button */
+  color: black;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+button.back-button,
+button.submit-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+button.back-button {
+  background-color: #d9999b;
+  color: black;
+  border: none;
+  width: fit-content;
+  height: 50px;
+  padding-left: 35px;
+  padding-right: 35px;
+  border-radius: 30px;
+  font-family: Inika;
+  font-weight: bold;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+  transition: background-color 0.3s ease;
+}
+
+button.submit-button {
+  background-color: #d9999b;
+  color: black;
+  border: none;
+  width: fit-content;
+  height: 50px;
+  padding-left: 35px;
+  padding-right: 35px;
+  border-radius: 30px;
+  font-family: Inika;
+  font-weight: bold;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+  transition: background-color 0.3s ease;
+}
+
+button.back-button:hover {
+  background-color: #f4bcbc;
+}
+
+button.submit-button:hover {
+  background-color: #f4bcbc;
+}
+.submitted-table {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.table-container {
+  max-height: 300px; /* Limit table height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f1f1f1;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .input-group-cur,
+  .input-group-amount,
+  .input-group-percentage,
+  .input-group-tier {
+    flex-basis: 100%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+}

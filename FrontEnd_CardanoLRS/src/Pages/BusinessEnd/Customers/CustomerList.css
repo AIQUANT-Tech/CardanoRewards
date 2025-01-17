@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  font-family: "Inika", serif;
+  height: 100%;
+}
+
+.Customer-css {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.Customer-main-body {
+  width: 100%;
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  height: 100%;
+}

@@ -1,0 +1,78 @@
+.UserDashBoard {
+  display: flex;
+  flex-direction: row;
+}
+
+body {
+  margin: 0;
+  font-family: "Inika", serif;
+}
+
+.UserDashboard-main-body {
+  width: 100%;
+  align-items: first baseline;
+  display: flex;
+  flex-direction: column;
+}
+.UserWelcome-text {
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+  padding-top: 15px;
+  letter-spacing: 2px;
+}
+
+.UserWelcome {
+  display: flex;
+  margin: 0px;
+  padding: 0px;
+}
+
+.UserSecond-text {
+  padding: 0px;
+  margin: 0px;
+  font-weight: 100;
+  font-size: 25px;
+}
+
+.Usermain-dash {
+  width: 90%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  padding-left: 20px;
+}
+.Usermain-dash2 {
+  width: 80%;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  padding-left: 75px;
+}
+/* .First {
+  width: 200px;
+  height: 150px;
+  background-color: aqua;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 20px;
+  margin: 0px;
+}
+
+.Second {
+  width: 200px;
+  height: 150px;
+  background-color: aqua;
+}
+.Third {
+  width: 200px;
+  height: 150px;
+  background-color: aqua;
+} */

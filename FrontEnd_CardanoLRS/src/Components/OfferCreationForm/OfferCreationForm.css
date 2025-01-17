@@ -1,0 +1,158 @@
+/* Container Styles */
+.offer-form-container {
+  background-color: #f8d7da;
+  width: 90%;
+  margin: 50px auto;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: Inika;
+}
+
+.form-title {
+  font-size: 28px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.form-subtitle {
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.offer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+/* Form Field Styles */
+.form-field-name {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+.form-field-description {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+
+.form-field label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-field input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+/* Add and Remove Buttons in Same Row */
+.button-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: none;
+}
+
+.add-offer-button,
+.remove-offer-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.add-offer-button:hover,
+.remove-offer-button:hover {
+  background-color: #ccc;
+  transform: scale(1.1);
+}
+
+.remove-offer-button {
+  color: red;
+}
+
+.add-offer-button {
+  color: green;
+}
+
+/* Navigation Buttons */
+.form-navigation {
+  display: flex;
+  /* justify-content: space-between; */
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.navigation-button {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.back-button {
+  background-color: #d9999b;
+  color: black;
+  border: none;
+  width: fit-content;
+  height: 50px;
+  padding-left: 35px;
+  padding-right: 35px;
+  border-radius: 30px;
+  font-family: Inika;
+  font-weight: bold;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #f4bcbc;
+}
+
+.next-button {
+  background-color: #d9999b;
+  color: black;
+  border: none;
+  width: fit-content;
+  height: 50px;
+  padding-left: 35px;
+  padding-right: 35px;
+  border-radius: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 70px;
+  font-family: Inika;
+  font-weight: bold;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+  transition: background-color 0.3s ease;
+}
+
+.next-button:hover {
+  background-color: #f4bcbc;
+}
