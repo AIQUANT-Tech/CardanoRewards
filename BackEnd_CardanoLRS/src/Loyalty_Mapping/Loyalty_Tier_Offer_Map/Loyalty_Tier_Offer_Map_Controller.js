@@ -23,6 +23,9 @@ export const mappingLoyaltyOffersTiers = async (req, res) => {
 
       let existingMapping = await LoyaltyTierOfferMap.findOne({ tier_id, offer_id });
 
+      console.log(existingMapping);
+      
+
       if (existingMapping) {
         existingMapping.status = Status;
         existingMapping.modified_at = new Date();
