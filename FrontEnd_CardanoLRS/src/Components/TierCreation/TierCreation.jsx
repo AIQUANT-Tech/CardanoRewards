@@ -67,18 +67,17 @@ const TierCreation = () => {
   };
 
   const handleNext = () => {
-    navigate("/SetupPage3");
+    navigate("/SetupPage4");
   };
 
   const handleBack = () => {
-    navigate("/SetupPage1");
+    navigate("/SetupPage2");
   };
 
   return (
     <div className="tier-creation-container">
-      {/* Left Section: Tier Creation */}
       <div className="tier-creation-section">
-        <h2>Tier Creation</h2>
+        <h2>Tier Mapping</h2>
         <div className="input-group">
           {/* Tier Name Dropdown */}
           <div className="input-field">

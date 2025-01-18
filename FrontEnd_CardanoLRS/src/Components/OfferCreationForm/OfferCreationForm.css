@@ -1,5 +1,6 @@
 /* Container Styles */
-.offer-form-container {
+.offer-form-container,
+.tier-form-container {
   background-color: #f8d7da;
   width: 90%;
   margin: 50px auto;
@@ -22,7 +23,8 @@
   font-weight: bold;
 }
 
-.offer-row {
+.offer-row,
+.tier-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -64,6 +66,8 @@
 }
 
 .add-offer-button,
+.add-tier-button,
+.remove-tier-button,
 .remove-offer-button {
   display: flex;
   justify-content: center;
@@ -80,16 +84,20 @@
 }
 
 .add-offer-button:hover,
+.add-tier-button:hover,
+.remove-tier-button:hover,
 .remove-offer-button:hover {
   background-color: #ccc;
   transform: scale(1.1);
 }
 
-.remove-offer-button {
+.remove-offer-button,
+.remove-tier-button {
   color: red;
 }
 
-.add-offer-button {
+.add-offer-button,
+.add-tier-button {
   color: green;
 }
 

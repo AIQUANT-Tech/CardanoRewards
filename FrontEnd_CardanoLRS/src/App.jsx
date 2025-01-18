@@ -18,6 +18,7 @@ import UserWallet2 from "./Pages/UserEnd/UserWallet/UserWallet2.jsx";
 import UserLogIn from "./Pages/UserEnd/UserLogIn/UserLogIn.jsx";
 import Profile from "./Pages/BusinessEnd/Profile/Profile.jsx";
 import SignInPage from "./Pages/BusinessEnd/SignInPage/SignInPage.jsx";
+import TierSetup from "./Pages/BusinessEnd/FirstSetupPage/TierSetup.jsx";
 
 const App = () => {
   return (
@@ -30,8 +31,9 @@ const App = () => {
         <Route path="/CustomerList" element={<CustomerList />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/SetupPage1" element={<FirstSetup />} />
-        <Route path="/SetupPage2" element={<SecondSetup />} />
-        <Route path="/SetupPage3" element={<ThirdSetup />} />
+        <Route path="/SetupPage2" element={<TierSetup />} />
+        <Route path="/SetupPage3" element={<SecondSetup />} />
+        <Route path="/SetupPage4" element={<ThirdSetup />} />
         <Route path="/Setup" element={<Setup />} />
 
         {/* User routes */}
