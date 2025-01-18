@@ -1,28 +1,73 @@
 import React, { useState } from "react";
-import "./OfferCreationForm.css";
+import "./OfferCreationForm.css"; // Ensure this file is correctly styled
 import { useNavigate } from "react-router-dom";
 
 const TierCreationForm = () => {
-  const [tiers, settiers] = useState([{ name: "", description: "" }]);
+  const [tiers, setTiers] = useState([{ name: "", description: "" }]);
+  const [loading, setLoading] = useState(false); // For loading spinner
   const navigate = useNavigate();
-  const handleAddtier = () => {
-    settiers([...tiers, { name: "", description: "" }]);
+
+  // Add a new tier
+  const handleAddTier = () => {
+    setTiers([...tiers, { name: "", description: "" }]);
   };
 
-  const handleRemovetier = (index) => {
-    const updatedtiers = tiers.filter((_, i) => i !== index);
-    settiers(updatedtiers);
+  // Remove an existing tier
+  const handleRemoveTier = (index) => {
+    const updatedTiers = tiers.filter((_, i) => i !== index);
+    setTiers(updatedTiers);
   };
 
+  // Handle input change for a specific tier
   const handleInputChange = (index, field, value) => {
-    const updatedtiers = [...tiers];
-    updatedtiers[index][field] = value;
-    settiers(updatedtiers);
+    const updatedTiers = [...tiers];
+    updatedTiers[index][field] = value;
+    setTiers(updatedTiers);
   };
 
-  const handleNext = () => {
-    console.log("tiers Submitted:", tiers);
-    navigate("/SetupPage3");
+  // Submit tiers to the backend API
+  const handleNext = async () => {
+    try {
+      setLoading(true); // Show loading spinner
+      const requestBody = {
+        loyalty_tier_crud_rq: {
+          tier_list: tiers.map((tier) => ({
+            tier_name: tier.name,
+            tier_desc: tier.description,
+            status: "Active", // Default status, customize if needed
+          })),
+          header: {
+            user_name: "test_user", // Replace with real user data
+          },
+        },
+      };
+
+      const response = await fetch(
+        "http://localhost:5000/api/tier/createLoyaltyTiers",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.loyalty_tier_crud_rs.status === "success") {
+        console.log("Tiers submitted successfully!");
+        navigate("/SetupPage3"); // Navigate to the next page
+      } else {
+        console.error("Failed to submit tiers");
+        alert("Failed to submit tiers. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting tiers:", error);
+      alert("An error occurred while submitting tiers. Please try again.");
+    } finally {
+      setLoading(false); // Hide loading spinner
+    }
   };
 
   return (
@@ -46,7 +91,7 @@ const TierCreationForm = () => {
               <label>Tier Description</label>
               <input
                 type="text"
-                placeholder="Enter tier Description"
+                placeholder="Enter tier description"
                 value={tier.description}
                 onChange={(e) =>
                   handleInputChange(index, "description", e.target.value)
@@ -57,13 +102,13 @@ const TierCreationForm = () => {
               {tiers.length > 1 && (
                 <button
                   className="remove-tier-button"
-                  onClick={() => handleRemovetier(index)}
+                  onClick={() => handleRemoveTier(index)}
                 >
                   −
                 </button>
               )}
               {index === tiers.length - 1 && (
-                <button className="add-tier-button" onClick={handleAddtier}>
+                <button className="add-tier-button" onClick={handleAddTier}>
                   +
                 </button>
               )}
@@ -72,8 +117,12 @@ const TierCreationForm = () => {
         ))}
       </div>
       <div className="form-navigation">
-        <button className="navigation-button next-button" onClick={handleNext}>
-          Next
+        <button
+          className="navigation-button next-button"
+          onClick={handleNext}
+          disabled={loading}
+        >
+          {loading ? "Submitting..." : "Next"}
         </button>
       </div>
     </div>

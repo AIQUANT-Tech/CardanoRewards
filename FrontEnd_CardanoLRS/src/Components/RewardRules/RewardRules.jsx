@@ -9,7 +9,7 @@ const RewardRules = () => {
   const [submittedRows, setSubmittedRows] = useState([]);
 
   const handleBack = () => {
-    navigate("/SetupPage2");
+    navigate("/SetupPage3");
   };
 
   const handleInputChange = (e, index) => {
