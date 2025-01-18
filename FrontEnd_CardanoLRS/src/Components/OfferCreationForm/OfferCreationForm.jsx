@@ -1,10 +1,13 @@
 // import React, { useState } from "react";
 // import "./OfferCreationForm.css";
 // import { useNavigate } from "react-router-dom";
+// import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
+// import "react-toastify/dist/ReactToastify.css"; // Importing styles for the toast
 
 // const OfferCreationForm = () => {
 //   const [offers, setOffers] = useState([{ name: "", description: "" }]);
 //   const navigate = useNavigate();
+
 //   const handleAddOffer = () => {
 //     setOffers([...offers, { name: "", description: "" }]);
 //   };
@@ -20,9 +23,42 @@
 //     setOffers(updatedOffers);
 //   };
 
-//   const handleNext = () => {
+//   const handleNext = async () => {
 //     console.log("Offers Submitted:", offers);
-//     navigate("/SetupPage2");
+//     try {
+//       const response = await fetch(
+//         "http://localhost:5000/api/offers/createLoyaltyOffers",
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({
+//             loyalty_offer_crud_rq: {
+//               offer_list: offers.map((offer) => ({
+//                 offer_name: offer.name,
+//                 offer_desc: offer.description,
+//                 status: "Active", // Set the status as needed (Active or Inactive)
+//               })),
+//               header: {
+//                 user_name: "yourUserNameHere", // Replace with actual username if needed
+//               },
+//             },
+//           }),
+//         }
+//       );
+
+//       const data = await response.json();
+//       if (response.ok) {
+//         toast.success("Offers submitted successfully!"); // Success message
+//         navigate("/SetupPage2"); // Redirect after success
+//       } else {
+//         toast.error(`Error: ${data.loyalty_offer_crud_rs.message}`);
+//       }
+//     } catch (error) {
+//       console.error("Error sending offers to backend:", error);
+//       toast.error("An error occurred while submitting the offers!"); // Catch error
+//     }
 //   };
 
 //   return (
@@ -76,6 +112,7 @@
 //           Next
 //         </button>
 //       </div>
+//       <ToastContainer /> {/* Add ToastContainer to render the toast messages */}
 //     </div>
 //   );
 // };
@@ -90,6 +127,8 @@ import "react-toastify/dist/ReactToastify.css"; // Importing styles for the toas
 
 const OfferCreationForm = () => {
   const [offers, setOffers] = useState([{ name: "", description: "" }]);
+  const [isLoading, setIsLoading] = useState(false); // New state for loading
+  const [showLoadingContainer, setShowLoadingContainer] = useState(false);
   const navigate = useNavigate();
 
   const handleAddOffer = () => {
@@ -108,6 +147,8 @@ const OfferCreationForm = () => {
   };
 
   const handleNext = async () => {
+    setIsLoading(true); // Show loading container
+    setShowLoadingContainer(true);
     console.log("Offers Submitted:", offers);
     try {
       const response = await fetch(
@@ -135,13 +176,20 @@ const OfferCreationForm = () => {
       const data = await response.json();
       if (response.ok) {
         toast.success("Offers submitted successfully!"); // Success message
-        navigate("/SetupPage2"); // Redirect after success
+        setTimeout(() => {
+          navigate("/SetupPage2");
+          setShowLoadingContainer(false);
+        }, 2500);
       } else {
         toast.error(`Error: ${data.loyalty_offer_crud_rs.message}`);
+        setShowLoadingContainer(false);
       }
     } catch (error) {
       console.error("Error sending offers to backend:", error);
       toast.error("An error occurred while submitting the offers!"); // Catch error
+      setShowLoadingContainer(false);
+    } finally {
+      setIsLoading(false); // Hide loading container after operation completes
     }
   };
 
@@ -192,11 +240,30 @@ const OfferCreationForm = () => {
         ))}
       </div>
       <div className="form-navigation">
-        <button className="navigation-button next-button" onClick={handleNext}>
-          Next
+        <button
+          className="navigation-button next-button"
+          onClick={handleNext}
+          disabled={isLoading} // Disable the button while loading
+        >
+          {isLoading ? "Submitting..." : "Next"}
         </button>
       </div>
-      <ToastContainer /> {/* Add ToastContainer to render the toast messages */}
+
+      {/* Loading Container */}
+      {showLoadingContainer && (
+        <div className="loading-overlay">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Submitting Offers...</p>
+          </div>
+        </div>
+      )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={true}
+      />
     </div>
   );
 };

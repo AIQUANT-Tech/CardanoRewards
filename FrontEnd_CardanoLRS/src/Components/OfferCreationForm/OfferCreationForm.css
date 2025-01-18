@@ -164,3 +164,99 @@
 .next-button:hover {
   background-color: #f4bcbc;
 }
+
+/* OfferCreationForm.css */
+
+/* Spinner Animation */
+.loading-spinner {
+  border: 4px solid #f3f3f3; /* Light gray */
+  border-top: 4px solid #3498db; /* Blue color */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Centered Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-overlay p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3; /* Light gray */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Toast Animation */
+.Toastify__toast {
+  animation: fadeIn 0.5s ease-in-out, fadeOut 0.5s ease-in-out 4.5s forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}

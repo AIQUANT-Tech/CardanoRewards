@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./OfferCreationForm.css"; // Ensure this file is correctly styled
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify"; // Import Toastify components
+import "react-toastify/dist/ReactToastify.css"; // Import the default styles for Toastify
 
 const TierCreationForm = () => {
   const [tiers, setTiers] = useState([{ name: "", description: "" }]);
   const [loading, setLoading] = useState(false); // For loading spinner
+  const [showLoadingContainer, setShowLoadingContainer] = useState(false); // State for controlling the loading container visibility
   const navigate = useNavigate();
 
   // Add a new tier
@@ -29,6 +32,8 @@ const TierCreationForm = () => {
   const handleNext = async () => {
     try {
       setLoading(true); // Show loading spinner
+      setShowLoadingContainer(true); // Show loading container
+
       const requestBody = {
         loyalty_tier_crud_rq: {
           tier_list: tiers.map((tier) => ({
@@ -56,15 +61,22 @@ const TierCreationForm = () => {
       const data = await response.json();
 
       if (data.loyalty_tier_crud_rs.status === "success") {
-        console.log("Tiers submitted successfully!");
-        navigate("/SetupPage3"); // Navigate to the next page
+        toast.success("Tiers submitted successfully!");
+        setTimeout(() => {
+          navigate("/SetupPage3"); // Navigate to the next page after 4 seconds
+          setShowLoadingContainer(false); // Hide loading container
+        }, 2500); // Wait for 4 seconds before redirecting
       } else {
         console.error("Failed to submit tiers");
-        alert("Failed to submit tiers. Please try again.");
+        toast.error("Failed to submit tiers. Please try again.");
+        setShowLoadingContainer(false);
       }
     } catch (error) {
       console.error("Error submitting tiers:", error);
-      alert("An error occurred while submitting tiers. Please try again.");
+      toast.error(
+        "An error occurred while submitting tiers. Please try again."
+      );
+      setShowLoadingContainer(false); // Hide loading container
     } finally {
       setLoading(false); // Hide loading spinner
     }
@@ -125,6 +137,23 @@ const TierCreationForm = () => {
           {loading ? "Submitting..." : "Next"}
         </button>
       </div>
+
+      {/* Loading Container */}
+      {showLoadingContainer && (
+        <div className="loading-overlay">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Submitting Tiers...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={true}
+      />
     </div>
   );
 };

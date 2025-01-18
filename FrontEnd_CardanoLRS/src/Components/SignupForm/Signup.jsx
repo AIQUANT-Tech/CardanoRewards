@@ -1,111 +1,9 @@
-// import React, { useState } from "react";
-// import "./Signup.css";
-// import { useNavigate } from "react-router-dom";
-// const SignupForm = () => {
-//   const navigate = useNavigate();
-//   const [email, setEmail] = useState("");
-//   const [error, setError] = useState("");
-//   const [focused, setFocused] = useState(false);
-
-//   const handleClick = () => {
-//     navigate("/SignInPage");
-//   };
-
-//   const setUpPage1 = () => {
-//     navigate("/SetupPage1");
-//   };
-//   const [mobile, setMobile] = useState("");
-
-//   const handleInputChange = (e) => {
-//     const value = e.target.value;
-
-//     // Only allow digits (0-9) and limit to 10 characters
-//     if (/^\d{0,10}$/.test(value)) {
-//       setMobile(value);
-//     }
-//   };
-//   const handleEmailChange = (e) => {
-//     const value = e.target.value;
-//     setEmail(value);
-
-//     // Regular expression for email validation
-//     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-//     if (!emailRegex.test(value)) {
-//       setError("Enter a valid email address");
-//     } else {
-//       setError("");
-//     }
-//   };
-
-//   const handleFocus = () => {
-//     setFocused(true);
-//   };
-
-//   const handleBlur = () => {
-//     setFocused(false);
-//   };
-
-//   return (
-//     <>
-//       <div className="Form">
-//         <h1 className="sign-text"> Sign Up</h1>
-//         <div className="signup-container">
-//           <div className="Container">
-//             <div className="input-container">
-//               <input
-//                 type="text"
-//                 placeholder="Enter Your Email Id"
-//                 className="sign-input"
-//                 value={email}
-//                 onChange={handleEmailChange}
-//                 required
-//                 onFocus={handleFocus}
-//                 onBlur={handleBlur}
-//               />
-//               {error && <div className="error-popup">{error}</div>}
-//             </div>
-//           </div>
-//           <div className="Container">
-//             <input
-//               type="password"
-//               placeholder="Enter Your Password"
-//               className="sign-input"
-//             ></input>
-//           </div>
-//           <div className="Container-mobile">
-//             <input
-//               type="text"
-//               placeholder="Enter Your Mobile Number"
-//               className="sign-input"
-//               maxLength="10"
-//               pattern="\d{10}"
-//               value={mobile}
-//               onChange={handleInputChange}
-//             ></input>
-//           </div>
-//         </div>
-
-//         <div className="signup-footer">
-//           <button type="submit" className="submit-button" onClick={setUpPage1}>
-//             Sign Up
-//           </button>
-//           <div>
-//             <a className="submit-button-next">Already have an account? </a>
-//             <a href="" className="submit-button-next2" onClick={handleClick}>
-//               Sign In
-//             </a>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default SignupForm;
-
 import React, { useState } from "react";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -115,15 +13,61 @@ const SignupForm = () => {
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle input changes
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (value === "") {
+      setError("");
+    } else if (!emailRegex.test(value)) {
+      setError("Enter a valid email address");
+    } else {
+      setError("");
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+
+    const passwordRegex =
+      /^(?=.*\d)(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+    if (value === "") {
+      setError("");
+    } else if (!passwordRegex.test(value)) {
+      setError(
+        "Password must be at least 6 characters long, contain an uppercase letter, a digit, and a special character"
+      );
+    } else {
+      setError("");
+    }
+  };
+
   const handleInputChange = (e, setter) => {
-    setter(e.target.value);
+    const value = e.target.value;
+    setter(value);
+
+    if (value === "") {
+      setError("This field cannot be empty");
+    } else {
+      setError("");
+    }
   };
 
   // Handle form submission
   const handleSignup = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Start loading
+
     try {
       const response = await fetch(
         "http://localhost:5000/api/user/createUser",
@@ -147,12 +91,17 @@ const SignupForm = () => {
 
       if (response.ok) {
         setSuccessMessage(data.message);
-        setTimeout(() => navigate("/SignInPage"), 2000); // Redirect after success
+        toast.success(data.message); // Toastify success message
+        setTimeout(() => navigate("/SignInPage"), 2000);
       } else {
         setError(data.message || "Signup failed");
+        toast.error(data.message || "Signup failed"); // Toastify error message
       }
     } catch (err) {
       setError("An error occurred while signing up");
+      toast.error("An error occurred while signing up"); // Toastify error message
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
@@ -191,21 +140,49 @@ const SignupForm = () => {
             placeholder="Enter Your Email Id"
             className="sign-input"
             value={email}
-            onChange={(e) => handleInputChange(e, setEmail)}
+            onChange={handleEmailChange}
             required
           />
         </div>
 
         {/* Password */}
         <div className="Container">
-          <input
-            type="password"
-            placeholder="Enter Your Password"
-            className="sign-input"
-            value={password}
-            onChange={(e) => handleInputChange(e, setPassword)}
-            required
-          />
+          {/* Password Section */}
+          <div className="input-group-signup">
+            <div className="password-wrapper" style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                placeholder="Enter Your Password"
+                className="sign-input"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={togglePasswordVisibility}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {showPassword ? (
+                  <Eye className="eye-icon" />
+                ) : (
+                  <EyeOff className="eye-icon" />
+                )}
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Error or Success Messages */}
@@ -216,8 +193,8 @@ const SignupForm = () => {
 
         {/* Submit Button */}
         <div className="signup-footer">
-          <button type="submit" className="submit-button">
-            Sign Up
+          <button type="submit" className="submit-button" disabled={isLoading}>
+            {isLoading ? "Signing Up..." : "Sign Up"}
           </button>
           <div>
             <span className="submit-button-next">Already have an account?</span>
@@ -231,6 +208,9 @@ const SignupForm = () => {
           </div>
         </div>
       </form>
+
+      {/* Toastify container */}
+      <ToastContainer />
     </div>
   );
 };
