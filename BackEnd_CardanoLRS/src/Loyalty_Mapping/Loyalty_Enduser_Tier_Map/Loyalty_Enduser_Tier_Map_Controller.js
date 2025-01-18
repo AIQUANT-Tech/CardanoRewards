@@ -42,8 +42,10 @@ export const editEndUserInfo = async (req, res) => {
           last_tier_assigned_at: new Date(),
           status: "A",
         });
+        // Till this it is working
+        await newMapping.save(); // This is giving me error, Look at the Schema
 
-        await newMapping.save();
+        // Getthin this Error: 'E11000 duplicate key error collection: test.loyaltyendusertiermaps index: mapping_id_1 dup key: { mapping_id: null }'
       }
     }
 
