@@ -148,15 +148,17 @@ export const loginInfoForEndUser = async (req, res) => {
 export const fetchEndUsersInfo = async (req, res) => {
   try {
     const endUsers = await User.find({ role: "End User" });
-
-    console.log(endUsers);
-
     const userInfoList = [];
 
     for (const user of endUsers) {
-      const tier_details = await LoyaltyEndUserTierMap.findOne({
-        user_id: user.user_id,
-      });
+      const tier_details = await LoyaltyEndUserTierMap.findOne(
+        {},
+        {
+          user_id: user.user_id,
+        }
+      );
+
+      console.log(tier_details);
 
       const tier = await LoyaltyTier.find({ tier_id: tier_details.tier_id });
 

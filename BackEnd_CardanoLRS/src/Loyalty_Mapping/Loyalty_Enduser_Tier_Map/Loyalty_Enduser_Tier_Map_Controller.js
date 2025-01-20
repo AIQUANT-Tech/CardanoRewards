@@ -2,6 +2,10 @@ import LoyaltyEndUserTierMap from "./Loyalty_Enduser_Tier_Map_Schema.js";
 import LoyaltyTier from "../../Loyalty_Mast/Loyalty_Tier_Mast/Loyalty_Tier_Mast_Schema.js";
 import User from "../../Loyalty_Mast/Loyalty_User_Mast/Loyalty_User_Mast_Schema.js";
 
+const generateNumericUUID = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
 export const editEndUserInfo = async (req, res) => {
   try {
     const { user_info } = req.body.loyalty_end_user_edit_rq.user_info_list;
@@ -34,6 +38,7 @@ export const editEndUserInfo = async (req, res) => {
         await existingMapping.save();
       } else {
         const newMapping = new LoyaltyEndUserTierMap({
+          mapping_id: generateNumericUUID(),
           user_id,
           tier_id: tier.tier_id,
           created_by: "user",
@@ -43,9 +48,10 @@ export const editEndUserInfo = async (req, res) => {
           status: "A",
         });
         // Till this it is working
-        await newMapping.save(); // This is giving me error, Look at the Schema
+        console.log("----------------I am here-----------------");
+        console.log("Printing newMapping: ", newMapping);
 
-        // Getthin this Error: 'E11000 duplicate key error collection: test.loyaltyendusertiermaps index: mapping_id_1 dup key: { mapping_id: null }'
+        await newMapping.save();
       }
     }
 

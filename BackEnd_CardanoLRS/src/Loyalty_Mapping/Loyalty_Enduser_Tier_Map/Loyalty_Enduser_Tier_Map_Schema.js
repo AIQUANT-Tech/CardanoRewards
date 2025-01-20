@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import mongooseSequence from 'mongoose-sequence';
+import mongooseSequence from "mongoose-sequence";
 
 const AutoIncrement = mongooseSequence(mongoose);
 
@@ -7,16 +7,17 @@ const loyaltyEndUserTierMapSchema = new mongoose.Schema({
   mapping_id: {
     type: Number,
     unique: true,
+    required: true,
   },
   tier_id: {
     type: Number,
     required: true,
-    ref: 'LoyaltyTier', 
+    ref: "LoyaltyTier",
   },
   user_id: {
     type: Number,
     required: true,
-    ref: 'User', 
+    ref: "User",
   },
   created_at: {
     type: Date,
@@ -41,11 +42,14 @@ const loyaltyEndUserTierMapSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['A', 'I'], 
+    enum: ["A", "I"],
     required: true,
   },
 });
 
-const LoyaltyEndUserTierMap = mongoose.model('LoyaltyEndUserTierMap', loyaltyEndUserTierMapSchema);
+const LoyaltyEndUserTierMap = mongoose.model(
+  "LoyaltyEndUserTierMap",
+  loyaltyEndUserTierMapSchema
+);
 
 export default LoyaltyEndUserTierMap;
