@@ -155,8 +155,6 @@ export const fetchEndUsersInfo = async (req, res) => {
         user_id: user.user_id,
       });
 
-      console.log(tier_details);
-
       const tier = await LoyaltyTier.find({ tier_id: tier_details.tier_id });
 
       const rule = await LoyaltyTierWiseRuleSetup.findOne({
@@ -171,6 +169,7 @@ export const fetchEndUsersInfo = async (req, res) => {
         user_id: user.user_id,
         email: user.email,
         user_name: user.first_name || "End User",
+        last_name: user.last_name || "Last Name",
         tier_editable: true,
         tier: {
           tier_id: tier ? tier[0].tier_id : null,
