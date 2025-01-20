@@ -131,6 +131,7 @@ button.submit-button {
 }
 
 button.back-button {
+  font-size: 20px;
   background-color: #d9999b;
   color: black;
   border: none;
@@ -148,6 +149,7 @@ button.back-button {
 }
 
 button.submit-button {
+  font-size: 20px;
   background-color: #d9999b;
   color: black;
   border: none;

@@ -17,3 +17,33 @@ body {
   flex: 1;
   height: 100%;
 }
+
+.loading-container-customer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Stack spinner and text vertically */
+  height: 100vh;
+}
+
+.loading-spinner-customer {
+  border: 5px solid #f3f3f3; /* Light gray */
+  border-top: 5px solid #f4bcbc; /* Blue color */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+.loading-text {
+  margin-top: 10px; /* Add space between the spinner and text */
+  font-size: 18px; /* Optional: Adjust the font size */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
