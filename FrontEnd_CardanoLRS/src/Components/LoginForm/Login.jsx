@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify"; // Import Toastify
-import "react-toastify/dist/ReactToastify.css"; // Toastify CSS
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -48,7 +48,10 @@ const LoginForm = () => {
         console.log(data.loyalty_end_user_login_rs.user_info);
 
         // Navigate to Dashboard
-        setTimeout(() => navigate("/Dashboard"), 1500); // Navigate after a slight delay
+        setTimeout(() => {
+          navigate("/Dashboard");
+          window.history.replaceState(null, "", "/SignInPage");
+        }, 1500);
       } else {
         // Show error toast
         toast.error(data.loyalty_end_user_login_rs.message || "Login failed");
@@ -63,6 +66,17 @@ const LoginForm = () => {
   const handleSignUpNavigation = () => {
     navigate("/SignUpPage");
   };
+
+  useEffect(() => {
+    const onBeforeUnload = () => {
+      window.history.replaceState(null, "", window.location.href);
+    };
+    window.addEventListener("popstate", onBeforeUnload);
+
+    return () => {
+      window.removeEventListener("popstate", onBeforeUnload);
+    };
+  }, []);
 
   return (
     <div className="login-form-container">
