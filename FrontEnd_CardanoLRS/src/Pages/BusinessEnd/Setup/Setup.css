@@ -16,3 +16,72 @@ body {
   font-family: "Inika", serif;
   height: 100%;
 }
+
+.tab-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tab-buttons button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  color: black;
+}
+
+.tab-buttons button.active {
+  background-color: #f0c6c6;
+  /* color: white; */
+  color: black;
+  /* border-color: #007bff; */
+}
+
+.tab-buttons button:hover {
+  background-color: #d89595;
+  color: black;
+}
+
+.tab-content {
+  padding: 1rem;
+  background-color: #fff;
+  /* border: 1px solid #ddd; */
+  border-radius: 5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input,
+textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  /* width: 100%; */
+}
+
+button[type="setup-submit"] {
+  padding: 0.5rem 1rem;
+  background-color: #f0c6c6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
+}
+
+button[type="setup-submit"]:hover {
+  background-color: #d89595;
+}
