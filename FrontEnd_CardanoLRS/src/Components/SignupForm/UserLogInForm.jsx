@@ -10,7 +10,7 @@ const UserSignInForm = () => {
   const [focused, setFocused] = useState(false);
 
   const handleClick = () => {
-    navigate("/SignUpPage");
+    navigate("/UserDashBoard");
   };
 
   const handleEmailChange = (e) => {
@@ -40,7 +40,7 @@ const UserSignInForm = () => {
 
   return (
     <>
-      <div className="Form" style={{ "--form-bg-color": "#18A7B8" }}>
+      <div className="User-Form" style={{ "--form-bg-color": "#18A7B8" }}>
         {" "}
         <h1 className="sign-text"> Sign In</h1>
         <div className="signup-container">
@@ -72,7 +72,8 @@ const UserSignInForm = () => {
         {/* <div className="signup-footer"> */}
         <button
           type="submit"
-          className="submit-button"
+          onClick={handleClick}
+          className="user-submit-button"
           style={{ backgroundColor: "#0E808E" }}
         >
           Sign In
