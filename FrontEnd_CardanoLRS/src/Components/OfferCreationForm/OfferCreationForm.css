@@ -104,9 +104,11 @@
 /* Navigation Buttons */
 .form-navigation {
   display: flex;
-  /* justify-content: space-between; */
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 30px;
+  flex-wrap: wrap;
+  position: relative;
+  right: 40px;
 }
 
 .navigation-button {

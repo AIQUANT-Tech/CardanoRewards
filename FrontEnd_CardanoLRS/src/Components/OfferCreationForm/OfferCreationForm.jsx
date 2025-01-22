@@ -6,6 +6,8 @@
 
 // const OfferCreationForm = () => {
 //   const [offers, setOffers] = useState([{ name: "", description: "" }]);
+//   const [isLoading, setIsLoading] = useState(false); // New state for loading
+//   const [showLoadingContainer, setShowLoadingContainer] = useState(false);
 //   const navigate = useNavigate();
 
 //   const handleAddOffer = () => {
@@ -23,7 +25,13 @@
 //     setOffers(updatedOffers);
 //   };
 
-//   const handleNext = async () => {
+//   const handleNext = () => {
+//     navigate("/SetupPage2");
+//   };
+
+//   const handleSubmit = async () => {
+//     setIsLoading(true); // Show loading container
+//     setShowLoadingContainer(true);
 //     console.log("Offers Submitted:", offers);
 //     try {
 //       const response = await fetch(
@@ -51,13 +59,20 @@
 //       const data = await response.json();
 //       if (response.ok) {
 //         toast.success("Offers submitted successfully!"); // Success message
-//         navigate("/SetupPage2"); // Redirect after success
+//         setTimeout(() => {
+//           // navigate("/SetupPage2");
+//           setShowLoadingContainer(false);
+//         }, 2500);
 //       } else {
 //         toast.error(`Error: ${data.loyalty_offer_crud_rs.message}`);
+//         setShowLoadingContainer(false);
 //       }
 //     } catch (error) {
 //       console.error("Error sending offers to backend:", error);
 //       toast.error("An error occurred while submitting the offers!"); // Catch error
+//       setShowLoadingContainer(false);
+//     } finally {
+//       setIsLoading(false); // Hide loading container after operation completes
 //     }
 //   };
 
@@ -108,11 +123,37 @@
 //         ))}
 //       </div>
 //       <div className="form-navigation">
-//         <button className="navigation-button next-button" onClick={handleNext}>
+//         <button
+//           className="navigation-button next-button"
+//           onClick={handleSubmit}
+//           disabled={isLoading} // Disable the button while loading
+//         >
+//           {isLoading ? "Submitting..." : "Submit"}
+//         </button>
+//         <button
+//           className="navigation-button next-button"
+//           onClick={handleNext}
+//           disabled={isLoading}
+//         >
 //           Next
 //         </button>
 //       </div>
-//       <ToastContainer /> {/* Add ToastContainer to render the toast messages */}
+
+//       {/* Loading Container */}
+//       {showLoadingContainer && (
+//         <div className="loading-overlay">
+//           <div className="loading-container">
+//             <div className="loading-spinner"></div>
+//             <p>Submitting Offers...</p>
+//           </div>
+//         </div>
+//       )}
+
+//       <ToastContainer
+//         position="top-right"
+//         autoClose={5000}
+//         hideProgressBar={true}
+//       />
 //     </div>
 //   );
 // };
@@ -125,7 +166,8 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Importing styles for the toast
 
-const OfferCreationForm = () => {
+const OfferCreationForm = ({ showNextButton = true }) => {
+  // Add prop with default value
   const [offers, setOffers] = useState([{ name: "", description: "" }]);
   const [isLoading, setIsLoading] = useState(false); // New state for loading
   const [showLoadingContainer, setShowLoadingContainer] = useState(false);
@@ -146,7 +188,11 @@ const OfferCreationForm = () => {
     setOffers(updatedOffers);
   };
 
-  const handleNext = async () => {
+  const handleNext = () => {
+    navigate("/SetupPage2");
+  };
+
+  const handleSubmit = async () => {
     setIsLoading(true); // Show loading container
     setShowLoadingContainer(true);
     console.log("Offers Submitted:", offers);
@@ -177,7 +223,7 @@ const OfferCreationForm = () => {
       if (response.ok) {
         toast.success("Offers submitted successfully!"); // Success message
         setTimeout(() => {
-          navigate("/SetupPage2");
+          // navigate("/SetupPage2");
           setShowLoadingContainer(false);
         }, 2500);
       } else {
@@ -242,11 +288,20 @@ const OfferCreationForm = () => {
       <div className="form-navigation">
         <button
           className="navigation-button next-button"
-          onClick={handleNext}
+          onClick={handleSubmit}
           disabled={isLoading} // Disable the button while loading
         >
-          {isLoading ? "Submitting..." : "Next"}
+          {isLoading ? "Submitting..." : "Submit"}
         </button>
+        {showNextButton && ( // Conditionally render the "Next" button
+          <button
+            className="navigation-button next-button"
+            onClick={handleNext}
+            disabled={isLoading}
+          >
+            Next
+          </button>
+        )}
       </div>
 
       {/* Loading Container */}

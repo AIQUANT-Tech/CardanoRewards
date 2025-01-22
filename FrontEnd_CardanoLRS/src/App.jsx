@@ -5,7 +5,7 @@ import LandingPage from "./Pages/BusinessEnd/SignInPage/LandingPage.jsx";
 import SignUpPage from "./Pages/BusinessEnd/SignUpPage/SignUpPage.jsx";
 import Dashboard from "./Pages/BusinessEnd/Dashboard/Dashboard.jsx";
 import CustomerList from "./Pages/BusinessEnd/Customers/CustomerList.jsx";
-
+import Setting from "./Pages/BusinessEnd/Setting/Setting.jsx";
 import FirstSetup from "./Pages/BusinessEnd/FirstSetupPage/FirstSetupPage.jsx";
 import SecondSetup from "./Pages/BusinessEnd/FirstSetupPage/SecondSetupPage.jsx";
 import ThirdSetup from "./Pages/BusinessEnd/FirstSetupPage/ThirdSetupPage.jsx";
@@ -35,6 +35,7 @@ const App = () => {
         <Route path="/SetupPage3" element={<SecondSetup />} />
         <Route path="/SetupPage4" element={<ThirdSetup />} />
         <Route path="/Setup" element={<Setup />} />
+        <Route path="/Setting" element={<Setting />} />
 
         {/* User routes */}
         <Route path="/UserDashBoard" element={<UserDashBoard />} />

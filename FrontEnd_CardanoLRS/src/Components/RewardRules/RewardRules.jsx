@@ -232,7 +232,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const RewardRules = () => {
+const RewardRules = ({ showNext = true }) => {
   const navigate = useNavigate();
   const [rows, setRows] = useState([{ amount: "", percentage: "", tier: "" }]);
   const [submittedRows, setSubmittedRows] = useState([]); // Keep track of rows added via +
@@ -332,9 +332,9 @@ const RewardRules = () => {
 
       if (data.loyalty_rule_setup_with_tier_rs.status === "success") {
         toast.success("Tier-wise reward rules saved successfully!"); // Success message
-        setTimeout(() => {
-          navigate("/SignInPage"); // Redirect after 3 seconds
-        }, 3000);
+        // setTimeout(() => {
+        //   navigate("/SignInPage"); // Redirect after 3 seconds
+        // }, 3000);
       } else {
         toast.error("Failed to save tier-wise reward rules."); // Error message
       }
@@ -430,10 +430,7 @@ const RewardRules = () => {
             ))}
           </div>
 
-          <div className="form-actions">
-            <button type="button" className="back-button" onClick={handleBack}>
-              Back
-            </button>
+          <div className="reward-form-actions">
             <button
               type="submit"
               className="submit-button"
@@ -441,6 +438,15 @@ const RewardRules = () => {
             >
               Submit
             </button>
+            {showNext && (
+              <button
+                type="button"
+                className="back-button"
+                onClick={() => navigate("/SignInPage")}
+              >
+                Go To SignIn Page
+              </button>
+            )}
           </div>
         </form>
 

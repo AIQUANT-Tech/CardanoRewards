@@ -5,6 +5,7 @@ import {
   UserRound,
   List,
   SlidersHorizontal,
+  Settings,
 } from "lucide-react";
 
 const menuItems = [
@@ -27,6 +28,11 @@ const menuItems = [
     label: "Setup",
     path: "/Setup",
     icon: <SlidersHorizontal />,
+  },
+  {
+    label: "Settings",
+    path: "/Setting",
+    icon: <Settings />,
   },
 ];
 

@@ -11,7 +11,7 @@ body {
 
 .SideBar-Menu {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   padding-left: 20px;
   padding-right: 20px;
   margin: 0;
