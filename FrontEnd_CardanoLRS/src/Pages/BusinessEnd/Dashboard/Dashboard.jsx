@@ -43,7 +43,7 @@ const Dashboard = () => {
     };
 
     fetchTotalMembers();
-  }, []);
+  }, [totalMembers]);
 
   return (
     <>
