@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import Card from "../../../Components/Card/Card";
 import "./Dashboard.css";
 import { Gauge, Bitcoin, Clock } from "lucide-react";
@@ -7,6 +6,45 @@ import AdminSideBar from "../../../Components/SideBar/AdminSideBar";
 import Header from "../../../Components/Header/header";
 
 const Dashboard = () => {
+  const [totalMembers, setTotalMembers] = useState(0);
+
+  useEffect(() => {
+    const fetchTotalMembers = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/user/fetchEndUsersInfo",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              loyalty_end_users_info_rq: {
+                header: {
+                  user_name: "businessUser",
+                  product: "LRS",
+                  request_type: "FETCH_END_USER_INFO",
+                },
+              },
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        const users =
+          data?.loyalty_end_users_info_rs?.user_info_list?.overall_info
+            ?.total_users || [];
+
+        setTotalMembers(users);
+      } catch (error) {
+        console.error("Error fetching total members:", error);
+      }
+    };
+
+    fetchTotalMembers();
+  }, []);
+
   return (
     <>
       <Header title="Dashboard" />
@@ -24,7 +62,7 @@ const Dashboard = () => {
             <Card
               icon={<Gauge style={{ width: "40px", height: "40px" }} />}
               primaryText="Total Members:"
-              secondaryText="2000"
+              secondaryText={totalMembers.toString()} // Display total members
               backgroundColor={"#f8d6d6"}
             />
             <Card

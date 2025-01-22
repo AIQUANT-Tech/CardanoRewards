@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Signup.css"; // Reuse the same styling
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserSignInForm = () => {
   const navigate = useNavigate();
@@ -8,9 +10,52 @@ const UserSignInForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [focused, setFocused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
-  const handleClick = () => {
-    navigate("/UserDashBoard");
+  const handleClick = async (e) => {
+    e.preventDefault();
+
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError("Enter a valid email address");
+      return;
+    }
+
+    // Clear previous error
+    setError("");
+    setIsLoading(true); // Start loading
+
+    try {
+      const response = await fetch("http://localhost:5000/api/user/fetchUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message);
+        toast.error(data.message);
+        setIsLoading(false);
+        return;
+      }
+
+      toast.success("Login successful!");
+
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/UserDashBoard");
+      }, 2000);
+    } catch (err) {
+      setIsLoading(false);
+      setError("An error occurred while signing in");
+      toast.error("An error occurred while signing in");
+      console.error("Error:", err);
+    }
   };
 
   const handleEmailChange = (e) => {
@@ -40,9 +85,9 @@ const UserSignInForm = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="User-Form" style={{ "--form-bg-color": "#18A7B8" }}>
-        {" "}
-        <h1 className="sign-text"> Sign In</h1>
+        <h1 className="sign-text">Sign In</h1>
         <div className="signup-container">
           <div className="Container">
             <div className="input-container">
@@ -66,19 +111,27 @@ const UserSignInForm = () => {
               className="sign-input"
               value={password}
               onChange={handlePasswordChange}
-            ></input>
+            />
           </div>
         </div>
-        {/* <div className="signup-footer"> */}
         <button
           type="submit"
           onClick={handleClick}
           className="user-submit-button"
+          disabled={isLoading}
           style={{ backgroundColor: "#0E808E" }}
         >
-          Sign In
+          {isLoading ? "Signing In..." : "Sign In"}
         </button>
-        {/* </div> */}
+
+        {isLoading && (
+          <div className="loading-overlay">
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>Loading...</p>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

@@ -59,17 +59,104 @@ export const createUser = async (req, res) => {
 };
 
 //Login user
+// export const loginInfoForEndUser = async (req, res) => {
+//   try {
+//     const { loyalty_end_user_login_rq } = req.body;
+//     const { email, password } = loyalty_end_user_login_rq.user_info;
+
+//     if (loyalty_end_user_login_rq.header.request_type !== "END_USER_LOGIN") {
+//       return res.status(400).json({
+//         error: "Invalid request type",
+//       });
+//     }
+
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({
+//         loyalty_end_user_login_rs: {
+//           status: "failure",
+//           message: "User not found",
+//         },
+//       });
+//     }
+
+//     const isPasswordMatch = await bcrypt.compare(password, user.password_hash);
+//     if (!isPasswordMatch) {
+//       return res.status(400).json({
+//         loyalty_end_user_login_rs: {
+//           status: "failure",
+//           message: "Invalid password",
+//         },
+//       });
+//     }
+
+//     const userTier = await LoyaltyTier.findById(user.tier_id);
+//     const tierDetails = {
+//       tier_id: userTier ? userTier.tier_id : null,
+//       tier_name: userTier ? userTier.tier_name : "No Tier",
+//     };
+
+//     const assignedOffers = await LoyaltyOffer.find({ user_id: user.user_id });
+//     const offers = assignedOffers.map((offer) => ({
+//       offer_id: offer.offer_id,
+//       offer_name: offer.offer_name,
+//       offer_desc: offer.offer_desc,
+//     }));
+
+//     const transactions = await LoyaltyUserWalletTransaction.find({
+//       user_id: user.user_id,
+//     });
+//     const walletInfo = {
+//       ada_balance: 1200,
+//       rewards_earned: 800,
+//       rewards_spent: 300,
+//       rewards_balance: 500,
+//       transactions: transactions.map((transaction) => ({
+//         transaction_id: transaction.transaction_id,
+//         date: transaction.date,
+//         amount: transaction.amount,
+//         type: transaction.type,
+//         desc: transaction.desc,
+//       })),
+//     };
+
+//     return res.status(200).json({
+//       loyalty_end_user_login_rs: {
+//         status: "success",
+//         message: "Login successful",
+//         user_info: {
+//           user_id: user.user_id,
+//           email: user.email,
+//           tier: tierDetails,
+//           assigned_offers: offers,
+//           wallet_info: walletInfo,
+//         },
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error during login:", error);
+//     return res.status(500).json({
+//       loyalty_end_user_login_rs: {
+//         status: "failure",
+//         message: "An error occurred during login",
+//       },
+//     });
+//   }
+// };
+
 export const loginInfoForEndUser = async (req, res) => {
   try {
     const { loyalty_end_user_login_rq } = req.body;
     const { email, password } = loyalty_end_user_login_rq.user_info;
 
+    // Validate request type
     if (loyalty_end_user_login_rq.header.request_type !== "END_USER_LOGIN") {
       return res.status(400).json({
         error: "Invalid request type",
       });
     }
 
+    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({
@@ -80,6 +167,17 @@ export const loginInfoForEndUser = async (req, res) => {
       });
     }
 
+    // Check if the user is a "Business User"
+    if (user.role === "End User") {
+      return res.status(403).json({
+        loyalty_end_user_login_rs: {
+          status: "failure",
+          message: "Access denied. End User are not allowed to log in here.",
+        },
+      });
+    }
+
+    // Verify password
     const isPasswordMatch = await bcrypt.compare(password, user.password_hash);
     if (!isPasswordMatch) {
       return res.status(400).json({
@@ -90,12 +188,14 @@ export const loginInfoForEndUser = async (req, res) => {
       });
     }
 
+    // Fetch user tier details
     const userTier = await LoyaltyTier.findById(user.tier_id);
     const tierDetails = {
       tier_id: userTier ? userTier.tier_id : null,
       tier_name: userTier ? userTier.tier_name : "No Tier",
     };
 
+    // Fetch assigned offers
     const assignedOffers = await LoyaltyOffer.find({ user_id: user.user_id });
     const offers = assignedOffers.map((offer) => ({
       offer_id: offer.offer_id,
@@ -103,6 +203,7 @@ export const loginInfoForEndUser = async (req, res) => {
       offer_desc: offer.offer_desc,
     }));
 
+    // Fetch wallet transactions
     const transactions = await LoyaltyUserWalletTransaction.find({
       user_id: user.user_id,
     });
@@ -120,6 +221,7 @@ export const loginInfoForEndUser = async (req, res) => {
       })),
     };
 
+    // Successful response
     return res.status(200).json({
       loyalty_end_user_login_rs: {
         status: "success",
@@ -212,5 +314,43 @@ export const fetchEndUsersInfo = async (req, res) => {
     return res.status(500).json({
       message: "An error occurred while fetching end user information",
     });
+  }
+};
+
+export const fetchUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email });
+    console.log(user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Verify role
+    if (user.role !== "End User") {
+      return res.status(403).json({ message: "User is not an End user" });
+    }
+
+    // Verify password
+    const isPasswordMatch = await bcrypt.compare(password, user.password_hash);
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+
+    // Return user information
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while fetching user" });
   }
 };

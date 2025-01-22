@@ -3,6 +3,7 @@ import {
   createUser,
   fetchEndUsersInfo,
   loginInfoForEndUser,
+  fetchUser,
 } from "./Loyalty_User_Mast_Controller.js";
 
 const router = express.Router();
@@ -15,5 +16,8 @@ router.post("/loginInfoForEndUser", loginInfoForEndUser);
 
 //Route to fetch end user info
 router.post("/fetchEndUsersInfo", fetchEndUsersInfo);
+
+//Route to fetch End user
+router.post("/fetchUser", fetchUser);
 
 export default router;
