@@ -47,8 +47,6 @@ export const editEndUserInfo = async (req, res) => {
           last_tier_assigned_at: new Date(),
           status: "A",
         });
-        // Till this it is working
-        console.log("----------------I am here-----------------");
         console.log("Printing newMapping: ", newMapping);
 
         await newMapping.save();

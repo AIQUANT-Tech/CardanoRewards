@@ -6,6 +6,8 @@ import LoyaltyUserWalletTransaction from "../../Loyalty_Rule_and_Transaction/Loy
 import LoyaltyTierWiseRuleSetup from "../../Loyalty_Rule_and_Transaction/Loyalty_Tier_Wise_Rule_Setup/Loyalty_Tier_Wise_Rule_Setup_Schema.js";
 import LoyaltyEndUserTierMap from "../../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Schema.js";
 
+import { generateToken } from "../../auth/jwtUtil.js"; 
+
 //Create user
 export const createUser = async (req, res) => {
   try {
@@ -144,13 +146,13 @@ export const createUser = async (req, res) => {
 //   }
 // };
 
-export const loginInfoForEndUser = async (req, res) => {
+export const loginInfoForBusinessUser = async (req, res) => {
   try {
     const { loyalty_end_user_login_rq } = req.body;
     const { email, password } = loyalty_end_user_login_rq.user_info;
 
     // Validate request type
-    if (loyalty_end_user_login_rq.header.request_type !== "END_USER_LOGIN") {
+    if (loyalty_end_user_login_rq.header.request_type !== "BUSINESS_USER_LOGIN") {
       return res.status(400).json({
         error: "Invalid request type",
       });
@@ -166,6 +168,8 @@ export const loginInfoForEndUser = async (req, res) => {
         },
       });
     }
+
+    const token = generateToken(user);
 
     // Check if the user is a "Business User"
     if (user.role === "End User") {
@@ -223,11 +227,13 @@ export const loginInfoForEndUser = async (req, res) => {
 
     // Successful response
     return res.status(200).json({
-      loyalty_end_user_login_rs: {
+      loyalty_business_user_login_rs: {
         status: "success",
+        token,
         message: "Login successful",
         user_info: {
           user_id: user.user_id,
+          username: user.first_name+" "+user.last_name,
           email: user.email,
           tier: tierDetails,
           assigned_offers: offers,
@@ -317,22 +323,23 @@ export const fetchEndUsersInfo = async (req, res) => {
   }
 };
 
-export const fetchUser = async (req, res) => {
+export const loginInfoForEndUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body.loyalty_end_user_login_rq.user_info;
 
     if (!email || !password) {
       return res
         .status(400)
-        .json({ message: "Email and password are required" });
+        .json({ message: "Email and loyalty_end_user_login_rqpassword are required" });
     }
 
     const user = await User.findOne({ email });
-    console.log(user);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    const token = generateToken(user);
 
     // Verify role
     if (user.role !== "End User") {
@@ -345,8 +352,58 @@ export const fetchUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid password" });
     }
 
+    const tier_details = await LoyaltyEndUserTierMap.findOne({
+      user_id: user.user_id,
+    });    
+
+    const userTier = await LoyaltyTier.findOne({tier_id: tier_details.tier_id});     
+
+    const tierDetails = {
+      tier_id: userTier.tier_id,
+      tier_name: userTier.tier_name,
+    };
+    // Fetch assigned offers
+    const assignedOffers = await LoyaltyOffer.find({ user_id: user.user_id });
+    const offers = assignedOffers.map((offer) => ({
+      offer_id: offer.offer_id,
+      offer_name: offer.offer_name,
+      offer_desc: offer.offer_desc,
+    }));
+
+    // Fetch wallet transactions
+    const transactions = await LoyaltyUserWalletTransaction.find({
+      user_id: user.user_id,
+    });
+    const walletInfo = {
+      ada_balance: 1200,
+      rewards_earned: 800,
+      rewards_spent: 300,
+      rewards_balance: 500,
+      transactions: transactions.map((transaction) => ({
+        transaction_id: transaction.transaction_id,
+        date: transaction.date,
+        amount: transaction.amount,
+        type: transaction.type,
+        desc: transaction.desc,
+      })),
+    };
+
     // Return user information
-    return res.status(200).json({ user });
+    return res.status(200).json({ 
+      loyalty_end_user_login_rs: {
+      status: "success",
+      token,
+      message: "Login successful",
+      user_info: {
+        user_id: user.user_id,
+        username: user.first_name+" "+user.last_name,
+        email: user.email,
+        tier: tierDetails,
+        assigned_offers: offers,
+        wallet_info: walletInfo,
+      },
+    },
+   });
   } catch (error) {
     console.error("Error fetching user:", error);
     return res

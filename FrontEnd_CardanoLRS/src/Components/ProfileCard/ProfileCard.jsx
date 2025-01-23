@@ -4,7 +4,7 @@ import ProfileImage from "./ProfileImage";
 import "../../Pages/BusinessEnd/Profile/Profile.css";
 
 const ProfileCard = ({ profileData }) => {
-  const { name, contactNumber, email, publicKey } = profileData;
+  const { name, tier, email, publicKey } = profileData;
 
   return (
     <div className="Profile-Container">
@@ -16,7 +16,7 @@ const ProfileCard = ({ profileData }) => {
               <strong>Name:</strong> {name}
             </p>
             <p>
-              <strong>Contact Number:</strong> {contactNumber}
+              <strong>Tier:</strong> {tier}
             </p>
             <p>
               <strong>Email Id:</strong> {email}

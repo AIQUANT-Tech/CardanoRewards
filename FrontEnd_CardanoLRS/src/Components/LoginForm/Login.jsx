@@ -23,13 +23,13 @@ const LoginForm = () => {
     try {
       const requestBody = {
         loyalty_end_user_login_rq: {
-          header: { request_type: "END_USER_LOGIN" },
+          header: { request_type: "BUSINESS_USER_LOGIN" },
           user_info: { email, password },
         },
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/user/loginInfoForEndUser",
+        "http://localhost:5000/api/user/loginInfoForBusinessUser",
         {
           method: "POST",
           headers: {
@@ -42,19 +42,19 @@ const LoginForm = () => {
       const data = await response.json();
       setLoading(false);
 
-      if (response.ok && data.loyalty_end_user_login_rs.status === "success") {
+      if (response.ok && data.loyalty_business_user_login_rs.status === "success") {
         // Show success toast
         toast.success("Login successful!");
-        console.log(data.loyalty_end_user_login_rs.user_info);
-
+        sessionStorage.setItem("token", JSON.stringify(data.loyalty_business_user_login_rs.token));
+        sessionStorage.setItem("user", JSON.stringify(data.loyalty_business_user_login_rs.user_info));
         // Navigate to Dashboard
         setTimeout(() => {
           navigate("/Dashboard");
-          window.history.replaceState(null, "", "/SignInPage");
+          // window.history.replaceState(null, "", "/SignInPage");
         }, 1500);
       } else {
         // Show error toast
-        toast.error(data.loyalty_end_user_login_rs.message || "Login failed");
+        toast.error(data.loyalty_business_user_login_rs.message || "Login failed");
       }
     } catch (error) {
       setLoading(false);

@@ -10,8 +10,10 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     setLoading(true);
-    localStorage.removeItem("authToken");
-    sessionStorage.removeItem("authToken");
+    localStorage.removeItem("Token");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("Token");
+    sessionStorage.removeItem("user");
 
     setTimeout(() => {
       setLoading(false);
