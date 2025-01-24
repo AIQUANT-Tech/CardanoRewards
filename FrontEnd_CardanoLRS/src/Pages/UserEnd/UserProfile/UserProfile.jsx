@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../../Components/Header/header";
 import UserSideBar from "../../../Components/SideBar/UserSideBar";
 import "./UserProfile.css";
@@ -10,9 +11,17 @@ const UserProfile = () => {
     email: "",
   });
 
+  const nav = useNavigate();
+
   useEffect(() => {
 
     const userData = JSON.parse(sessionStorage.getItem("user"));
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      nav("/UserSignIn");
+    }
+
 
     if (userData) {
       setProfileData({
@@ -21,7 +30,7 @@ const UserProfile = () => {
         email: userData.email || "default@example.com",
       });
     }
-  }, []);
+  }, [nav]);
 
   return (
     <>

@@ -10,9 +10,9 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     setLoading(true);
-    localStorage.removeItem("Token");
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
-    sessionStorage.removeItem("Token");
+    sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
 
     setTimeout(() => {

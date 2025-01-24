@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../../Components/Header/header";
 import UserSideBar from "../../../Components/SideBar/UserSideBar";
 import "./UserDashBoard.css";
 import Card from "./../../../Components/Card/Card";
 import { Coins, Bitcoin, HandCoins } from "lucide-react";
 const UserDashBoard = () => {
+
+  const navigate = useNavigate();
+
+   useEffect(() => {
+  
+      const token = sessionStorage.getItem("token");
+
+      if(!token){
+        navigate("/UserSignIn");
+      }
+
+    }, [navigate]);
+
   return (
     <>
       <Header

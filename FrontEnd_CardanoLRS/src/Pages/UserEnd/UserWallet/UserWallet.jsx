@@ -1,10 +1,23 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../../Components/Header/header";
 import UserSideBar from "../../../Components/SideBar/UserSideBar";
 import "./UserWallet.css";
 import WalletConnect from "./../../../Components/Wallet/WalletConnect";
 
 const UserWallet = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+ 
+     const token = sessionStorage.getItem("token");
+
+     if(!token){
+       navigate("/UserSignIn");
+     }
+
+   }, [navigate]);
+
   const handleCustomConnect = () => {
     alert("Successfully Connected Your Wallet !");
   };
