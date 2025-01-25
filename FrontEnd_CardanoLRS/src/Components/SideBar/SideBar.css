@@ -23,7 +23,7 @@ body {
 
 .SideBar-Menu li {
   list-style: none;
-  margin: 20px 0;
+  /* margin: 20px 0; */
   padding-top: 20px;
 }
 

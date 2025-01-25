@@ -93,14 +93,14 @@ const Setting = () => {
   const [activeStep, setActiveStep] = useState(1);
 
   const steps = [
-    {
-      label: "Step 1: Add Tier",
-      component: <TierCreationForm showNextButton={false} />,
-    },
-    {
-      label: "Step 2: Add Offer",
-      component: <OfferCreationForm showNextButton={false} />,
-    },
+    // {
+    //   label: "Step 1: Add Tier",
+    //   component: <TierCreationForm showNextButton={false} />,
+    // },
+    // {
+    //   label: "Step 2: Add Offer",
+    //   component: <OfferCreationForm showNextButton={false} />,
+    // },
     {
       label: "Step 3: Map Offers to Tiers",
       component: <TierCreation showNext={false} />,

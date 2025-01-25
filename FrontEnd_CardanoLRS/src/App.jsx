@@ -19,6 +19,7 @@ import UserLogIn from "./Pages/UserEnd/UserLogIn/UserLogIn.jsx";
 import Profile from "./Pages/BusinessEnd/Profile/Profile.jsx";
 import SignInPage from "./Pages/BusinessEnd/SignInPage/SignInPage.jsx";
 import TierSetup from "./Pages/BusinessEnd/FirstSetupPage/TierSetup.jsx";
+import Offer from "./Pages/BusinessEnd/Offer/Offer.jsx";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/SetupPage3" element={<SecondSetup />} />
         <Route path="/SetupPage4" element={<ThirdSetup />} />
         <Route path="/Setup" element={<Setup />} />
+        <Route path="/Offers" element={<Offer />} />
         <Route path="/Setting" element={<Setting />} />
 
         {/* User routes */}

@@ -6,6 +6,8 @@ import {
   List,
   SlidersHorizontal,
   Settings,
+  Coins,
+  BadgePercent,
 } from "lucide-react";
 
 const menuItems = [
@@ -25,9 +27,14 @@ const menuItems = [
     icon: <List />,
   },
   {
-    label: "Setup",
+    label: "Tier",
     path: "/Setup",
-    icon: <SlidersHorizontal />,
+    icon: <Coins />,
+  },
+  {
+    label: "Offer",
+    path: "/Offers",
+    icon: <BadgePercent />,
   },
   {
     label: "Settings",

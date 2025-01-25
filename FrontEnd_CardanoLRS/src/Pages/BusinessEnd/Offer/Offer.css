@@ -18,6 +18,12 @@ body {
   height: 100%;
 }
 
+.offer-tab-content {
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
 .tab-buttons {
   display: flex;
   gap: 1rem;
@@ -45,13 +51,6 @@ body {
   background-color: #d89595;
   color: black;
 }
-
-.tab-content {
-  padding: 1rem;
-  background-color: #fff;
-  border-radius: 5px;
-}
-
 form {
   display: flex;
   flex-direction: column;
