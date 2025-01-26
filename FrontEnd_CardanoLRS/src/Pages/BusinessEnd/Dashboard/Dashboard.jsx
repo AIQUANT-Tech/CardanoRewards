@@ -7,10 +7,12 @@ import Header from "../../../Components/Header/header";
 
 const Dashboard = () => {
   const [totalMembers, setTotalMembers] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTotalMembers = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           "http://localhost:5000/api/user/fetchEndUsersInfo",
           {
@@ -39,6 +41,8 @@ const Dashboard = () => {
         setTotalMembers(users);
       } catch (error) {
         console.error("Error fetching total members:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -62,7 +66,7 @@ const Dashboard = () => {
             <Card
               icon={<Gauge style={{ width: "40px", height: "40px" }} />}
               primaryText="Total Members:"
-              secondaryText={totalMembers.toString()} // Display total members
+              secondaryText={loading ? "Loading..." : totalMembers.toString()}
               backgroundColor={"#f8d6d6"}
             />
             <Card

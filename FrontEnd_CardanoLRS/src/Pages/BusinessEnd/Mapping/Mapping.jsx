@@ -4,9 +4,9 @@ import AdminSideBar from "../../../Components/SideBar/AdminSideBar";
 import TierCreation from "../../../Components/TierCreation/TierCreation";
 
 import RewardRules from "../../../Components/RewardRules/RewardRules";
-import "./Setting.css";
+import "./Mapping.css";
 
-const Setting = () => {
+const Mapping = () => {
   const [activeStep, setActiveStep] = useState(1);
 
   const steps = [
@@ -22,7 +22,7 @@ const Setting = () => {
 
   return (
     <>
-      <Header title="Setting" />
+      <Header title="Mapping" />
       <div className="Setting-css">
         <AdminSideBar />
         <div className="Setting-main-body">
@@ -45,4 +45,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default Mapping;

@@ -4,8 +4,7 @@ import {
   LayoutDashboard,
   UserRound,
   List,
-  SlidersHorizontal,
-  Settings,
+  ChevronsLeftRightEllipsis,
   Coins,
   BadgePercent,
 } from "lucide-react";
@@ -28,7 +27,7 @@ const menuItems = [
   },
   {
     label: "Tier",
-    path: "/Setup",
+    path: "/Tier",
     icon: <Coins />,
   },
   {
@@ -37,9 +36,9 @@ const menuItems = [
     icon: <BadgePercent />,
   },
   {
-    label: "Settings",
-    path: "/Setting",
-    icon: <Settings />,
+    label: "Map",
+    path: "/Mapping",
+    icon: <ChevronsLeftRightEllipsis />,
   },
 ];
 

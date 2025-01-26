@@ -138,7 +138,7 @@ const Offer = () => {
 
   return (
     <>
-      <Header title="Setup" />
+      <Header title="Offer" />
       <div className="Setup-css">
         <AdminSideBar />
         <div className="Setup-main-body">

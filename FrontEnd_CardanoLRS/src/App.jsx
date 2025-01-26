@@ -5,11 +5,10 @@ import LandingPage from "./Pages/BusinessEnd/SignInPage/LandingPage.jsx";
 import SignUpPage from "./Pages/BusinessEnd/SignUpPage/SignUpPage.jsx";
 import Dashboard from "./Pages/BusinessEnd/Dashboard/Dashboard.jsx";
 import CustomerList from "./Pages/BusinessEnd/Customers/CustomerList.jsx";
-import Setting from "./Pages/BusinessEnd/Setting/Setting.jsx";
 import FirstSetup from "./Pages/BusinessEnd/FirstSetupPage/FirstSetupPage.jsx";
 import SecondSetup from "./Pages/BusinessEnd/FirstSetupPage/SecondSetupPage.jsx";
 import ThirdSetup from "./Pages/BusinessEnd/FirstSetupPage/ThirdSetupPage.jsx";
-import Setup from "./Pages/BusinessEnd/Setup/Setup.jsx";
+import Tier from "./Pages/BusinessEnd/Tier/Tier.jsx";
 import UserDashBoard from "./Pages/UserEnd/UserDashBoard/UserDashBoard.jsx";
 import UserProfile from "./Pages/UserEnd/UserProfile/UserProfile.jsx";
 import UserWallet from "./Pages/UserEnd/UserWallet/UserWallet.jsx";
@@ -20,6 +19,7 @@ import Profile from "./Pages/BusinessEnd/Profile/Profile.jsx";
 import SignInPage from "./Pages/BusinessEnd/SignInPage/SignInPage.jsx";
 import TierSetup from "./Pages/BusinessEnd/FirstSetupPage/TierSetup.jsx";
 import Offer from "./Pages/BusinessEnd/Offer/Offer.jsx";
+import Mapping from "./Pages/BusinessEnd/Mapping/Mapping.jsx";
 
 const App = () => {
   return (
@@ -35,9 +35,9 @@ const App = () => {
         <Route path="/SetupPage2" element={<TierSetup />} />
         <Route path="/SetupPage3" element={<SecondSetup />} />
         <Route path="/SetupPage4" element={<ThirdSetup />} />
-        <Route path="/Setup" element={<Setup />} />
+        <Route path="/Tier" element={<Tier />} />
         <Route path="/Offers" element={<Offer />} />
-        <Route path="/Setting" element={<Setting />} />
+        <Route path="/Mapping" element={<Mapping />} />
 
         {/* User routes */}
         <Route path="/UserDashBoard" element={<UserDashBoard />} />

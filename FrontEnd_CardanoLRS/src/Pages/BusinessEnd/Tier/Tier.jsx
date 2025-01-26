@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../Components/Header/header";
 import AdminSideBar from "../../../Components/SideBar/AdminSideBar";
-import "./Setup.css";
+import "./Tier.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TierCreationForm from "../../../Components/OfferCreationForm/TierCreationForm";
 
-const Setup = () => {
+const Tier = () => {
   const [activeTab, setActiveTab] = useState("editTier");
   const [tierFormData, setTierFormData] = useState({
     tier_id: "",
@@ -133,7 +133,7 @@ const Setup = () => {
 
   return (
     <>
-      <Header title="Setup" />
+      <Header title="Tier" />
       <div className="Setup-css">
         <AdminSideBar />
         <div className="Setup-main-body">
@@ -219,4 +219,4 @@ const Setup = () => {
   );
 };
 
-export default Setup;
+export default Tier;
