@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminSideBar from "../../../Components/SideBar/AdminSideBar";
 import "./CustomerList.css";
 import { FilePenLine } from "lucide-react";
@@ -18,6 +19,18 @@ const CustomerList = () => {
 
   // Fetch the loyalty tiers from the backend
   const fetchTiers = async () => {
+    const navigate = useNavigate();
+
+   useEffect(() => {
+  
+      const token = sessionStorage.getItem("token");
+
+      if(!token){
+        navigate("/SignInPage");
+      }
+
+    }, [navigate]);
+
     try {
       const response = await fetch(
         "http://localhost:5000/api/tier/getLoyaltyTiersInfo",

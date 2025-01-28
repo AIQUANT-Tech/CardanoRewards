@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../../../Components/Card/Card";
 import "./Dashboard.css";
 import { Gauge, Bitcoin, Clock } from "lucide-react";
@@ -8,9 +9,17 @@ import Header from "../../../Components/Header/header";
 const Dashboard = () => {
   const [totalMembers, setTotalMembers] = useState(0);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = sessionStorage.getItem("token");
+
+    if(!token){
+      navigate("/SignInPage");
+    }
+
     const fetchTotalMembers = async () => {
+      
       try {
         setLoading(true);
         const response = await fetch(
@@ -47,7 +56,7 @@ const Dashboard = () => {
     };
 
     fetchTotalMembers();
-  }, [totalMembers]);
+  }, [totalMembers, navigate]);
 
   return (
     <>

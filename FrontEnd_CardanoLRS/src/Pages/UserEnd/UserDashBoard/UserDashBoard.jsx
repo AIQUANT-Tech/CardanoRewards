@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Header from "../../../Components/Header/header";
 import UserSideBar from "../../../Components/SideBar/UserSideBar";
 import "./UserDashBoard.css";
 import Card from "./../../../Components/Card/Card";
 import { Coins, Bitcoin, HandCoins } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 const UserDashBoard = () => {
 
   const navigate = useNavigate();

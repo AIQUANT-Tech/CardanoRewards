@@ -7,9 +7,12 @@ import "./Offer.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OfferCreationForm from "../../../Components/OfferCreationForm/OfferCreationForm";
+import { useNavigate } from "react-router-dom";
 
 const Offer = () => {
   const [activeTab, setActiveTab] = useState("editOffer");
+
+  const navigate = useNavigate();
 
   const [offerFormData, setOfferFormData] = useState({
     offer_id: "",
@@ -26,6 +29,11 @@ const Offer = () => {
   console.log(offerOptions);
 
   useEffect(() => {
+    const token = sessionStorage.getItem("token");
+
+     if(!token){
+       navigate("/SignInPage");
+     }
     // Fetch offer data from backend
     const fetchOfferData = async () => {
       try {
@@ -62,7 +70,7 @@ const Offer = () => {
     };
 
     fetchOfferData();
-  }, [offerFormData]);
+  }, [offerFormData, navigate]);
 
   const handleOfferInputChange = (e) => {
     const { name, value } = e.target;

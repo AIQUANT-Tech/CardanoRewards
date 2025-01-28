@@ -5,6 +5,7 @@ import "./Tier.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TierCreationForm from "../../../Components/OfferCreationForm/TierCreationForm";
+import { useNavigate } from "react-router-dom";
 
 const Tier = () => {
   const [activeTab, setActiveTab] = useState("editTier");
@@ -20,9 +21,18 @@ const Tier = () => {
     statuses: ["Active", "Inactive"],
   });
 
+  const navigate = useNavigate();
+
   console.log(tierOptions);
 
   useEffect(() => {
+
+    const token = sessionStorage.getItem("token");
+
+     if(!token){
+       navigate("/SignInPage");
+     }
+
     const fetchTierData = async () => {
       try {
         const response = await fetch(
@@ -60,7 +70,7 @@ const Tier = () => {
     fetchTierData();
 
     // Fetch offer data from backend
-  }, [tierFormData]);
+  }, [tierFormData, navigate]);
 
   const handleTierInputChange = (e) => {
     const { name, value } = e.target;

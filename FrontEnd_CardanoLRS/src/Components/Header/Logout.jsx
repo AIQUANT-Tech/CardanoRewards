@@ -18,7 +18,13 @@ const LogoutButton = () => {
     setTimeout(() => {
       setLoading(false);
       toast.success("Successfully logged out!");
-      navigate("/SignInPage");
+      const currentPath = window.location.pathname;
+
+      if (currentPath === "/UserDashBoard" || currentPath === "/UserProfile" || currentPath === "/UserWallet" || currentPath === "/UserWallet2") {
+        navigate("/UserSignIn"); 
+      } else {
+        navigate("/SignInPage"); 
+      }
     }, 1500);
   };
 

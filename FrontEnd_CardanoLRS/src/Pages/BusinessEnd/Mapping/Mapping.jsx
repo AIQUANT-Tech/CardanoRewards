@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../Components/Header/header";
 import AdminSideBar from "../../../Components/SideBar/AdminSideBar";
 import TierCreation from "../../../Components/TierCreation/TierCreation";
 
 import RewardRules from "../../../Components/RewardRules/RewardRules";
 import "./Mapping.css";
+import { useNavigate } from "react-router-dom";
 
 const Mapping = () => {
   const [activeStep, setActiveStep] = useState(1);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+ 
+     const token = sessionStorage.getItem("token");
+
+     if(!token){
+       navigate("/SignInPage");
+     }
+
+   }, [navigate]);
 
   const steps = [
     {
