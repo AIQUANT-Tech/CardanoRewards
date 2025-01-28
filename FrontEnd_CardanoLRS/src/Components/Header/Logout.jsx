@@ -21,10 +21,15 @@ const LogoutButton = () => {
       toast.success("Successfully logged out!");
       const currentPath = window.location.pathname;
 
-      if (currentPath === "/UserDashBoard" || currentPath === "/UserProfile" || currentPath === "/UserWallet" || currentPath === "/UserWallet2") {
-        navigate("/UserSignIn"); 
+      if (
+        currentPath === "/UserDashBoard" ||
+        currentPath === "/UserProfile" ||
+        currentPath === "/UserWallet" ||
+        currentPath === "/UserWallet2"
+      ) {
+        navigate("/UserSignIn");
       } else {
-        navigate("/SignInPage"); 
+        navigate("/SignInPage");
       }
     }, 1500);
   };

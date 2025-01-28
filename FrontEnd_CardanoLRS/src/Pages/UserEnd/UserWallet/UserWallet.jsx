@@ -14,7 +14,7 @@ const UserWallet = () => {
     const token = sessionStorage.getItem("token");
     const wallet = sessionStorage.getItem("wallet");
 
-    if(wallet){
+    if (wallet) {
       setDescription("Wallet Connected!");
     }
 
@@ -30,6 +30,8 @@ const UserWallet = () => {
     if (window.cardano) {
       try {
         // Enable wallet connection
+        console.log(window.cardano);
+
         await window.cardano.enable();
 
         // Fetch the wallet address (assuming the wallet supports this method)
@@ -47,7 +49,9 @@ const UserWallet = () => {
         alert("Failed to connect wallet. Please try again.");
       }
     } else {
-      alert("Please install a Cardano wallet extension (e.g., Nami, Yoroi, Eternal).");
+      alert(
+        "Please install a Cardano wallet extension (e.g., Nami, Yoroi, Eternal)."
+      );
     }
 
     setLoading(false); // Reset loading state

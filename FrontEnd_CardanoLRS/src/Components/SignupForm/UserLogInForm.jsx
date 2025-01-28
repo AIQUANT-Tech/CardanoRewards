@@ -27,44 +27,48 @@ const UserSignInForm = () => {
     setIsLoading(true); // Start loading
 
     try {
-      const response = await fetch("http://localhost:5000/api/user/loginInfoForEndUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          loyalty_end_user_login_rq: {
-            header: {
-              product: "LRS",
-              request_type: "END_USER_LOGIN"
+      const response = await fetch(
+        "http://localhost:5000/api/user/loginInfoForEndUser",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            loyalty_end_user_login_rq: {
+              header: {
+                product: "LRS",
+                request_type: "END_USER_LOGIN",
+              },
+              user_info: {
+                email: email,
+                password: password,
+              },
             },
-            user_info: {
-              email: email,
-              password: password
-            }
-          }
-        }),
-      });
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok && data.loyalty_end_user_login_rs.status === "success") {
+        toast.success("Login successful!");
+        sessionStorage.setItem(
+          "token",
+          JSON.stringify(data.loyalty_end_user_login_rs.token)
+        );
+        sessionStorage.setItem(
+          "user",
+          JSON.stringify(data.loyalty_end_user_login_rs.user_info)
+        );
 
-              toast.success("Login successful!");
-              sessionStorage.setItem("token", JSON.stringify(data.loyalty_end_user_login_rs.token));
-              sessionStorage.setItem("user", JSON.stringify(data.loyalty_end_user_login_rs.user_info));
-
-                setIsLoading(false);
-                navigate("/UserDashboard");
-                // window.history.replaceState(null, "", "/SignInPage");
-
-        
+        setIsLoading(false);
+        navigate("/UserDashboard");
+        // window.history.replaceState(null, "", "/SignInPage");
       } else {
         setIsLoading(false);
         toast.error("An error occurred while signing in");
-
       }
-
     } catch (err) {
       setIsLoading(false);
       setError("An error occurred while signing in");
