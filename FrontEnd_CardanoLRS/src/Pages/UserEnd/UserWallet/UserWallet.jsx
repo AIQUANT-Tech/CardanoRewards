@@ -46,30 +46,22 @@ const UserWallet = () => {
 
     setLoading(true); // Show loading state
 
-    // Check if a Cardano wallet extension is available
-    if (window.cardano) {
-      try {
-        // Enable wallet connection
-        await window.cardano.enable();
+    try {
+      const walletAPI = await window.cardano[selectedWallet].enable();
 
-        // Fetch the wallet address (assuming the wallet supports this method)
-        const address = await window.cardano.getUsedAddresses();
-
-        if (address && address[0]) {
-          alert(`Wallet connected successfully! Address: ${address[0]}`);
-          sessionStorage.setItem("wallet", address[0]);
-          // navigate("/UserWallet2");
-        } else {
-          alert("Failed to retrieve wallet address.");
-        }
-      } catch (error) {
-        console.error("Error connecting to wallet:", error);
-        alert("Failed to connect wallet. Please try again.");
+      // Fetch the wallet address (if the wallet supports this method)
+      const addresses = await walletAPI.getUsedAddresses();
+      if (addresses && addresses[0]) {
+        const address = Buffer.from(addresses[0], "hex").toString("base64"); // Convert to a readable format
+        alert(`Wallet connected successfully! Address: ${address}`);
+        sessionStorage.setItem("wallet", address);
+        setDescription("Wallet Connected!");
+      } else {
+        alert("Failed to retrieve wallet address.");
       }
-    } else {
-      alert(
-        "Please install a Cardano wallet extension (e.g., Nami, Yoroi, Eternal)."
-      );
+    } catch (error) {
+      console.error("Error connecting to wallet:", error);
+      alert("Failed to connect wallet. Please try again.");
     }
 
     setLoading(false); // Reset loading state
