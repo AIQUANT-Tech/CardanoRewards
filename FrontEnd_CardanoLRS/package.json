@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@meshsdk/core": "^1.7.20",
+    "cardano-wallet": "^1.2.2",
     "lucide-react": "^0.469.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",

@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./WalletConnect.css";
 
 const WalletConnect = (props) => {
+  const [wallet, setWallet] = useState();
+
+  useEffect(() => {
+    const wallet = sessionStorage.getItem("wallet");
+    setWallet(wallet);
+
+    // if(wallet){
+    //   navigate("/UserWallet2");
+    // }
+  }, [wallet]);
+
   const {
     title = "",
     description = "",
@@ -21,11 +32,16 @@ const WalletConnect = (props) => {
           style={{
             width: buttonWidth,
             height: buttonHeight,
+            backgroundColor: wallet ? '#818181' : '#18a7b8'
           }}
+          disabled={wallet ? true : false}
           onClick={onConnect}
         >
           {buttonText}
         </button>
+        <div className="wallet-address">
+          <p>Your address: {wallet}</p>
+        </div>
       </div>
     </div>
   );

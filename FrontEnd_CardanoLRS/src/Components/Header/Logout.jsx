@@ -14,6 +14,7 @@ const LogoutButton = () => {
     localStorage.removeItem("user");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem("wallet");
 
     setTimeout(() => {
       setLoading(false);
