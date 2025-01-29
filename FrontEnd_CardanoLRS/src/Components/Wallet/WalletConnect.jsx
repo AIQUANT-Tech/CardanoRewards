@@ -7,10 +7,6 @@ const WalletConnect = (props) => {
   useEffect(() => {
     const wallet = sessionStorage.getItem("wallet");
     setWallet(wallet);
-
-    // if(wallet){
-    //   navigate("/UserWallet2");
-    // }
   }, [wallet]);
 
   const {
@@ -32,7 +28,7 @@ const WalletConnect = (props) => {
           style={{
             width: buttonWidth,
             height: buttonHeight,
-            backgroundColor: wallet ? '#818181' : '#18a7b8'
+            backgroundColor: wallet ? "#818181" : "#18a7b8",
           }}
           disabled={wallet ? true : false}
           onClick={onConnect}
