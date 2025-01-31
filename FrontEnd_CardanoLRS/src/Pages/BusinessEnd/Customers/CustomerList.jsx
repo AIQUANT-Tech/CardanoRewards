@@ -17,18 +17,19 @@ const CustomerList = () => {
   const [newTier, setNewTier] = useState(""); // State for the new tier
   const rowsPerPage = 5;
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      navigate("/SignInPage");
+    }
+  }, [navigate]);
+
   // Fetch the loyalty tiers from the backend
   const fetchTiers = async () => {
-    const navigate = useNavigate();
     console.log("I Am Here");
-
-    useEffect(() => {
-      const token = sessionStorage.getItem("token");
-
-      if (!token) {
-        navigate("/SignInPage");
-      }
-    }, [navigate]);
 
     try {
       const response = await fetch(
@@ -45,6 +46,9 @@ const CustomerList = () => {
           }),
         }
       );
+
+      console.log("Broooooooooooooooooooooooooooo");
+
       const result = await response.json();
       console.log("Response:", result);
 
