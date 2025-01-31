@@ -27,10 +27,10 @@ const ProfileCard = ({ profileData }) => {
               </p>
             )}
           </div>
-          <button className="Profile-Edit-Button">
+          {/* <button className="Profile-Edit-Button">
             <FilePenLine />
             Edit
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
