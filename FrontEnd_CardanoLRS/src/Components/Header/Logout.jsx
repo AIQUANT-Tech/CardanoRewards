@@ -21,23 +21,29 @@ const LogoutButton = () => {
       toast.success("Successfully logged out!");
       const currentPath = window.location.pathname;
 
+      console.log("Current Path:", currentPath);
+
       if (
-        currentPath === "/UserDashBoard" ||
+        currentPath === "/UserDashboard" ||
         currentPath === "/UserProfile" ||
         currentPath === "/UserWallet" ||
         currentPath === "/UserWallet2"
       ) {
-        navigate("/UserSignIn");
+        setTimeout(() => {
+          navigate("/UserSignIn");
+        }, 1500);
       } else {
-        navigate("/SignInPage");
+        setTimeout(() => {
+          navigate("/SignInPage");
+        }, 1500);
       }
-    }, 1500);
+    }, 500);
   };
 
   return (
     <div>
       {/* Toastify Container */}
-      <ToastContainer />
+      <ToastContainer position="top-right" autoClose={3000} />
 
       {/* Loading Spinner */}
       {loading && (

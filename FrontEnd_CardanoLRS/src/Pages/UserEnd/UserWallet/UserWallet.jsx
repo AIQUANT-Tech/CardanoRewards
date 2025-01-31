@@ -3,8 +3,10 @@ import { Buffer } from "buffer";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../Components/Header/header";
 import UserSideBar from "../../../Components/SideBar/UserSideBar";
-import WalletConnect from "../../../Components/Wallet/WalletConnect"; // Ensure WalletConnect is properly imported
+import WalletConnect from "../../../Components/Wallet/WalletConnect";
 import "./UserWallet.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserWallet = () => {
   const navigate = useNavigate();
@@ -25,7 +27,6 @@ const UserWallet = () => {
       navigate("/UserSignIn");
     }
 
-    // Detect available wallets
     const wallets = [];
     if (window.cardano) {
       for (const walletName in window.cardano) {
@@ -49,22 +50,26 @@ const UserWallet = () => {
     try {
       const walletAPI = await window.cardano[selectedWallet].enable();
 
-      // Fetch the wallet address (if the wallet supports this method)
       const addresses = await walletAPI.getUsedAddresses();
+
       if (addresses && addresses[0]) {
-        const address = Buffer.from(addresses[0], "hex").toString("base64"); // Convert to a readable format
-        alert(`Wallet connected successfully! Address: ${address}`);
+        const address = Buffer.from(addresses[0], "hex").toString("base64");
+
+        toast.success(`Wallet connected successfully! Address: ${address}`);
         sessionStorage.setItem("wallet", address);
         setDescription("Wallet Connected!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
-        alert("Failed to retrieve wallet address.");
+        toast.error("Failed to retrieve wallet address.");
       }
     } catch (error) {
       console.error("Error connecting to wallet:", error);
-      alert("Failed to connect wallet. Please try again.");
+      toast.error("Failed to connect wallet. Please try again.");
     }
 
-    setLoading(false); // Reset loading state
+    setLoading(false);
   };
 
   return (
@@ -113,6 +118,7 @@ const UserWallet = () => {
           </div>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 };

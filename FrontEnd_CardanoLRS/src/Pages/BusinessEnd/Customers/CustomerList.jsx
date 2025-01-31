@@ -20,15 +20,14 @@ const CustomerList = () => {
   // Fetch the loyalty tiers from the backend
   const fetchTiers = async () => {
     const navigate = useNavigate();
+    console.log("I Am Here");
 
-   useEffect(() => {
-  
+    useEffect(() => {
       const token = sessionStorage.getItem("token");
 
-      if(!token){
+      if (!token) {
         navigate("/SignInPage");
       }
-
     }, [navigate]);
 
     try {
@@ -47,6 +46,8 @@ const CustomerList = () => {
         }
       );
       const result = await response.json();
+      console.log("Response:", result);
+
       if (result.loyalty_tier_fetch_rs) {
         setTiers(result.loyalty_tier_fetch_rs.tier_list);
       }

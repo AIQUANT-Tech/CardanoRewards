@@ -8,15 +8,17 @@
   background-color: #18cbdf;
   border-radius: 10px;
   padding-top: 20px;
+  width: 100%;
 }
 
 .Outer-wallet-container {
   display: flex;
-  padding-top: 20px;
+  height: 80vh;
   width: 90%;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
+  padding-left: 30px;
 }
 
 .wallet-title {

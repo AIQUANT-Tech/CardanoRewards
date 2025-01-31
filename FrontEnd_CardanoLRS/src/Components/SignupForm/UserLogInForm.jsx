@@ -63,8 +63,9 @@ const UserSignInForm = () => {
         );
 
         setIsLoading(false);
-        navigate("/UserDashboard");
-        // window.history.replaceState(null, "", "/SignInPage");
+        setTimeout(() => {
+          navigate("/UserDashboard");
+        }, 1500);
       } else {
         setIsLoading(false);
         toast.error("An error occurred while signing in");
@@ -104,7 +105,7 @@ const UserSignInForm = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="User-Form" style={{ "--form-bg-color": "#18A7B8" }}>
         <h1 className="sign-text">Sign In</h1>
         <div className="signup-container">
