@@ -66,3 +66,11 @@
   display: flex;
   justify-content: center;
 }
+
+.wallet-address-text {
+  font-size: 13px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+}

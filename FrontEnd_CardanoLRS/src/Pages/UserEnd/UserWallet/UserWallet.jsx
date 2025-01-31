@@ -51,12 +51,15 @@ const UserWallet = () => {
       const walletAPI = await window.cardano[selectedWallet].enable();
 
       const addresses = await walletAPI.getUsedAddresses();
+      console.log("Addresses:", addresses);
 
       if (addresses && addresses[0]) {
-        const address = Buffer.from(addresses[0], "hex").toString("base64");
+        // const address = Buffer.from(addresses[0], "hex").toString("base64");
 
-        toast.success(`Wallet connected successfully! Address: ${address}`);
-        sessionStorage.setItem("wallet", address);
+        toast.success(
+          `Wallet connected successfully! Address: ${addresses[0]}`
+        );
+        sessionStorage.setItem("wallet", addresses[0]);
         setDescription("Wallet Connected!");
         setTimeout(() => {
           window.location.reload();

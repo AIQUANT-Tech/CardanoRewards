@@ -36,7 +36,7 @@ const WalletConnect = (props) => {
           {buttonText}
         </button>
         <div className="wallet-address">
-          <p>Your address: {wallet}</p>
+          <p className="wallet-address-text">Your address: {wallet}</p>
         </div>
       </div>
     </div>

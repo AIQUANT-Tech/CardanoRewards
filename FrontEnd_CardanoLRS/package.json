@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@anastasia-labs/lucid-cardano-fork": "^0.10.7",
     "@emurgo/cardano-serialization-lib-browser": "^14.0.0",
     "@meshsdk/core": "^1.7.20",
     "buffer": "^6.0.3",
