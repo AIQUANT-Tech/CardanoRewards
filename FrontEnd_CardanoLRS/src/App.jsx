@@ -51,3 +51,6 @@ const App = () => {
 };
 
 export default App;
+
+
+// Setup Page is not working after creating the account
