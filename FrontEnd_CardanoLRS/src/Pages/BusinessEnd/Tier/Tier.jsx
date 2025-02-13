@@ -218,7 +218,7 @@ const Tier = () => {
               </div>
             )}
             {activeTab === "addTier" && (
-              <div className="edit-offer">
+              <div className="add-tier">
                 <TierCreationForm showNextButton={false} />
               </div>
             )}
