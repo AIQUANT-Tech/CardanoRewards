@@ -146,7 +146,7 @@ const Tier = () => {
       <Header title="Tier" />
       <div className="Setup-css">
         <AdminSideBar />
-        <div className="Setup-main-body">
+        <div className="Tier-Setup-main-body">
           <div className="tab-buttons">
             <button
               className={activeTab === "editTier" ? "active" : ""}

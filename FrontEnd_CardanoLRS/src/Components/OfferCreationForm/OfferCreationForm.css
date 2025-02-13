@@ -6,9 +6,12 @@
   margin: 50px auto;
   padding: 40px;
   border-radius: 10px;
+  overflow-y: visible !important;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   font-family: Inika;
 }
+
+
 
 .form-title {
   font-size: 28px;

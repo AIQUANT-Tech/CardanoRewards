@@ -92,7 +92,7 @@ const SignupForm = () => {
       if (response.ok) {
         setSuccessMessage(data.message);
         toast.success(data.message); // Toastify success message
-        setTimeout(() => navigate("/SetUpPage1"), 2000);
+        setTimeout(() => navigate("/SetupPage1"), 2000);
       } else {
         setError(data.message || "Signup failed");
         toast.error(data.message || "Signup failed"); // Toastify error message
