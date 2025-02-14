@@ -332,6 +332,7 @@ const RewardRules = ({ showNext = true }) => {
 
       if (data.loyalty_rule_setup_with_tier_rs.status === "success") {
         toast.success("Tier-wise reward rules saved successfully!"); // Success message
+        setRows([{ amount: "", percentage: "", tier: "" }]);
         // setTimeout(() => {
         //   navigate("/SignInPage"); // Redirect after 3 seconds
         // }, 3000);

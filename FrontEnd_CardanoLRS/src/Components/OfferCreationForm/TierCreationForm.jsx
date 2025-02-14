@@ -239,6 +239,7 @@ const TierCreationForm = ({ showNextButton = true }) => {
 
       if (data.loyalty_tier_crud_rs.status === "success") {
         toast.success("Tiers submitted successfully!");
+        setTiers([{ name: "", description: "" }]);
         setTimeout(() => {
           setShowLoadingContainer(false);
         }, 2500);

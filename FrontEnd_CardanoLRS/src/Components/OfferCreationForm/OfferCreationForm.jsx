@@ -222,6 +222,7 @@ const OfferCreationForm = ({ showNextButton = true }) => {
       const data = await response.json();
       if (response.ok) {
         toast.success("Offers submitted successfully!"); // Success message
+        setOffers([{ name: "", description: "" }]);
         setTimeout(() => {
           // navigate("/SetupPage2");
           setShowLoadingContainer(false);
