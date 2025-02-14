@@ -7,6 +7,7 @@ import Table from "../../../Components/Table/Table";
 import Header from "../../../Components/Header/header";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_BASE_URL } from "../../../config.js";
 
 const CustomerList = () => {
   const [data, setData] = useState([]);
@@ -33,7 +34,7 @@ const CustomerList = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/tier/getLoyaltyTiersInfo",
+        `${API_BASE_URL}/api/tier/getLoyaltyTiersInfo`,
         {
           method: "POST",
           headers: {
@@ -65,7 +66,7 @@ const CustomerList = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        "http://localhost:5000/api/user/fetchEndUsersInfo",
+        `${API_BASE_URL}/api/user/fetchEndUsersInfo`,
         {
           method: "POST",
           headers: {
@@ -143,7 +144,7 @@ const CustomerList = () => {
       console.log("Request Body: ", JSON.stringify(requestBody));
 
       const response = await fetch(
-        "http://localhost:5000/api/map/user/editEndUserInfo",
+        `${API_BASE_URL}/api/map/user/editEndUserInfo`,
         {
           method: "POST",
           headers: {

@@ -4,6 +4,7 @@ import { CirclePlus } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./TierCreation.css";
+import { API_BASE_URL } from "../../config.js";
 
 const TierCreation = ({ showNext = true }) => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const TierCreation = ({ showNext = true }) => {
     const fetchData = async () => {
       try {
         const tierResponse = await fetch(
-          "http://localhost:5000/api/tier/getLoyaltyTiersInfo",
+          `${API_BASE_URL}/api/tier/getLoyaltyTiersInfo`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -28,7 +29,7 @@ const TierCreation = ({ showNext = true }) => {
         );
 
         const offerResponse = await fetch(
-          "http://localhost:5000/api/offers/getLoyaltyOfferInfo",
+          `${API_BASE_URL}/api/offers/getLoyaltyOfferInfo`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -116,7 +117,7 @@ const TierCreation = ({ showNext = true }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/map/mappingLoyaltyOffersTiers",
+        `${API_BASE_URL}/api/map/mappingLoyaltyOffersTiers`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

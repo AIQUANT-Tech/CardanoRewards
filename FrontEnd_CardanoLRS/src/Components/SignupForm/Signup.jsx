@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Eye, EyeOff } from "lucide-react";
+import { API_BASE_URL } from "../../config.js";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const SignupForm = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/user/createUser",
+        `${API_BASE_URL}/api/user/createUser`,
         {
           method: "POST",
           headers: {

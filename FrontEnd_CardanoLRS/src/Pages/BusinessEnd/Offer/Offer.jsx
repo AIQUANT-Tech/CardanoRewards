@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OfferCreationForm from "../../../Components/OfferCreationForm/OfferCreationForm";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../../config.js";
 
 const Offer = () => {
   const [activeTab, setActiveTab] = useState("editOffer");
@@ -38,7 +39,7 @@ const Offer = () => {
     const fetchOfferData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/offers/getLoyaltyOfferInfo",
+          `${API_BASE_URL}/api/offers/getLoyaltyOfferInfo`,
           {
             method: "POST",
             headers: {
@@ -115,7 +116,7 @@ const Offer = () => {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/offers/editLoyaltyOffers",
+        `${API_BASE_URL}/api/offers/editLoyaltyOffers`,
         {
           method: "POST",
           headers: {

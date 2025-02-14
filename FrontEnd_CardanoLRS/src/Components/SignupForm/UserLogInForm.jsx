@@ -3,6 +3,7 @@ import "./Signup.css"; // Reuse the same styling
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_BASE_URL } from "../../config.js";
 
 const UserSignInForm = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const UserSignInForm = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/user/loginInfoForEndUser",
+        `${API_BASE_URL}/api/user/loginInfoForEndUser`,
         {
           method: "POST",
           headers: {

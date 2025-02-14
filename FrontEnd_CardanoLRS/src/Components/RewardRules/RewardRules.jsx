@@ -231,6 +231,7 @@ import "./RewardRules.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_BASE_URL } from "../../config.js";
 
 const RewardRules = ({ showNext = true }) => {
   const navigate = useNavigate();
@@ -244,7 +245,7 @@ const RewardRules = ({ showNext = true }) => {
     const fetchTiers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/tier/getLoyaltyTiersInfo",
+          `${API_BASE_URL}/api/tier/getLoyaltyTiersInfo`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -321,7 +322,7 @@ const RewardRules = ({ showNext = true }) => {
     try {
       setIsSubmitting(true); // Show loading indicator
       const response = await fetch(
-        "http://localhost:5000/api/rule/saveTierwiseRuleSetup",
+        `${API_BASE_URL}/api/rule/saveTierwiseRuleSetup`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

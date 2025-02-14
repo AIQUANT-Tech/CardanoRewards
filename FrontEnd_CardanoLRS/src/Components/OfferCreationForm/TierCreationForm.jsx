@@ -176,6 +176,7 @@ import "./OfferCreationForm.css"; // Ensure this file is correctly styled
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify"; // Import Toastify components
 import "react-toastify/dist/ReactToastify.css"; // Import the default styles for Toastify
+import { API_BASE_URL } from "../../config.js";
 
 const TierCreationForm = ({ showNextButton = true }) => {
   const [tiers, setTiers] = useState([{ name: "", description: "" }]);
@@ -225,7 +226,7 @@ const TierCreationForm = ({ showNextButton = true }) => {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/tier/createLoyaltyTiers",
+        `${API_BASE_URL}/api/tier/createLoyaltyTiers`,
         {
           method: "POST",
           headers: {

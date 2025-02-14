@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_BASE_URL } from "../../config.js";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ const LoginForm = () => {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/user/loginInfoForBusinessUser",
+        `${API_BASE_URL}/api/user/loginInfoForBusinessUser`,
         {
           method: "POST",
           headers: {
@@ -42,11 +43,20 @@ const LoginForm = () => {
       const data = await response.json();
       setLoading(false);
 
-      if (response.ok && data.loyalty_business_user_login_rs.status === "success") {
+      if (
+        response.ok &&
+        data.loyalty_business_user_login_rs.status === "success"
+      ) {
         // Show success toast
         toast.success("Login successful!");
-        sessionStorage.setItem("token", JSON.stringify(data.loyalty_business_user_login_rs.token));
-        sessionStorage.setItem("user", JSON.stringify(data.loyalty_business_user_login_rs.user_info));
+        sessionStorage.setItem(
+          "token",
+          JSON.stringify(data.loyalty_business_user_login_rs.token)
+        );
+        sessionStorage.setItem(
+          "user",
+          JSON.stringify(data.loyalty_business_user_login_rs.user_info)
+        );
         // Navigate to Dashboard
         setTimeout(() => {
           navigate("/Dashboard");
@@ -54,7 +64,9 @@ const LoginForm = () => {
         }, 1500);
       } else {
         // Show error toast
-        toast.error(data.loyalty_business_user_login_rs.message || "Login failed");
+        toast.error(
+          data.loyalty_business_user_login_rs.message || "Login failed"
+        );
       }
     } catch (error) {
       setLoading(false);

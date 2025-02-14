@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TierCreationForm from "../../../Components/OfferCreationForm/TierCreationForm";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../../config.js";
 
 const Tier = () => {
   const [activeTab, setActiveTab] = useState("editTier");
@@ -26,17 +27,16 @@ const Tier = () => {
   console.log(tierOptions);
 
   useEffect(() => {
-
     const token = sessionStorage.getItem("token");
 
-     if(!token){
-       navigate("/SignInPage");
-     }
+    if (!token) {
+      navigate("/SignInPage");
+    }
 
     const fetchTierData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/tier/getLoyaltyTiersInfo",
+          `${API_BASE_URL}/api/tier/getLoyaltyTiersInfo`,
           {
             method: "POST",
             headers: {
@@ -112,7 +112,7 @@ const Tier = () => {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/tier/editLoyaltyTiers",
+        `${API_BASE_URL}/api/tier/editLoyaltyTiers`,
         {
           method: "POST",
           headers: {

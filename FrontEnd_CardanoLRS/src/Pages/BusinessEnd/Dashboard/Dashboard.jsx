@@ -5,6 +5,7 @@ import "./Dashboard.css";
 import { Gauge, Bitcoin, Clock } from "lucide-react";
 import AdminSideBar from "../../../Components/SideBar/AdminSideBar";
 import Header from "../../../Components/Header/header";
+import { API_BASE_URL } from "../../../config.js";
 
 const Dashboard = () => {
   const [totalMembers, setTotalMembers] = useState(0);
@@ -23,7 +24,7 @@ const Dashboard = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "http://localhost:5000/api/user/fetchEndUsersInfo",
+          `${API_BASE_URL}/api/user/fetchEndUsersInfo`,
           {
             method: "POST",
             headers: {
