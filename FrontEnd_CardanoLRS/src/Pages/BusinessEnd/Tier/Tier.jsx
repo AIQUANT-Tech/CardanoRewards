@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TierCreationForm from "../../../Components/OfferCreationForm/TierCreationForm";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../../../config.js";
+import API_BASE_URL from "../../../config.js";
 
 const Tier = () => {
   const [activeTab, setActiveTab] = useState("editTier");

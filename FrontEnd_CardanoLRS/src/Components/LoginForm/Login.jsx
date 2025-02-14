@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { API_BASE_URL } from "../../config.js";
+import  API_BASE_URL  from "../../config.js";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");

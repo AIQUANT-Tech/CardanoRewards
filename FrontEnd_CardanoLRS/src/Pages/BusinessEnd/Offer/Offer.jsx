@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OfferCreationForm from "../../../Components/OfferCreationForm/OfferCreationForm";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../../../config.js";
+import  API_BASE_URL  from "../../../config.js";
 
 const Offer = () => {
   const [activeTab, setActiveTab] = useState("editOffer");

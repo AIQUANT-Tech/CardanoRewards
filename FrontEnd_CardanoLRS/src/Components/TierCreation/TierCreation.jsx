@@ -4,7 +4,7 @@ import { CirclePlus } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./TierCreation.css";
-import { API_BASE_URL } from "../../config.js";
+import  API_BASE_URL  from "../../config.js";
 
 const TierCreation = ({ showNext = true }) => {
   const navigate = useNavigate();

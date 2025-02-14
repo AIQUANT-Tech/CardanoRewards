@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Eye, EyeOff } from "lucide-react";
-import { API_BASE_URL } from "../../config.js";
+import  API_BASE_URL  from "../../config.js";
 
 const SignupForm = () => {
   const navigate = useNavigate();

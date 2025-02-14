@@ -7,7 +7,7 @@ import Table from "../../../Components/Table/Table";
 import Header from "../../../Components/Header/header";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { API_BASE_URL } from "../../../config.js";
+import  API_BASE_URL  from "../../../config.js";
 
 const CustomerList = () => {
   const [data, setData] = useState([]);

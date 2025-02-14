@@ -165,7 +165,7 @@ import "./OfferCreationForm.css";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Importing styles for the toast
-import { API_BASE_URL } from "../../config.js";
+import  API_BASE_URL  from "../../config.js";
 
 const OfferCreationForm = ({ showNextButton = true }) => {
   // Add prop with default value
