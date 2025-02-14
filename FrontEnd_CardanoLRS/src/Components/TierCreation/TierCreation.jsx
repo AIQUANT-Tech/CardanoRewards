@@ -97,7 +97,7 @@ const TierCreation = ({ showNext = true }) => {
     if (isAlreadyAdded) {
       toast.warn("This offer is already added to this tier.");
     } else {
-      toast.success("Offer added to the tier!");
+      toast.success("Offer added to the tier!", { position: "top-right" });
     }
 
     setSelectedOffer("");
@@ -132,7 +132,7 @@ const TierCreation = ({ showNext = true }) => {
       const data = await response.json();
 
       if (data.loyalty_offer_tier_mapping_rs.status === "success") {
-        toast.success("Mapping saved successfully!");
+        toast.success("Mapping saved successfully!", { position: "top-right" });
         // Navigate after 4 seconds
       } else {
         toast.error("Failed to save the mapping. Please try again.");
@@ -151,13 +151,13 @@ const TierCreation = ({ showNext = true }) => {
 
   return (
     <div className="tier-creation-container">
-      <ToastContainer />
+      <ToastContainer autoClose={2000} pauseOnHover={false} />
 
       {loading && (
         <div className="loading-overlay">
           <div className="loading-container">
             <div className="loading-spinner"></div>
-            <p>Submitting Tiers...</p>
+            <p>Submitting...</p>
           </div>
         </div>
       )}
