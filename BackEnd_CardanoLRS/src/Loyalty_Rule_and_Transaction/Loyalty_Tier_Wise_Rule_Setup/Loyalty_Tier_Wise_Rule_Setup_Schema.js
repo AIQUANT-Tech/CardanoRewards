@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import mongooseSequence from 'mongoose-sequence';
+import mongoose from "mongoose";
+import mongooseSequence from "mongoose-sequence";
 
 const AutoIncrement = mongooseSequence(mongoose);
 
@@ -11,7 +11,7 @@ const loyaltyTierWiseRuleSetupSchema = new mongoose.Schema({
   tier_id: {
     type: Number,
     required: true,
-    ref: 'LoyaltyTier', 
+    ref: "LoyaltyTier",
   },
   rule_desc: {
     type: String,
@@ -23,7 +23,7 @@ const loyaltyTierWiseRuleSetupSchema = new mongoose.Schema({
   },
   max_threshold: {
     type: Number,
-    required: false, 
+    required: false,
   },
   percentage_rate: {
     type: Number,
@@ -48,14 +48,18 @@ const loyaltyTierWiseRuleSetupSchema = new mongoose.Schema({
   },
   Status: {
     type: String,
-    enum: ['A', 'I'], // Active, Inactive
+    enum: ["A", "I"], // Active, Inactive
     required: true,
   },
 });
 
-loyaltyTierWiseRuleSetupSchema.plugin(AutoIncrement, { inc_field: 'rule_id' });
+loyaltyTierWiseRuleSetupSchema.plugin(AutoIncrement, { inc_field: "rule_id" });
 
-
-const LoyaltyTierWiseRuleSetup = mongoose.model('LoyaltyTierWiseRuleSetup', loyaltyTierWiseRuleSetupSchema);
+const LoyaltyTierWiseRuleSetup = mongoose.model(
+  "LoyaltyTierWiseRuleSetup",
+  loyaltyTierWiseRuleSetupSchema
+);
 
 export default LoyaltyTierWiseRuleSetup;
+
+// Update in .gitignore
