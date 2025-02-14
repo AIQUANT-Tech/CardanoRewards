@@ -92,6 +92,7 @@ const SignupForm = () => {
       if (response.ok) {
         setSuccessMessage(data.message);
         toast.success(data.message); // Toastify success message
+        localStorage.setItem("token", JSON.stringify("Signup successful"));
         setTimeout(() => navigate("/SetupPage1"), 2000);
       } else {
         setError(data.message || "Signup failed");

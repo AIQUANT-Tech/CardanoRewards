@@ -35,6 +35,15 @@
   gap: 10px;
 }
 
+.offer-form-field{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  /* gap: 10px; */
+  width: 85%;
+}
+
 /* Form Field Styles */
 .form-field-name {
   display: flex;

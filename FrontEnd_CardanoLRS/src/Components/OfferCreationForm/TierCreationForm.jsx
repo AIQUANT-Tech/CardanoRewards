@@ -264,27 +264,29 @@ const TierCreationForm = ({ showNextButton = true }) => {
         <h2 className="form-subtitle">Tier Creation</h2>
         {tiers.map((tier, index) => (
           <div className="tier-row" key={index}>
-            <div className="form-field-name">
-              <label>Tier Name</label>
-              <input
-                type="text"
-                placeholder="Enter tier name"
-                value={tier.name}
-                onChange={(e) =>
-                  handleInputChange(index, "name", e.target.value)
-                }
-              />
-            </div>
-            <div className="form-field-description">
-              <label>Tier Description</label>
-              <input
-                type="text"
-                placeholder="Enter tier description"
-                value={tier.description}
-                onChange={(e) =>
-                  handleInputChange(index, "description", e.target.value)
-                }
-              />
+            <div className="offer-form-field">
+              <div className="form-field-name">
+                <label>Tier Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter tier name"
+                  value={tier.name}
+                  onChange={(e) =>
+                    handleInputChange(index, "name", e.target.value)
+                  }
+                />
+              </div>
+              <div className="form-field-description">
+                <label>Tier Description</label>
+                <input
+                  type="text"
+                  placeholder="Enter tier description"
+                  value={tier.description}
+                  onChange={(e) =>
+                    handleInputChange(index, "description", e.target.value)
+                  }
+                />
+              </div>
             </div>
             <div className="button-group">
               {tiers.length > 1 && (

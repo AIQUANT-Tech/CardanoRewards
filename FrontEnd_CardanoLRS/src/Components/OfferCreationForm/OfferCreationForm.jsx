@@ -245,27 +245,29 @@ const OfferCreationForm = ({ showNextButton = true }) => {
         <h2 className="form-subtitle">Offer Creation</h2>
         {offers.map((offer, index) => (
           <div className="offer-row" key={index}>
-            <div className="form-field-name">
-              <label>Offer Name</label>
-              <input
-                type="text"
-                placeholder="Enter offer name"
-                value={offer.name}
-                onChange={(e) =>
-                  handleInputChange(index, "name", e.target.value)
-                }
-              />
-            </div>
-            <div className="form-field-description">
-              <label>Offer Description</label>
-              <input
-                type="text"
-                placeholder="Enter offer Description"
-                value={offer.description}
-                onChange={(e) =>
-                  handleInputChange(index, "description", e.target.value)
-                }
-              />
+            <div className="offer-form-field">
+              <div className="form-field-name">
+                <label>Offer Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter offer name"
+                  value={offer.name}
+                  onChange={(e) =>
+                    handleInputChange(index, "name", e.target.value)
+                  }
+                />
+              </div>
+              <div className="form-field-description">
+                <label>Offer Description</label>
+                <input
+                  type="text"
+                  placeholder="Enter offer Description"
+                  value={offer.description}
+                  onChange={(e) =>
+                    handleInputChange(index, "description", e.target.value)
+                  }
+                />
+              </div>
             </div>
             <div className="button-group">
               {offers.length > 1 && (
