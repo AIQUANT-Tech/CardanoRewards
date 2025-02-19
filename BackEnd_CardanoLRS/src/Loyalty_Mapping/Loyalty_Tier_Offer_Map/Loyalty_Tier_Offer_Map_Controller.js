@@ -128,3 +128,197 @@ export const editMappingLoyaltyOffersTiers = async (req, res) => {
     });
   }
 };
+
+// import {
+//   mappingLoyaltyOffersTiers,
+//   editMappingLoyaltyOffersTiers,
+// } from "./Loyalty_Tier_Offer_Map_Controller";
+// import LoyaltyTier from "../../Loyalty_Mast/Loyalty_Tier_Mast/Loyalty_Tier_Mast_Schema";
+// import LoyaltyOffer from "../../Loyalty_Mast/Loyalty_Offer_Mast/Loyalty_Offer_Mast_Schema";
+// import LoyaltyTierOfferMap from "./Loyalty_Tier_Offer_Map_Schema";
+
+// jest.mock("../../Loyalty_Mast/Loyalty_Tier_Mast/Loyalty_Tier_Mast_Schema");
+// jest.mock("../../Loyalty_Mast/Loyalty_Offer_Mast/Loyalty_Offer_Mast_Schema");
+// jest.mock("./Loyalty_Tier_Offer_Map_Schema");
+
+// describe("mappingLoyaltyOffersTiers", () => {
+//   let mockRequest, mockResponse;
+
+//   beforeEach(() => {
+//     mockRequest = {
+//       body: {
+//         loyalty_offer_tier_mapping_rq: {
+//           header: {
+//             user_name: "businessUser",
+//             product: "LRS",
+//             request_type: "MAPPING_LOYALTY_OFFER_TIER",
+//           },
+//           mapping_info_offer_tier: [
+//             {
+//               offer_id: "1",
+//               tier_id: "101",
+//               Status: "A",
+//             },
+//           ],
+//         },
+//       },
+//     };
+
+//     mockResponse = {
+//       status: jest.fn().mockReturnThis(),
+//       json: jest.fn(),
+//     };
+
+//     jest.clearAllMocks();
+//   });
+
+//   afterEach(() => {
+//     jest.resetAllMocks();
+//   });
+
+//   it("should return 200 and success status if mapping is successful (new mapping)", async () => {
+//     LoyaltyTier.findOne.mockResolvedValue({ tier_id: "101" });
+//     LoyaltyOffer.findOne.mockResolvedValue({ offer_id: "1" });
+//     LoyaltyTierOfferMap.findOne.mockResolvedValue(null);
+
+//     const saveMock = jest.fn().mockResolvedValue(true);
+//     LoyaltyTierOfferMap.mockImplementation(() => ({ save: saveMock }));
+
+//     await mappingLoyaltyOffersTiers(mockRequest, mockResponse);
+
+//     expect(LoyaltyTier.findOne).toHaveBeenCalledWith({ tier_id: "101" });
+//     expect(LoyaltyOffer.findOne).toHaveBeenCalledWith({ offer_id: "1" });
+//     expect(LoyaltyTierOfferMap.findOne).toHaveBeenCalledWith({
+//       tier_id: "101",
+//       offer_id: "1",
+//     });
+//     expect(saveMock).toHaveBeenCalled();
+//     expect(mockResponse.status).toHaveBeenCalledWith(200);
+//     expect(mockResponse.json).toHaveBeenCalledWith({
+//       loyalty_offer_tier_mapping_rs: { status: "success" },
+//     });
+//   });
+
+//   it("should return 500 if loyalty tier is not found", async () => {
+//     LoyaltyTier.findOne.mockResolvedValue(null);
+//     LoyaltyOffer.findOne.mockResolvedValue({ offer_id: "1" });
+
+//     await mappingLoyaltyOffersTiers(mockRequest, mockResponse);
+
+//     expect(mockResponse.status).toHaveBeenCalledWith(500);
+//     expect(mockResponse.json).toHaveBeenCalledWith({
+//       loyalty_offer_tier_mapping_rs: { status: "failure" },
+//     });
+//   });
+
+//   it("should return 500 if loyalty offer is not found", async () => {
+//     LoyaltyTier.findOne.mockResolvedValue({ tier_id: "101" });
+//     LoyaltyOffer.findOne.mockResolvedValue(null);
+
+//     await mappingLoyaltyOffersTiers(mockRequest, mockResponse);
+
+//     expect(mockResponse.status).toHaveBeenCalledWith(500);
+//     expect(mockResponse.json).toHaveBeenCalledWith({
+//       loyalty_offer_tier_mapping_rs: { status: "failure" },
+//     });
+//   });
+
+//   it("should update existing mapping if it exists", async () => {
+//     const existingMapping = {
+//       status: "A",
+//       modified_at: new Date(),
+//       modified_by: "testUser",
+//       save: jest.fn().mockResolvedValue(true),
+//     };
+
+//     LoyaltyTier.findOne.mockResolvedValue({ tier_id: "101" });
+//     LoyaltyOffer.findOne.mockResolvedValue({ offer_id: "1" });
+//     LoyaltyTierOfferMap.findOne.mockResolvedValue(existingMapping);
+
+//     await mappingLoyaltyOffersTiers(mockRequest, mockResponse);
+
+//     expect(existingMapping.save).toHaveBeenCalled();
+//     expect(mockResponse.status).toHaveBeenCalledWith(200);
+//     expect(mockResponse.json).toHaveBeenCalledWith({
+//       loyalty_offer_tier_mapping_rs: { status: "success" },
+//     });
+//   });
+// });
+
+// describe("editMappingLoyaltyOffersTiers", () => {
+//   let mockRequest, mockResponse;
+
+//   beforeEach(() => {
+//     mockRequest = {
+//       body: {
+//         loyalty_offer_tier_mapping_edit_rq: {
+//           header: {
+//             user_name: "businessUser",
+//             product: "LRS",
+//             request_type: "EDIT_MAPPING_LOYALTY_OFFER_TIER",
+//           },
+//           mapping_info_offer_tier: [
+//             {
+//               offer_id: "1",
+//               tier_id: "101",
+//               status: "I",
+//             },
+//           ],
+//         },
+//       },
+//     };
+
+//     mockResponse = {
+//       status: jest.fn().mockReturnThis(),
+//       json: jest.fn(),
+//     };
+
+//     jest.clearAllMocks();
+//   });
+
+//   afterEach(() => {
+//     jest.resetAllMocks();
+//   });
+
+//   it("should return 200 and success status if editing is successful", async () => {
+//     const existingMapping = {
+//       status: "A",
+//       modified_at: new Date(),
+//       modified_by: "testUser",
+//       save: jest.fn().mockResolvedValue(true),
+//     };
+
+//     LoyaltyTierOfferMap.findOne.mockResolvedValue(existingMapping);
+
+//     await editMappingLoyaltyOffersTiers(mockRequest, mockResponse);
+
+//     expect(existingMapping.status).toBe("I");
+//     expect(existingMapping.save).toHaveBeenCalled();
+//     expect(mockResponse.status).toHaveBeenCalledWith(200);
+//     expect(mockResponse.json).toHaveBeenCalledWith({
+//       loyalty_offer_tier_mapping_edit_rs: { status: "success" },
+//     });
+//   });
+
+//   it("should return 500 if mapping is not found", async () => {
+//     LoyaltyTierOfferMap.findOne.mockResolvedValue(null);
+
+//     await editMappingLoyaltyOffersTiers(mockRequest, mockResponse);
+
+//     expect(mockResponse.status).toHaveBeenCalledWith(500);
+//     expect(mockResponse.json).toHaveBeenCalledWith({
+//       loyalty_offer_tier_mapping_edit_rs: { status: "failure" },
+//     });
+//   });
+
+//   it("should return 500 if an error occurs", async () => {
+//     LoyaltyTierOfferMap.findOne.mockRejectedValue(new Error("Database error"));
+
+//     await editMappingLoyaltyOffersTiers(mockRequest, mockResponse);
+
+//     expect(mockResponse.status).toHaveBeenCalledWith(500);
+//     expect(mockResponse.json).toHaveBeenCalledWith({
+//       loyalty_offer_tier_mapping_edit_rs: { status: "failure" },
+//     });
+//   });
+// });
