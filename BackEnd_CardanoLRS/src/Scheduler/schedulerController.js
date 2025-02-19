@@ -95,7 +95,7 @@ export const processUserMappingFeed = async () => {
 
             await tierMapping.save();
             console.log(
-              `🏅 Assigned Tier ${guest.tier_id} to User ${user.user_id}`
+              `Assigned Tier ${guest.tier_id} to User ${user.user_id}`
             );
           } else {
             console.log(
