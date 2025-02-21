@@ -10,6 +10,7 @@ import LoyaltyUser from "../Loyalty_Mast/Loyalty_User_Mast/Loyalty_User_Mast_Rou
 import LoyaltyOfferUserMap from "../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Route.js";
 import HbsRoutes from "../../Hotel_Booking_System/Hbs_Routes.js";
 import schedulerRoutes from "../Scheduler/schedulerRoutes.js";
+import transactionRoutes from "../../Cardano_Smartcontract/ChainRoute.js";
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use("/api/user", LoyaltyUser);
 app.use("/api/map/user", LoyaltyOfferUserMap);
 app.use("/api/hotel_booking_system/", HbsRoutes);
 app.use("/api/scheduler", schedulerRoutes);
+
+app.use("/api/transaction", transactionRoutes);
 
 app.listen(5000, () => {
   console.log(`Server is running on port 5000`);
