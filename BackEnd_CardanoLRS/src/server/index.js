@@ -12,6 +12,7 @@ import HbsRoutes from "../../Hotel_Booking_System/Hbs_Routes.js";
 import schedulerRoutes from "../Scheduler/schedulerRoutes.js";
 import transactionRoutes from "../../Cardano_Smartcontract/ChainRoute.js";
 import rewardTransactionRoute from "../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRoute.js";
+import rewardbalance from "../Total_Reward/Reward_Balance.js";
 
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.use("/api/scheduler", schedulerRoutes);
 
 app.use("/api/transaction", transactionRoutes);
 app.use("/api/rewardTransaction", rewardTransactionRoute);
+
+app.use("/api/rewardBalanceTotal", rewardbalance);
 
 app.listen(5000, () => {
   console.log(`Server is running on port 5000`);
