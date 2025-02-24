@@ -63,7 +63,7 @@ const lockFunds = async (dataToLock) => {
     }
     console.log("I am here");
 
-    const b = new Constr(0, ["72657669657734", BigInt(400)]);
+    const b = new Constr(0, ["72657669657736", BigInt(700)]); // Id and Balance
 
     const tx = await lucid
       .newTx()
@@ -90,94 +90,6 @@ const lockFunds = async (dataToLock) => {
   }
 };
 
-// Redeem ADA from the script
-// async function redeemFunds(datumToRedeem, redeemer) {
-//   try {
-//     if (typeof datumToRedeem !== "object" || datumToRedeem === null) {
-//       throw new Error("Invalid datum: Expected a valid JSON object.");
-//     }
-//     //     if (typeof redeemer.reviewId !== "string") {
-//     //       throw new Error("Invalid redeemer: Expected a string (reviewId).");
-//     //     }
-
-//     const b = new Constr(0, ["72657669657733", BigInt(500)]);
-
-//     const datumCbor = Data.to(b);
-//     console.log("🔹 Encoded Datum (CBOR):", datumCbor);
-
-//     const utxos = await lucid.utxosAt(scriptAddress);
-
-//     const paymentUtxos = await lucid.utxosAt(await lucid.wallet.address());
-
-//     //console.log(paymentUtxos);
-
-//     // Find matching UTXOs and print both sides
-//     const matchingUtxos = utxos.flatMap((scriptUtxo) => {
-//       return paymentUtxos
-//         .filter((paymentUtxo) => scriptUtxo.txHash === paymentUtxo.txHash)
-//         .map((paymentUtxo) => ({ scriptUtxo, paymentUtxo }));
-//     });
-
-//     const matchingPaymentUtxos = matchingUtxos.map(
-//       ({ paymentUtxo }) => paymentUtxo
-//     );
-
-//     console.log("Matching Payment UTXOs:", matchingPaymentUtxos[0].txHash);
-
-//     const referenceScriptUtxo = utxos.find((utxo) => Boolean(utxo.scriptRef));
-//     if (!referenceScriptUtxo) throw new Error("Reference script not found");
-
-//     // Fix UTxO Selection (Ensure it has a datum)
-//     const utxoToRedeem = utxos.find((utxo) => utxo.datum === datumCbor);
-//     if (!utxoToRedeem) throw new Error("No valid UTxO with datum found!");
-
-//     console.log("🔹 Selected UTxO:", utxoToRedeem);
-
-//     const cborRedeemer = new Constr(0, [
-//       "72657669650001",
-//       BigInt(100),
-//       "72657669657733",
-//       BigInt(100),
-//       BigInt(700),
-//       BigInt(1619190195),
-//     ]);
-//     console.log("🔹 Redeemer(CBOR): ", cborRedeemer);
-
-//     console.log("🔹 Encoded Redeemer(CBOR): ", Data.to(cborRedeemer));
-
-//     // Build Transaction
-//     let txBuilder = lucid.newTx();
-
-//     if (matchingPaymentUtxos[0]) {
-//       console.log("✅ Using reference script.");
-//       txBuilder = txBuilder.readFrom([matchingPaymentUtxos[0]]);
-//     } else {
-//       console.log("✅ Attaching validator script manually.");
-//       txBuilder = txBuilder.attachSpendingValidator(script);
-//     }
-
-//     console.log("Wallet Address: ", await lucid.wallet.address());
-
-//     const tx = await txBuilder
-//       .collectFrom([utxoToRedeem], Data.to(cborRedeemer))
-//       .addSigner(await lucid.wallet.address())
-//       .payToAddress(await lucid.wallet.address(), { lovelace: 19675150n })
-//       .complete();
-
-//     console.log("Transaction Built:", tx);
-
-//     // Sign & Submit
-//     const signedTx = await tx.sign().complete();
-//     const txHash = await signedTx.submit();
-
-//     console.log("Funds redeemed successfully with transaction:", txHash);
-//     return txHash;
-//   } catch (error) {
-//     console.error("❌ Error redeeming funds:", error.message);
-//     throw new Error("Transaction failed: " + error.message);
-//   }
-// }
-
 async function redeemFunds(datumToRedeem, redeemer) {
   try {
     // Validate input datum
@@ -186,7 +98,7 @@ async function redeemFunds(datumToRedeem, redeemer) {
     }
 
     // Step 0: Prepare datum and redeemer
-    const b = new Constr(0, ["72657669657734", BigInt(400)]);
+    const b = new Constr(0, ["72657669657736", BigInt(700)]);
     const datumCbor = Data.to(b);
     console.log("🔹 Encoded Datum (CBOR):", datumCbor);
 
@@ -198,10 +110,10 @@ async function redeemFunds(datumToRedeem, redeemer) {
 
     // Prepare the redeemer
     const cborRedeemer = new Constr(0, [
-      "72657669657734",
+      "72657669657736",
       BigInt(100),
       "72657669657701",
-      BigInt(110),
+      BigInt(100),
       BigInt(700),
       BigInt(1619190195),
     ]);
