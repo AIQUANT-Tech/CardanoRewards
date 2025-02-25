@@ -13,6 +13,7 @@ import schedulerRoutes from "../Scheduler/schedulerRoutes.js";
 import transactionRoutes from "../../Cardano_Smartcontract/ChainRoute.js";
 import rewardTransactionRoute from "../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRoute.js";
 import rewardbalance from "../Total_Reward/Reward_Balance.js";
+import reward from "../../Reward_Spending/Apply_Reward_Route.js";
 
 dotenv.config();
 
@@ -37,10 +38,10 @@ app.use("/api/rewardTransaction", rewardTransactionRoute);
 
 app.use("/api/rewardBalanceTotal", rewardbalance);
 
+app.use("/api/reward", reward);
+
 app.listen(5000, () => {
   console.log(`Server is running on port 5000`);
-  //process.env.PORT
-  //${process.env.PORT}
 });
 
 export default app;
