@@ -37,7 +37,7 @@ export const lockFunds = async (dataToLock) => {
   if (typeof dataToLock !== "object" || dataToLock === null) {
     throw new Error("Datum must be a valid JSON object");
   }
-  console.log("I am inside the lockFunds");
+  console.log("Working On Locking The Funds");
 
   // const transformedData = encode(dataToLock).toString("hex");
   // console.log("Transformed Datum:", JSON.stringify(dataToLock, null, 2));
@@ -54,9 +54,6 @@ export const lockFunds = async (dataToLock) => {
     if (!utxos || utxos.length === 0) {
       throw new Error("No UTxOs found at the given address");
     }
-    console.log("I am here");
-
-    const b = new Constr(0, ["72657669657736", BigInt(700)]); // Id and Balance
 
     const tx = await lucid
       .newTx()
@@ -70,12 +67,10 @@ export const lockFunds = async (dataToLock) => {
       )
       .complete();
 
-    console.log("working upto here!");
+    // console.log("working upto here!");
 
     const signedTx = await tx.sign().complete();
     const txHash = await signedTx.submit();
-
-    console.log("Funds locked with transaction:", txHash);
     return txHash;
   } catch (error) {
     console.error("Error locking funds:", error);
@@ -90,16 +85,18 @@ export async function redeemFunds(datumToRedeem, redeemer) {
       throw new Error("Invalid datum: Expected a valid JSON object.");
     }
 
+    console.log("Working On Unlocking The Funds");
+
     const datumCbor = Data.to(datumToRedeem);
-    console.log("🔹 Encoded Datum (CBOR):", datumCbor);
+    // console.log("🔹 Encoded Datum (CBOR):", datumCbor);
 
     // Fetch script UTxOs and find the one matching your datum
     const scriptUtxos = await lucid.utxosAt(scriptAddress);
     const utxoToRedeem = scriptUtxos.find((utxo) => utxo.datum === datumCbor);
     if (!utxoToRedeem) throw new Error("No valid UTxO with datum found!");
-    console.log("🔹 Selected UTxO to redeem:", utxoToRedeem);
+    // console.log("🔹 Selected UTxO to redeem:", utxoToRedeem);
 
-    console.log("🔹 Encoded Redeemer (CBOR):", Data.to(redeemer));
+    // console.log("🔹 Encoded Redeemer (CBOR):", Data.to(redeemer));
 
     // ----------------------------
     // Step 1: Build a draft transaction to calculate fee.
@@ -139,7 +136,7 @@ export async function redeemFunds(datumToRedeem, redeemer) {
 
     // Complete the draft transaction so Lucid calculates the fee.
     const draftTx = await txBuilderDraft.complete();
-    console.log("Draft Transaction Built:", draftTx);
+    // console.log("Draft Transaction Built:", draftTx);
     console.log("Draft Calculated fee:", draftTx.fee);
 
     // ----------------------------
@@ -185,7 +182,7 @@ export async function redeemFunds(datumToRedeem, redeemer) {
       .payToAddress(await lucid.wallet.address(), { lovelace: amountToSend });
 
     const finalTx = await txBuilderFinal.complete();
-    console.log("Final Transaction Built:", finalTx);
+    // console.log("Final Transaction Built:", finalTx);
     console.log("Final Calculated fee:", finalTx.fee);
 
     const signedTx = await finalTx.sign().complete();
