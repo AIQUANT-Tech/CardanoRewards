@@ -1,4 +1,3 @@
-// controllers/transactionController.js
 import { Lucid, Blockfrost, Constr, Data, fromHex, toHex } from "lucid-cardano";
 import dotenv from "dotenv";
 import cbor from "cbor";
@@ -30,31 +29,25 @@ const script = {
 };
 
 // Derive script address
-const scriptAddress = lucid.utils.validatorToAddress(script);
+export const scriptAddress = lucid.utils.validatorToAddress(script);
 console.log(scriptAddress);
 
 // Lock ADA at the script
-const lockFunds = async (dataToLock) => {
+export const lockFunds = async (dataToLock) => {
   if (typeof dataToLock !== "object" || dataToLock === null) {
     throw new Error("Datum must be a valid JSON object");
   }
+  console.log("I am inside the lockFunds");
 
-  // const transformedDatum = transformReviewToDatum(dataToLock);
-  const transformedData = encode(dataToLock).toString("hex");
+  // const transformedData = encode(dataToLock).toString("hex");
+  // console.log("Transformed Datum:", JSON.stringify(dataToLock, null, 2));
 
-  console.log("Transformed Datum:", JSON.stringify(dataToLock, null, 2));
+  // const cborDatum = encode(dataToLock).toString("hex");
+  // console.log("Encoded CBOR Datum:", cborDatum);
 
-  const jsonString = JSON.stringify(dataToLock);
-  // const buffer = Buffer.from(jsonString, 'utf-8');
-  const cborDatum = encode(dataToLock).toString("hex");
+  // console.log("Encoded Redeemer:", transformedData);
 
-  console.log("Encoded CBOR Datum:", cborDatum);
-
-  // const transformedBuffer = JSON.stringify(transformedDatum);
-
-  console.log("Encoded Redeemer:", transformedData);
-
-  console.log(scriptAddress);
+  // console.log(scriptAddress);
 
   try {
     const utxos = await lucid.utxosAt(scriptAddress);
@@ -70,7 +63,7 @@ const lockFunds = async (dataToLock) => {
       .payToContract(
         scriptAddress,
         {
-          inline: Data.to(b),
+          inline: Data.to(dataToLock),
           scriptRef: script,
         },
         { lovelace: BigInt(process.env.AMMOUNT_ADA) }
@@ -90,16 +83,14 @@ const lockFunds = async (dataToLock) => {
   }
 };
 
-async function redeemFunds(datumToRedeem, redeemer) {
+export async function redeemFunds(datumToRedeem, redeemer) {
   try {
     // Validate input datum
     if (typeof datumToRedeem !== "object" || datumToRedeem === null) {
       throw new Error("Invalid datum: Expected a valid JSON object.");
     }
 
-    // Step 0: Prepare datum and redeemer
-    const b = new Constr(0, ["72657669657736", BigInt(700)]);
-    const datumCbor = Data.to(b);
+    const datumCbor = Data.to(datumToRedeem);
     console.log("🔹 Encoded Datum (CBOR):", datumCbor);
 
     // Fetch script UTxOs and find the one matching your datum
@@ -108,17 +99,7 @@ async function redeemFunds(datumToRedeem, redeemer) {
     if (!utxoToRedeem) throw new Error("No valid UTxO with datum found!");
     console.log("🔹 Selected UTxO to redeem:", utxoToRedeem);
 
-    // Prepare the redeemer
-    const cborRedeemer = new Constr(0, [
-      "72657669657736",
-      BigInt(100),
-      "72657669657701",
-      BigInt(100),
-      BigInt(700),
-      BigInt(1619190195),
-    ]);
-    console.log("🔹 Redeemer (CBOR):", cborRedeemer);
-    console.log("🔹 Encoded Redeemer (CBOR):", Data.to(cborRedeemer));
+    console.log("🔹 Encoded Redeemer (CBOR):", Data.to(redeemer));
 
     // ----------------------------
     // Step 1: Build a draft transaction to calculate fee.
@@ -152,7 +133,7 @@ async function redeemFunds(datumToRedeem, redeemer) {
 
     // Build draft transaction with a dummy output (0 lovelace) so we can calculate the fee.
     txBuilderDraft = txBuilderDraft
-      .collectFrom([utxoToRedeem], Data.to(cborRedeemer))
+      .collectFrom([utxoToRedeem], Data.to(redeemer))
       .addSigner(await lucid.wallet.address())
       .payToAddress(await lucid.wallet.address(), { lovelace: 0n });
 
@@ -199,7 +180,7 @@ async function redeemFunds(datumToRedeem, redeemer) {
     }
 
     txBuilderFinal = txBuilderFinal
-      .collectFrom([utxoToRedeem], Data.to(cborRedeemer))
+      .collectFrom([utxoToRedeem], Data.to(redeemer))
       .addSigner(await lucid.wallet.address())
       .payToAddress(await lucid.wallet.address(), { lovelace: amountToSend });
 
@@ -240,7 +221,6 @@ const getTransactionDetails = async (txHash) => {
   }
 };
 
-// Controller methods for the routes
 export const lockFundsController = async (req, res) => {
   const { datum } = req.body;
   console.log(datum);
