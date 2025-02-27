@@ -8,6 +8,7 @@ import {
   redeemFunds,
   scriptAddress,
 } from "../Cardano_Smartcontract/CardanoLucidRedeemReward.js";
+import RewardTransaction from "./Reward_Transaction_Schema.js";
 
 const lucid = await Lucid.new(
   new Blockfrost(
@@ -213,6 +214,21 @@ export const applyReward = async (req, res) => {
       typeof guest.reward_balance === "bigint"
         ? guest.reward_balance.toString()
         : guest.reward_balance;
+
+    const rewardTx = new RewardTransaction({
+      user_id: user_id,
+      lock_tx: lockTxHash,
+      redeem_tx: redeemTxHash,
+      booking_currency: currency.toUpperCase(),
+      original_booking_cost: booking_cost,
+      converted_booking_cost_usd: booking_cost_usd,
+      discount_applied_usd: discountUSD,
+      final_cost_usd: final_cost,
+      used_reward_ada: reward_usage,
+      new_reward_balance_ada: newRewardBalanceStr,
+      created_at: new Date(),
+    });
+    await rewardTx.save();
 
     return res.status(200).json({
       original_booking_cost: booking_cost,
