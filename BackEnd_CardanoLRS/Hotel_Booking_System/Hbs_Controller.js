@@ -127,35 +127,7 @@ async function getCurrencyToUSDRate(currency) {
   }
 }
 
-/**
- * Processes guest booking information.
- * Expects the request body to have:
- * {
- *   "guest_booking_info_rq": {
- *     "guest_list": [
- *       {
- *         "guest_id": Number,
- *         "first_name": "First",
- *         "last_name": "Last",
- *         "email": "email@example.com",
- *         "phone_number": "+123456789",
- *         "tier_id": Number,
- *         "reward_balance": Number,
- *         "booking_id": Number,
- *         "check_in_date": "2024-03-10T14:00:00Z",
- *         "check_out_date": "2024-03-15T11:00:00Z",
- *         "booking_status": "pending",
- *         "total_amount": "26085",   // Original amount (as string or number)
- *         "currency": "INR",         // Original currency code
- *         "payment_status": "pending",
- *         "payment_date": "2024-02-28T15:45:00Z"
- *       }
- *     ]
- *   }
- * }
- * 
- * The code converts the original amount to USD and stores it in `total_spend`.
- */
+
 export const processGuestBookingInfo = async (req, res) => {
   try {
     const { guest_booking_info_rq } = req.body;

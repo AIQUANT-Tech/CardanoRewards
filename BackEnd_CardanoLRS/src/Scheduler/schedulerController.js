@@ -7,10 +7,7 @@ import UserGuestMap from "./UserGuestMap.js";
 import LoyaltyEndUserTierMap from "../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Schema.js";
 import LoyaltyTierWiseRuleSetup from "../Loyalty_Rule_and_Transaction/Loyalty_Tier_Wise_Rule_Setup/Loyalty_Tier_Wise_Rule_Setup_Schema.js";
 
-/**
- * Fetches the exchange rate for converting the specified currency to ADA.
- * For example, calling getCurrencyToADARate("usd") returns the number of ADA per 1 USD.
- */
+
 async function getCurrencyToADARate(currency) {
   try {
     console.log(
@@ -42,11 +39,6 @@ async function getCurrencyToADARate(currency) {
   }
 }
 
-/**
- * Processes bookings by mapping guests to users, assigning tiers, and calculating rewards.
- * - BookingInfo.total_spend is in USD.
- * - Reward is first calculated in USD and then converted into ADA.
- */
 export const processUserMappingFeed = async () => {
   try {
     // Only fetch bookings that have not been processed

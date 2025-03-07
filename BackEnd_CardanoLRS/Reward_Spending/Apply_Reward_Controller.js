@@ -330,31 +330,6 @@ async function waitForUTxOWithTimeout(
   );
 }
 
-/**
- * Controller: applyReward
- *
- * Expected Request Body:
- * {
- *   "user_id": Number,
- *   "booking_cost": Number,         // In the provided currency.
- *   "reward_usage": Number,         // ADA to redeem.
- *   "booking_currency": "usd"       // (Optional) e.g., "usd", "inr", "eur"
- * }
- *
- * This function:
- * - Validates input and converts booking cost to USD if needed.
- * - Retrieves user and guest info.
- * - Calculates discount and final cost.
- * - Builds the blockchain datum (UserState) and redeemer (RedeemRequest).
- * - Calls lockFunds to lock funds on-chain.
- * - Immediately saves a RewardTransaction record with status "pending".
- * - Spawns an asynchronous background task (using setImmediate) that:
- *      - Waits for the locked UTxO to appear,
- *      - Calls redeemFunds,
- *      - Updates the RewardTransaction record status to "success" or "failed".
- * - Updates off-chain guest reward balance.
- * - Returns a pending response.
- */
 export const applyReward = async (req, res) => {
   try {
     const { user_id, booking_cost, reward_usage, booking_currency } = req.body;
