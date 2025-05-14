@@ -6,7 +6,7 @@ import LoyaltyUserWalletTransaction from "../../Loyalty_Rule_and_Transaction/Loy
 import LoyaltyTierWiseRuleSetup from "../../Loyalty_Rule_and_Transaction/Loyalty_Tier_Wise_Rule_Setup/Loyalty_Tier_Wise_Rule_Setup_Schema.js";
 import LoyaltyEndUserTierMap from "../../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Schema.js";
 
-import { generateToken } from "../../auth/jwtUtil.js"; 
+import { generateToken } from "../../auth/jwtUtil.js";
 
 //Create user
 export const createUser = async (req, res) => {
@@ -152,7 +152,9 @@ export const loginInfoForBusinessUser = async (req, res) => {
     const { email, password } = loyalty_end_user_login_rq.user_info;
 
     // Validate request type
-    if (loyalty_end_user_login_rq.header.request_type !== "BUSINESS_USER_LOGIN") {
+    if (
+      loyalty_end_user_login_rq.header.request_type !== "BUSINESS_USER_LOGIN"
+    ) {
       return res.status(400).json({
         error: "Invalid request type",
       });
@@ -233,7 +235,7 @@ export const loginInfoForBusinessUser = async (req, res) => {
         message: "Login successful",
         user_info: {
           user_id: user.user_id,
-          username: user.first_name+" "+user.last_name,
+          username: user.first_name + " " + user.last_name,
           email: user.email,
           tier: tierDetails,
           assigned_offers: offers,
@@ -328,9 +330,9 @@ export const loginInfoForEndUser = async (req, res) => {
     const { email, password } = req.body.loyalty_end_user_login_rq.user_info;
 
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email and loyalty_end_user_login_rqpassword are required" });
+      return res.status(400).json({
+        message: "Email and loyalty_end_user_login_rqpassword are required",
+      });
     }
 
     const user = await User.findOne({ email });
@@ -354,9 +356,11 @@ export const loginInfoForEndUser = async (req, res) => {
 
     const tier_details = await LoyaltyEndUserTierMap.findOne({
       user_id: user.user_id,
-    });    
+    });
 
-    const userTier = await LoyaltyTier.findOne({tier_id: tier_details.tier_id});     
+    const userTier = await LoyaltyTier.findOne({
+      tier_id: tier_details.tier_id,
+    });
 
     const tierDetails = {
       tier_id: userTier.tier_id,
@@ -389,21 +393,21 @@ export const loginInfoForEndUser = async (req, res) => {
     };
 
     // Return user information
-    return res.status(200).json({ 
+    return res.status(200).json({
       loyalty_end_user_login_rs: {
-      status: "success",
-      token,
-      message: "Login successful",
-      user_info: {
-        user_id: user.user_id,
-        username: user.first_name+" "+user.last_name,
-        email: user.email,
-        tier: tierDetails,
-        assigned_offers: offers,
-        wallet_info: walletInfo,
+        status: "success",
+        token,
+        message: "Login successful",
+        user_info: {
+          user_id: user.user_id,
+          username: user.first_name + " " + user.last_name,
+          email: user.email,
+          tier: tierDetails,
+          assigned_offers: offers,
+          wallet_info: walletInfo,
+        },
       },
-    },
-   });
+    });
   } catch (error) {
     console.error("Error fetching user:", error);
     return res
@@ -411,3 +415,84 @@ export const loginInfoForEndUser = async (req, res) => {
       .json({ message: "An error occurred while fetching user" });
   }
 };
+
+// Add this new controller function
+// export const loginWithWallet = async (req, res) => {
+//   try {
+//     const { address, publicKey, message, signature } = req.body;
+
+//     // 1. Find user by wallet address
+//     const user = await User.findOne({
+//       wallet_address: address,
+//       role: "Business User",
+//     });
+//     if (!user) {
+//       return res.status(404).json({
+//         status: "failure",
+//         message: "Wallet not registered",
+//       });
+//     }
+
+//     // 2. Verify message freshness (within 5 minutes)
+//     const messageTime = parseInt(message.match(/\d+/)[0]);
+//     if (Date.now() - messageTime > 300000) {
+//       // 5 minutes
+//       return res.status(400).json({
+//         status: "failure",
+//         message: "Expired login request",
+//       });
+//     }
+
+//     // 3. Cryptographic verification
+//     const CSL = await import("@emurgo/cardano-serialization-lib-nodejs");
+
+//     // Verify address matches public key
+//     const addr = CSL.Address.from_bech32(address);
+//     const baseAddr = CSL.BaseAddress.from_address(addr);
+//     const paymentCred = baseAddr.payment_cred();
+//     const keyHash = paymentCred.to_keyhash();
+
+//     const pKey = CSL.PublicKey.from_bytes(Buffer.from(publicKey, "hex"));
+//     const pKeyHash = CSL.hash_public_key(pKey);
+
+//     if (!pKeyHash.to_bytes().equals(keyHash.to_bytes())) {
+//       return res.status(401).json({
+//         status: "failure",
+//         message: "Public key mismatch",
+//       });
+//     }
+
+//     // Verify signature
+//     const signedData = Buffer.from(message, "utf8");
+//     const ed25519Sig = CSL.Ed25519Signature.from_bytes(
+//       Buffer.from(signature, "hex")
+//     );
+
+//     if (!pKey.verify(signedData, ed25519Sig)) {
+//       return res.status(401).json({
+//         status: "failure",
+//         message: "Invalid signature",
+//       });
+//     }
+
+//     // Generate JWT
+//     const token = generateToken(user);
+
+//     return res.status(200).json({
+//       status: "success",
+//       token,
+//       user_info: {
+//         user_id: user.user_id,
+//         email: user.email,
+//         wallet_address: user.wallet_address,
+//         role: user.role,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Wallet login error:", error);
+//     return res.status(500).json({
+//       status: "failure",
+//       message: "Authentication failed",
+//     });
+//   }
+// };

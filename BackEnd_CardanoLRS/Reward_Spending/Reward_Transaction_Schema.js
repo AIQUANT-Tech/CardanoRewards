@@ -7,8 +7,8 @@ const RewardTransactionSchema = new mongoose.Schema({
   transaction_id: { type: Number, unique: true },
   user_id: { type: Number, required: true, ref: "User" },
   lock_tx: { type: String, required: true },
-  redeem_tx: { type: String, default: "" }, // Not required at creation
-  status: { type: String, default: "pending" }, // "pending", "success", or "failed"
+  redeem_tx: { type: String, default: "" },
+  status: { type: String, default: "pending" },
   error: { type: String, default: "" },
   booking_currency: { type: String, required: true },
   original_booking_cost: { type: Number, required: true },

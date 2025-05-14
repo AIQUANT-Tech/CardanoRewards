@@ -20,4 +20,6 @@ router.post("/fetchEndUsersInfo", fetchEndUsersInfo);
 //Route to fetch End user
 router.post("/loginInfoForEndUser", loginInfoForEndUser);
 
+// router.post("/logInWithWallet", loginWithWallet);
+
 export default router;

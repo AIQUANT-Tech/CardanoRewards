@@ -7,6 +7,7 @@ import WalletConnect from "../../../Components/Wallet/WalletConnect";
 import "./UserWallet.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as Cardano from "@emurgo/cardano-serialization-lib-asmjs";
 
 const UserWallet = () => {
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ const UserWallet = () => {
     }
 
     const wallets = [];
+    console.log(window);
+
     if (window.cardano) {
       for (const walletName in window.cardano) {
         if (window.cardano[walletName]?.enable) {
@@ -45,21 +48,26 @@ const UserWallet = () => {
       return;
     }
 
-    setLoading(true); // Show loading state
+    setLoading(true);
 
     try {
-      const walletAPI = await window.cardano[selectedWallet].enable();
+      console.log(selectedWallet);
 
-      const addresses = await walletAPI.getUsedAddresses();
+      const walletAPI = await window.cardano[selectedWallet].enable();
+      console.log(walletAPI);
+
+      const addresses = await walletAPI.getUnusedAddresses();
       console.log("Addresses:", addresses);
 
       if (addresses && addresses[0]) {
-        // const address = Buffer.from(addresses[0], "hex").toString("base64");
+        const buffer = Buffer.from(addresses[0], "hex");
+        console.log(Cardano.Address);
 
-        toast.success(
-          `Wallet connected successfully! Address: ${addresses[0]}`
-        );
-        sessionStorage.setItem("wallet", addresses[0]);
+        const address = Cardano.Address.from_bytes(buffer).to_bech32();
+        console.log(address);
+
+        toast.success(`Wallet connected successfully! Address: ${address}`);
+        sessionStorage.setItem("wallet", address);
         setDescription("Wallet Connected!");
         setTimeout(() => {
           window.location.reload();
