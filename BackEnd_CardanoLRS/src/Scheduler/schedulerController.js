@@ -6,7 +6,13 @@ import User from "../Loyalty_Mast/Loyalty_User_Mast/Loyalty_User_Mast_Schema.js"
 import UserGuestMap from "./UserGuestMap.js";
 import LoyaltyEndUserTierMap from "../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Schema.js";
 import LoyaltyTierWiseRuleSetup from "../Loyalty_Rule_and_Transaction/Loyalty_Tier_Wise_Rule_Setup/Loyalty_Tier_Wise_Rule_Setup_Schema.js";
-
+import {
+  lockFundsRewardGen,
+  waitForUTxOWithTimeout,
+  redeemFundsRewardGen,
+  scriptAddress,
+} from "../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRewardGen.js";
+import { Constr } from "lucid-cardano";
 
 async function getCurrencyToADARate(currency) {
   try {
@@ -211,7 +217,43 @@ export const processUserMappingFeed = async () => {
           if (!usdToAdaRate) {
             console.error("Failed to fetch USD to ADA rate");
           }
+          // ++++++++++++++++++++++++++ SMART CONTRACT INTEGRATION  ++++++++++++++++++++++++++++++++++++
           const rewardAda = rewardUsd * usdToAdaRate;
+          const existingBalance = guest.reward_balance || 0;
+          console.log(existingBalance);
+
+          const rewardLovelace = Math.round(rewardAda * 1_000_000);
+          const existingBalanceLovelace = Math.round(
+            existingBalance * 1_000_000
+          );
+          const datum = {
+            amount: rewardLovelace,
+            existingBalance: existingBalanceLovelace,
+            timestamp: Date.now(),
+          };
+
+          const txHash = await lockFundsRewardGen(datum);
+          console.log(`✅ Locked reward for ${user.email}. TX: ${txHash}`);
+
+          try {
+            const constrDatum = new Constr(0, [
+              BigInt(datum.amount),
+              BigInt(datum.existingBalance),
+              BigInt(datum.timestamp),
+            ]);
+            // Wait for UTxO to appear
+            await waitForUTxOWithTimeout(scriptAddress, constrDatum, txHash);
+
+            // Redeem immediately
+            const redeemHash = await redeemFundsRewardGen(datum, {});
+            console.log(`🔓 Redeemed reward TX: ${redeemHash}`);
+          } catch (redeemError) {
+            console.error(
+              "❌ Redemption failed, aborting further processing:",
+              redeemError
+            );
+            break;
+          }
 
           // Update guest.reward_balance (stored in ADA) and record the assigned tier.
           guest.reward_balance = (guest.reward_balance || 0) + rewardAda;

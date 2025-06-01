@@ -140,3 +140,64 @@
     transform: rotate(360deg);
   }
 }
+
+/* Wallet Login Section Styles */
+.wallet-login-section {
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.wallet-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  background: #3C3C3D;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.wallet-button:hover {
+  background: #2C2C2D;
+}
+
+.wallet-button:disabled {
+  background: #5A5A5A;
+  cursor: not-allowed;
+}
+
+.wallet-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #666;
+  margin: 1.5rem 0;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.separator::before {
+  margin-right: 1rem;
+}
+
+.separator::after {
+  margin-left: 1rem;
+}
+
+/* Existing styles remain the same... */

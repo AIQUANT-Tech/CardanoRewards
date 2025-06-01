@@ -1,5 +1,5 @@
 import express from "express";
-import GuestInfo from "../../Hotel_Booking_System/Hbs_Guest_Info_Schema.js"; // Adjust the path as needed
+import GuestInfo from "../../Hotel_Booking_System/Hbs_Guest_Info_Schema.js";
 
 const router = express.Router();
 
@@ -13,7 +13,6 @@ router.get("/total-reward-balance", async (req, res) => {
         },
       },
     ]);
-
     const totalRewardBalance =
       result.length > 0 ? result[0].totalRewardBalance : 0;
     res.json({ totalRewardBalance });
