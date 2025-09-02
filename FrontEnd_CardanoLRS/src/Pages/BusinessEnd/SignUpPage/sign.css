@@ -1,0 +1,18 @@
+.SignUp-Container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  /* max-height: 450px; Set a max height for scrollable content */
+  overflow-y: auto;
+
+  height: 100vh;
+}
+
+.Text {
+  font-family: "Inika", sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  padding: 5px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}

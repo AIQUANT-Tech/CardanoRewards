@@ -1,0 +1,104 @@
+.Profile-css {
+  display: flex;
+  flex-direction: row;
+}
+
+body {
+  margin: 0;
+  font-family: "Inika", serif;
+}
+
+.Profile-main-body {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.Profile-Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #efeeee;
+  border-radius: 20px;
+  width: 98%;
+  height: 83%;
+  position: relative;
+  bottom: 35px;
+}
+
+.Profile-Image-Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  position: relative;
+}
+
+.Profile-Image {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.Image-Upload-Input {
+  display: none;
+}
+
+.Image-Upload-Label {
+  position: relative;
+  cursor: pointer;
+}
+
+.Image-Upload-Icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.Profile-Details-Container {
+  margin-top: 20px;
+  width: 80%;
+}
+
+.Profile-Card {
+  background-color: transparent;
+  border-radius: 10px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Profile-Content p {
+  margin: 15px 0; /* Add spacing between text */
+  font-size: 16px;
+}
+
+.Profile-Edit-Button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.Profile-Edit-Button:hover {
+  background-color: #45a049;
+}

@@ -1,0 +1,15 @@
+.UserProfile {
+  display: flex;
+  flex-direction: row;
+}
+
+.UserProfile-main-body {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}

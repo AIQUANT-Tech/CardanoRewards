@@ -1,0 +1,31 @@
+/* .FirstSetup-css {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.FirstSetup-main-body {
+  flex: 1;
+  width: 70%;
+  height: fit-content;
+  
+} */
+
+.FirstSetup-css {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.FirstSetup-main-body {
+  flex: 1;
+  width: 70%;
+  max-height: 80vh; /* You can adjust the max-height to your preference */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 20px;
+  box-sizing: border-box;
+}

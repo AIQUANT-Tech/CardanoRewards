@@ -1,0 +1,87 @@
+/* .Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  background-color: #f0c6c6;
+  padding-left: 10px;
+  padding-right: 15px;
+  height: 70px;
+  box-shadow: 0 0 5px #0000008c;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: darkblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.logo {
+  display: flex;
+  flex-direction: row;
+  padding-left: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+button:hover {
+  background-color: navy;
+}
+
+.header2-css {
+  display: flex;
+  flex-direction: row;
+  gap: 70px;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-logo {
+  height: 60px;
+} */
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  padding-left: 10px;
+  padding-right: 15px;
+  height: 70px;
+  box-shadow: 0 0 5px #0000008c;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: darkblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: navy;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  padding-left: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.header2-css {
+  display: flex;
+  flex-direction: row;
+  gap: 60px; /* Reduced gap for better flexibility */
+  justify-content: center;
+  align-items: center;
+}
+
+.image-logo {
+  height: 60px;
+}

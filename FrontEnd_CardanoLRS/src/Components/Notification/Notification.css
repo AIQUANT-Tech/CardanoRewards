@@ -1,0 +1,186 @@
+/* Blur background */
+.blur-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+/* Notification popup container */
+.notifications-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  max-width: 700px;
+  height: 70%;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1010;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: hidden;
+  opacity: 0; /* Initially hidden */
+  transform: translate(-50%, -50%) scale(0.8); /* Start scaled down */
+  animation: popupFadeIn 0.4s ease-out forwards; /* Animation for opening */
+}
+
+/* Keyframe animation for popup opening */
+@keyframes popupFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Header for the popup */
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.notifications-header h2 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.notifications-header button {
+  background: #000000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.close-button {
+  padding-top: 10px;
+}
+
+.close-button button {
+  background: black;
+}
+
+.notifications-header button:hover {
+  background: #d32f2f;
+}
+
+/* Notifications list styling */
+.notifications-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
+  overflow-y: auto; /* Make the list scrollable */
+}
+
+.notifications-list li {
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.notifications-list li:hover {
+  background: #f5f5f5;
+}
+
+.notifications-list .unread {
+  font-weight: bold;
+  background: #e8f5e9;
+}
+
+.notifications-list .read {
+  font-weight: normal;
+  color: #555;
+}
+
+.unread-indicator {
+  width: 10px;
+  height: 10px;
+  background: #4caf50;
+  border-radius: 50%;
+}
+/* Notification detail popup */
+.notification-detail-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  max-width: 600px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1020;
+  display: flex;
+  flex-direction: column;
+  opacity: 0; /* Initially hidden */
+  transform: translate(-50%, -50%) scale(0.8); /* Start scaled down */
+  animation: detailPopupFadeIn 0.4s ease-out forwards; /* Animation for opening */
+}
+
+/* Keyframe animation for notification detail popup opening */
+@keyframes detailPopupFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Header for the notification detail popup */
+.notification-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.notification-detail-header h3 {
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.notification-detail-header button {
+  background: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.notification-detail-header button:hover {
+  background: #d32f2f;
+}
+
+/* Content styling for the notification detail */
+.notification-detail-content {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #555;
+}

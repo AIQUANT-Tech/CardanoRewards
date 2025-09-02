@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: "Inika", serif;
+  height: 100%;
+}
+
+.Customer-css {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.Customer-main-body {
+  width: 100%;
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  height: 100%;
+}
+
+.loading-container-customer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Stack spinner and text vertically */
+  height: 100vh;
+}
+
+.loading-spinner-customer {
+  border: 5px solid #f3f3f3; /* Light gray */
+  border-top: 5px solid #f4bcbc; /* Blue color */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+.loading-text {
+  margin-top: 10px; /* Add space between the spinner and text */
+  font-size: 18px; /* Optional: Adjust the font size */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Styles for the modal */
+.edit-tier-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.edit-tier-modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.edit-tier-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #f0c6c6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #edb2b2;
+}
+
+.footer-button {
+  font-family: "Inika", sans-serif;
+  font-size: 15px;
+  text-align: center;
+  color: black;
+}
