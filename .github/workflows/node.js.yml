@@ -20,13 +20,13 @@ jobs:
         with:
           node-version: 20
 
-      # 3️⃣ Optional: install dependencies on runner (for build/test if needed)
+      # 3️⃣ Optional: install dependencies on runner for build/test
       - name: Install dependencies (runner)
-        working-directory: server
+        working-directory: BackEnd_CardanoLRS
         run: npm ci
 
       # 4️⃣ Deploy to server via SSH
-      - name: Deploy to server
+      - name: Deploy to EC2 with PM2
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -35,61 +35,47 @@ jobs:
           port: 22
           script: |
             #!/bin/bash
+            set -e
 
-            # ----------------------------
-            # Configuration
-            # ----------------------------
             DEPLOY_DIR="/home/ubuntu/lrs_backend"
             REPO_SSH="git@github.com:AIQUANT-Tech/CardanoRewards.git"
             BRANCH="qa"
             APP_NAME="lrs_backend"
+            SERVER_FOLDER="BackEnd_CardanoLRS"
 
-            # ----------------------------
-            # Prepare deployment folder
-            # ----------------------------
             mkdir -p $DEPLOY_DIR
             cd $DEPLOY_DIR
 
-            # ----------------------------
-            # Clone repo if empty or .git missing
-            # ----------------------------
+            # Use SSH deploy key for this repo
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519_lrs -o StrictHostKeyChecking=no"
+
+            # Clone or update repo
             if [ ! -d ".git" ]; then
-                echo "Cloning repository via SSH..."
-                export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519_lrs"
+                echo "Cloning repository..."
                 git clone -b $BRANCH $REPO_SSH .
             else
-                echo "Git repo exists. Switching remote to SSH..."
-                export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519_lrs"
+                echo "Updating existing repository..."
                 git remote set-url origin $REPO_SSH
-
-                echo "Fetching latest code and cleaning working tree..."
                 git fetch --all
                 git reset --hard origin/$BRANCH
                 git clean -fd
             fi
 
-            # ----------------------------
-            # Navigate to server folder
-            # ----------------------------
-            SERVER_DIR="$DEPLOY_DIR/BackEnd_CardanoLRS"
-            if [ ! -d "$SERVER_DIR" ]; then
-                echo "Error: server folder not found!"
+            # Go to backend folder
+            if [ ! -d "$SERVER_FOLDER" ]; then
+                echo "Error: backend folder $SERVER_FOLDER not found!"
                 exit 1
             fi
-            cd $SERVER_DIR
+            cd $SERVER_FOLDER
 
-            # ----------------------------
             # Install dependencies
-            # ----------------------------
-            echo "Installing dependencies with npm ci..."
+            echo "Installing dependencies..."
             npm ci
 
-            # ----------------------------
-            # Start / Restart with PM2
-            # ----------------------------
-            echo "Starting/restarting app with PM2..."
+            # Start / Restart PM2
+            echo "Starting/restarting PM2 app..."
             pm2 describe $APP_NAME > /dev/null 2>&1 || pm2 start npm --name "$APP_NAME" -- start
             pm2 save
             pm2 restart $APP_NAME
 
-            echo "✅ Deployment complete!"
+            echo "✅ Deployment of $APP_NAME complete!"
