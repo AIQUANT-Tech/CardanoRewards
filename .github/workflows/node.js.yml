@@ -71,7 +71,7 @@ jobs:
             # ----------------------------
             # Navigate to server folder
             # ----------------------------
-            SERVER_DIR="$DEPLOY_DIR/server"
+            SERVER_DIR="$DEPLOY_DIR/BackEnd_CardanoLRS"
             if [ ! -d "$SERVER_DIR" ]; then
                 echo "Error: server folder not found!"
                 exit 1
