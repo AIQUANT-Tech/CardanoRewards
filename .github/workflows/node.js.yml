@@ -1,0 +1,81 @@
+name: Node.js CI/CD with PM2
+
+on:
+  push:
+    branches:
+      - qa  # Deploy on pushes to the qa branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # 3️⃣ Optional: install dependencies on runner for build/test
+      - name: Install dependencies (runner)
+        working-directory: BackEnd_CardanoLRS
+        run: npm ci
+
+      # 4️⃣ Deploy to server via SSH
+      - name: Deploy to EC2 with PM2
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            #!/bin/bash
+            set -e
+
+            DEPLOY_DIR="/home/ubuntu/lrs_backend"
+            REPO_SSH="git@github.com:AIQUANT-Tech/CardanoRewards.git"
+            BRANCH="qa"
+            APP_NAME="lrs_backend"
+            SERVER_FOLDER="BackEnd_CardanoLRS"
+
+            mkdir -p $DEPLOY_DIR
+            cd $DEPLOY_DIR
+
+            # Use SSH deploy key for this repo
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519_lrs -o StrictHostKeyChecking=no"
+
+            # Clone or update repo
+            if [ ! -d ".git" ]; then
+                echo "Cloning repository..."
+                git clone -b $BRANCH $REPO_SSH .
+            else
+                echo "Updating existing repository..."
+                git remote set-url origin $REPO_SSH
+                git fetch --all
+                git reset --hard origin/$BRANCH
+                git clean -fd
+            fi
+
+            # Go to backend folder
+            if [ ! -d "$SERVER_FOLDER" ]; then
+                echo "Error: backend folder $SERVER_FOLDER not found!"
+                exit 1
+            fi
+            cd $SERVER_FOLDER
+
+            # Install dependencies
+            echo "Installing dependencies..."
+            npm ci
+
+            # Start / Restart PM2
+            echo "Starting/restarting PM2 app..."
+            pm2 describe $APP_NAME > /dev/null 2>&1 || pm2 start npm --name "$APP_NAME" -- start
+            pm2 save
+            pm2 restart $APP_NAME
+
+            echo "✅ Deployment of $APP_NAME complete!"
