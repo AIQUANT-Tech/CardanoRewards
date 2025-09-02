@@ -32,12 +32,40 @@ const script = {
 };
 
 // Derive script address from the validator script
-const scriptAddress = lucid.utils.validatorToAddress(script);
+export const scriptAddress = lucid.utils.validatorToAddress(script);
 console.log("Script Address:", scriptAddress);
 
-// LOCK FUNDS
-// Lock ADA at the script using a LoyaltyTransaction datum.
-const lockFundsRewardGen = async (dataToLock) => {
+export async function waitForUTxOWithTimeout(
+  scriptAddress,
+  targetDatum,
+  expectedTxHash,
+  maxWaitTime = 600000,
+  pollInterval = 10000
+) {
+  const expectedDatumHex = Data.to(targetDatum);
+  const startTime = Date.now();
+  while (Date.now() - startTime < maxWaitTime) {
+    const utxos = await lucid.utxosAt(scriptAddress);
+    const matchingUtxo = utxos.find(
+      (utxo) =>
+        utxo.datum === expectedDatumHex && utxo.txHash === expectedTxHash
+    );
+    if (matchingUtxo) {
+      console.log("Target UTxO with expected txHash found on-chain.");
+      return matchingUtxo;
+    }
+    console.log(
+      `UTxO not found. Waiting for ${pollInterval / 1000} seconds...`
+    );
+    await new Promise((resolve) => setTimeout(resolve, pollInterval));
+  }
+  throw new Error(
+    "Timed out waiting for UTxO with the target datum and expected txHash"
+  );
+}
+
+
+export const lockFundsRewardGen = async (dataToLock) => {
   if (typeof dataToLock !== "object" || dataToLock === null) {
     throw new Error("Datum must be a valid JSON object");
   }
@@ -88,10 +116,7 @@ const lockFundsRewardGen = async (dataToLock) => {
   }
 };
 
-// REDEEM FUNDS
-// Redeem funds by consuming the UTxO at the script and producing a new one
-// with an updated LoyaltyTransaction datum (i.e. updated balance).
-async function redeemFundsRewardGen(datumToRedeem, redeemer) {
+export async function redeemFundsRewardGen(datumToRedeem, redeemer) {
   try {
     // Validate input datum
     if (typeof datumToRedeem !== "object" || datumToRedeem === null) {

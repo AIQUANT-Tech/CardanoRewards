@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
-import mongooseSequence from 'mongoose-sequence';
+import mongooseSequence from "mongoose-sequence";
 
 const AutoIncrement = mongooseSequence(mongoose);
 
 const userSchema = new mongoose.Schema({
   user_id: {
     type: Number,
-    unique: true,
+    index: true,
+    // unique: true,
   },
   email: {
     type: String,
@@ -31,7 +32,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['End User', 'Business User'],
+    enum: ["End User", "Business User"],
     required: true,
   },
   created_at: {
@@ -50,9 +51,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.plugin(AutoIncrement, { inc_field: 'user_id' });
+userSchema.plugin(AutoIncrement, { inc_field: "user_id" });
 
-const User = mongoose.model('User', userSchema);
-
+const User = mongoose.model("User", userSchema);
 
 export default User;

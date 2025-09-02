@@ -28,9 +28,14 @@ const script = {
   script: process.env.SCRIPT_CBOR,
 };
 
+const pkh = lucid.utils.getAddressDetails(await lucid.wallet.address())
+  .paymentCredential.hash;
+
+console.log(pkh);
+
 // Derive script address
 export const scriptAddress = lucid.utils.validatorToAddress(script);
-console.log(scriptAddress);
+// console.log("ScriptAddress: ", scriptAddress);
 
 // Lock ADA at the script
 export const lockFunds = async (dataToLock) => {
@@ -39,21 +44,11 @@ export const lockFunds = async (dataToLock) => {
   }
   console.log("Working On Locking The Funds");
 
-  // const transformedData = encode(dataToLock).toString("hex");
-  // console.log("Transformed Datum:", JSON.stringify(dataToLock, null, 2));
-
-  // const cborDatum = encode(dataToLock).toString("hex");
-  // console.log("Encoded CBOR Datum:", cborDatum);
-
-  // console.log("Encoded Redeemer:", transformedData);
-
-  // console.log(scriptAddress);
-
   try {
-    const utxos = await lucid.utxosAt(scriptAddress);
-    if (!utxos || utxos.length === 0) {
-      throw new Error("No UTxOs found at the given address");
-    }
+    // const utxos = await lucid.utxosAt(scriptAddress);
+    // if (!utxos || utxos.length === 0) {
+    //   throw new Error("No UTxOs found at the given address");
+    // }
 
     const tx = await lucid
       .newTx()
@@ -180,6 +175,9 @@ export async function redeemFunds(datumToRedeem, redeemer) {
       .collectFrom([utxoToRedeem], Data.to(redeemer))
       .addSigner(await lucid.wallet.address())
       .payToAddress(await lucid.wallet.address(), { lovelace: amountToSend });
+    // .payToAddress(await lucid.wallet.address(), {
+    //   lovelace: redeemer.fields[1],
+    // });
 
     const finalTx = await txBuilderFinal.complete();
     // console.log("Final Transaction Built:", finalTx);

@@ -60,92 +60,6 @@ export const createUser = async (req, res) => {
   }
 };
 
-//Login user
-// export const loginInfoForEndUser = async (req, res) => {
-//   try {
-//     const { loyalty_end_user_login_rq } = req.body;
-//     const { email, password } = loyalty_end_user_login_rq.user_info;
-
-//     if (loyalty_end_user_login_rq.header.request_type !== "END_USER_LOGIN") {
-//       return res.status(400).json({
-//         error: "Invalid request type",
-//       });
-//     }
-
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//       return res.status(404).json({
-//         loyalty_end_user_login_rs: {
-//           status: "failure",
-//           message: "User not found",
-//         },
-//       });
-//     }
-
-//     const isPasswordMatch = await bcrypt.compare(password, user.password_hash);
-//     if (!isPasswordMatch) {
-//       return res.status(400).json({
-//         loyalty_end_user_login_rs: {
-//           status: "failure",
-//           message: "Invalid password",
-//         },
-//       });
-//     }
-
-//     const userTier = await LoyaltyTier.findById(user.tier_id);
-//     const tierDetails = {
-//       tier_id: userTier ? userTier.tier_id : null,
-//       tier_name: userTier ? userTier.tier_name : "No Tier",
-//     };
-
-//     const assignedOffers = await LoyaltyOffer.find({ user_id: user.user_id });
-//     const offers = assignedOffers.map((offer) => ({
-//       offer_id: offer.offer_id,
-//       offer_name: offer.offer_name,
-//       offer_desc: offer.offer_desc,
-//     }));
-
-//     const transactions = await LoyaltyUserWalletTransaction.find({
-//       user_id: user.user_id,
-//     });
-//     const walletInfo = {
-//       ada_balance: 1200,
-//       rewards_earned: 800,
-//       rewards_spent: 300,
-//       rewards_balance: 500,
-//       transactions: transactions.map((transaction) => ({
-//         transaction_id: transaction.transaction_id,
-//         date: transaction.date,
-//         amount: transaction.amount,
-//         type: transaction.type,
-//         desc: transaction.desc,
-//       })),
-//     };
-
-//     return res.status(200).json({
-//       loyalty_end_user_login_rs: {
-//         status: "success",
-//         message: "Login successful",
-//         user_info: {
-//           user_id: user.user_id,
-//           email: user.email,
-//           tier: tierDetails,
-//           assigned_offers: offers,
-//           wallet_info: walletInfo,
-//         },
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Error during login:", error);
-//     return res.status(500).json({
-//       loyalty_end_user_login_rs: {
-//         status: "failure",
-//         message: "An error occurred during login",
-//       },
-//     });
-//   }
-// };
-
 export const loginInfoForBusinessUser = async (req, res) => {
   try {
     const { loyalty_end_user_login_rq } = req.body;
@@ -416,83 +330,128 @@ export const loginInfoForEndUser = async (req, res) => {
   }
 };
 
-// Add this new controller function
-// export const loginWithWallet = async (req, res) => {
-//   try {
-//     const { address, publicKey, message, signature } = req.body;
+export const fetchAllUsersWithBalance = async (req, res) => {
+  try {
+    // Find all users
+    const users = await User.find({});
 
-//     // 1. Find user by wallet address
-//     const user = await User.findOne({
-//       wallet_address: address,
-//       role: "Business User",
-//     });
-//     if (!user) {
-//       return res.status(404).json({
-//         status: "failure",
-//         message: "Wallet not registered",
-//       });
-//     }
+    const results = [];
 
-//     // 2. Verify message freshness (within 5 minutes)
-//     const messageTime = parseInt(message.match(/\d+/)[0]);
-//     if (Date.now() - messageTime > 300000) {
-//       // 5 minutes
-//       return res.status(400).json({
-//         status: "failure",
-//         message: "Expired login request",
-//       });
-//     }
+    for (const user of users) {
+      // Get tier details
+      const tierMap = await LoyaltyEndUserTierMap.findOne({
+        user_id: user.user_id,
+      });
+      const tier = tierMap
+        ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
+        : null;
 
-//     // 3. Cryptographic verification
-//     const CSL = await import("@emurgo/cardano-serialization-lib-nodejs");
+      // Get wallet transactions
+      const transactions = await LoyaltyUserWalletTransaction.find({
+        user_id: user.user_id,
+      });
 
-//     // Verify address matches public key
-//     const addr = CSL.Address.from_bech32(address);
-//     const baseAddr = CSL.BaseAddress.from_address(addr);
-//     const paymentCred = baseAddr.payment_cred();
-//     const keyHash = paymentCred.to_keyhash();
+      const totalCredited = transactions
+        .filter((tx) => tx.type === "credit")
+        .reduce((sum, tx) => sum + tx.amount, 0);
 
-//     const pKey = CSL.PublicKey.from_bytes(Buffer.from(publicKey, "hex"));
-//     const pKeyHash = CSL.hash_public_key(pKey);
+      const totalRedeemed = transactions
+        .filter((tx) => tx.type === "debit")
+        .reduce((sum, tx) => sum + tx.amount, 0);
 
-//     if (!pKeyHash.to_bytes().equals(keyHash.to_bytes())) {
-//       return res.status(401).json({
-//         status: "failure",
-//         message: "Public key mismatch",
-//       });
-//     }
+      const pending = transactions
+        .filter((tx) => tx.status === "pending")
+        .reduce((sum, tx) => sum + tx.amount, 0);
 
-//     // Verify signature
-//     const signedData = Buffer.from(message, "utf8");
-//     const ed25519Sig = CSL.Ed25519Signature.from_bytes(
-//       Buffer.from(signature, "hex")
-//     );
+      const lastCreditedTx = transactions
+        .filter((tx) => tx.type === "credit")
+        .sort((a, b) => b.date - a.date)[0];
 
-//     if (!pKey.verify(signedData, ed25519Sig)) {
-//       return res.status(401).json({
-//         status: "failure",
-//         message: "Invalid signature",
-//       });
-//     }
+      results.push({
+        user_id: user.user_id,
+        email: user.email,
+        tierName: tier ? tier.tier_name : "No Tier",
+        totalBalance: totalCredited - totalRedeemed,
+        creditedOn: lastCreditedTx ? lastCreditedTx.date : null,
+        redeemed: totalRedeemed,
+        pending,
+      });
+    }
 
-//     // Generate JWT
-//     const token = generateToken(user);
+    return res.status(200).json({
+      status: "success",
+      users: results,
+    });
+  } catch (error) {
+    console.error("Error fetching all users with balance:", error);
+    return res.status(500).json({
+      status: "failure",
+      message: "An error occurred while fetching user balances",
+    });
+  }
+};
 
-//     return res.status(200).json({
-//       status: "success",
-//       token,
-//       user_info: {
-//         user_id: user.user_id,
-//         email: user.email,
-//         wallet_address: user.wallet_address,
-//         role: user.role,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Wallet login error:", error);
-//     return res.status(500).json({
-//       status: "failure",
-//       message: "Authentication failed",
-//     });
-//   }
-// };
+// Fetch PARTICULAR user by user_id
+export const fetchUserWithBalance = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    console.log("From FetchUSerByGuestId: ", userId);
+
+    const user = await User.findOne({ user_id: userId });
+    if (!user) {
+      return res.status(404).json({
+        status: "failure",
+        message: "User not found",
+      });
+    }
+
+    // Get tier details
+    const tierMap = await LoyaltyEndUserTierMap.findOne({
+      user_id: user.user_id,
+    });
+    const tier = tierMap
+      ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
+      : null;
+
+    // Get wallet transactions
+    const transactions = await LoyaltyUserWalletTransaction.find({
+      user_id: user.user_id,
+    });
+
+    const totalCredited = transactions
+      .filter((tx) => tx.type === "credit")
+      .reduce((sum, tx) => sum + tx.amount, 0);
+
+    const totalRedeemed = transactions
+      .filter((tx) => tx.type === "debit")
+      .reduce((sum, tx) => sum + tx.amount, 0);
+
+    const pending = transactions
+      .filter((tx) => tx.status === "pending")
+      .reduce((sum, tx) => sum + tx.amount, 0);
+
+    const lastCreditedTx = transactions
+      .filter((tx) => tx.type === "credit")
+      .sort((a, b) => b.date - a.date)[0];
+
+    return res.status(200).json({
+      status: "success",
+      user: {
+        user_id: user.user_id,
+        email: user.email,
+        tierName: tier ? tier.tier_name : "No Tier",
+        totalBalance: totalCredited - totalRedeemed,
+        creditedOn: lastCreditedTx ? lastCreditedTx.date : null,
+        redeemed: totalRedeemed,
+        pending,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching user with balance:", error);
+    return res.status(500).json({
+      status: "failure",
+      message: "An error occurred while fetching the user balance",
+    });
+  }
+};

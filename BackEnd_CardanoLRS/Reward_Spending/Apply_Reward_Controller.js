@@ -273,9 +273,6 @@ async function getCurrencyToADARate(currency) {
   }
 }
 
-/**
- * Get the conversion factor to convert a given currency amount to USD.
- */
 async function getCurrencyToUSDRate(currency) {
   try {
     if (currency.toLowerCase() === "usd") return 1;
@@ -297,10 +294,6 @@ async function getCurrencyToUSDRate(currency) {
   }
 }
 
-/**
- * Poll the script address until a UTxO with the expected datum and expected txHash appears.
- * Uses a maximum wait time (default 10 minutes) rather than a fixed number of attempts.
- */
 async function waitForUTxOWithTimeout(
   scriptAddress,
   targetDatum,

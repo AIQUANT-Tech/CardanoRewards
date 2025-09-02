@@ -1,22 +1,23 @@
 import mongoose from "mongoose";
-import mongooseSequence from 'mongoose-sequence';
+import mongooseSequence from "mongoose-sequence";
 
 const AutoIncrement = mongooseSequence(mongoose);
 
 const loyaltyTierOfferMapSchema = new mongoose.Schema({
   mapping_id: {
     type: Number,
-    unique: true,
+    index: true,
+    // unique: true,
   },
   tier_id: {
     type: Number,
-    required: true,
-    ref: 'LoyaltyTier', 
+    // required: true,
+    ref: "LoyaltyTier",
   },
   offer_id: {
     type: Number,
-    required: true,
-    ref: 'LoyaltyOffer', 
+    // required: true,
+    ref: "LoyaltyOffer",
   },
   created_at: {
     type: Date,
@@ -37,13 +38,16 @@ const loyaltyTierOfferMapSchema = new mongoose.Schema({
   },
   Status: {
     type: String,
-    enum: ['A', 'I'], 
+    enum: ["A", "I"],
     required: true,
   },
 });
 
-loyaltyTierOfferMapSchema.plugin(AutoIncrement, { inc_field: 'mapping_id' });
+loyaltyTierOfferMapSchema.plugin(AutoIncrement, { inc_field: "mapping_id" });
 
-const LoyaltyTierOfferMap = mongoose.model('LoyaltyTierOfferMap', loyaltyTierOfferMapSchema);
+const LoyaltyTierOfferMap = mongoose.model(
+  "LoyaltyTierOfferMap",
+  loyaltyTierOfferMapSchema
+);
 
 export default LoyaltyTierOfferMap;
