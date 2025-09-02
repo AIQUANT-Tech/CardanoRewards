@@ -6,7 +6,7 @@ const dbConnection = async () => {
   try {
     await mongoose.connect(process.env.DB_CNN);
     await mongoose.connect(
-      "mongodb+srv://admin:admin@cardanolrs.s1zd2.mongodb.net/?retryWrites=true&w=majority&appName=CardanoLRS"
+      "mongodb://13.203.191.101:27017/CardanoLRS"
     );
     // await mongoose.connect("mongodb://localhost:27017/LRS", {
     //   useNewUrlParser: true,
