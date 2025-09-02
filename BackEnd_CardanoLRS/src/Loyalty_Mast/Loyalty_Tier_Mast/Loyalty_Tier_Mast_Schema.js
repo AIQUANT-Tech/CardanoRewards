@@ -1,12 +1,13 @@
-import mongoose from 'mongoose';
-import mongooseSequence from 'mongoose-sequence';
+import mongoose from "mongoose";
+import mongooseSequence from "mongoose-sequence";
 
 const AutoIncrement = mongooseSequence(mongoose);
 
 const loyaltyTierSchema = new mongoose.Schema({
   tier_id: {
     type: Number,
-    unique: true,
+    index: true,
+    // unique: true,
   },
   tier_name: {
     type: String,
@@ -35,13 +36,13 @@ const loyaltyTierSchema = new mongoose.Schema({
   },
   Status: {
     type: String,
-    enum: ['A', 'I', 'D'], 
+    enum: ["A", "I", "D"],
     required: true,
   },
 });
 
-loyaltyTierSchema.plugin(AutoIncrement, { inc_field: 'tier_id' });
+loyaltyTierSchema.plugin(AutoIncrement, { inc_field: "tier_id" });
 
-const LoyaltyTier = mongoose.model('LoyaltyTier', loyaltyTierSchema);
+const LoyaltyTier = mongoose.model("LoyaltyTier", loyaltyTierSchema);
 
 export default LoyaltyTier;

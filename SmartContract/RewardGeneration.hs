@@ -166,18 +166,6 @@ validateRewardGeneration :: LoyaltyTransaction -> Bool
 validateRewardGeneration tx =
   traceIfFalse "Amount must be non-negative" (amount tx >= 0)
 
--- {-# INLINABLE typedGenerationValidator #-}
--- typedGenerationValidator :: BuiltinData -> BuiltinData -> BuiltinData -> ()
--- typedGenerationValidator datum _ context =
---   case (PlutusTx.unsafeFromBuiltinData datum :: Maybe LoyaltyTransaction,
---         PlutusTx.unsafeFromBuiltinData context :: Maybe ScriptContext) of
---     (Just tx, Just ctx) ->
---         trace "Decoded successfully" $
---         if validateTransaction tx ctx
---         then trace "Transaction validated and updated" ()
---         else traceError "Validation failed"
---     _ -> traceError "Invalid input data"
-
 typedGenerationValidator :: BuiltinData -> BuiltinData -> BuiltinData -> ()
 typedGenerationValidator datum _ _ =
   -- Ignore redeemer and context

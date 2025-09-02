@@ -4,6 +4,8 @@ import {
   fetchEndUsersInfo,
   loginInfoForEndUser,
   loginInfoForBusinessUser,
+  fetchAllUsersWithBalance,
+  fetchUserWithBalance,
 } from "./Loyalty_User_Mast_Controller.js";
 
 const router = express.Router();
@@ -19,6 +21,10 @@ router.post("/fetchEndUsersInfo", fetchEndUsersInfo);
 
 //Route to fetch End user
 router.post("/loginInfoForEndUser", loginInfoForEndUser);
+
+router.get("/alluserdetails", fetchAllUsersWithBalance);
+
+router.get("/fetchdetailsbyguestid/:guestId", fetchUserWithBalance);
 
 // router.post("/logInWithWallet", loginWithWallet);
 

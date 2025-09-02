@@ -1,12 +1,13 @@
-import mongoose from 'mongoose';
-import mongooseSequence from 'mongoose-sequence';
+import mongoose from "mongoose";
+import mongooseSequence from "mongoose-sequence";
 
 const AutoIncrement = mongooseSequence(mongoose);
 
 const loyaltyOfferSchema = new mongoose.Schema({
   offer_id: {
     type: Number,
-    unique: true,
+    index: true,
+    // unique: true,
   },
   offer_name: {
     type: String,
@@ -35,13 +36,13 @@ const loyaltyOfferSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['A', 'I', 'D'], // Active, Inactive, Deleted
+    enum: ["A", "I", "D"], // Active, Inactive, Deleted
     required: true,
   },
 });
 
-loyaltyOfferSchema.plugin(AutoIncrement, { inc_field: 'offer_id' });
+loyaltyOfferSchema.plugin(AutoIncrement, { inc_field: "offer_id" });
 
-const LoyaltyOffer = mongoose.model('LoyaltyOffer', loyaltyOfferSchema);
+const LoyaltyOffer = mongoose.model("LoyaltyOffer", loyaltyOfferSchema);
 
 export default LoyaltyOffer;
