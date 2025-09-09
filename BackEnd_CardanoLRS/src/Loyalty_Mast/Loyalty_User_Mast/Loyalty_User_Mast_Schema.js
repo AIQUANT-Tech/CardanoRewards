@@ -9,6 +9,16 @@ const userSchema = new mongoose.Schema({
     index: true,
     // unique: true,
   },
+  hotel_group_id: {
+    type: String,
+    required: true,
+  },
+  hotel_ids: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   email: {
     type: String,
     required: true,

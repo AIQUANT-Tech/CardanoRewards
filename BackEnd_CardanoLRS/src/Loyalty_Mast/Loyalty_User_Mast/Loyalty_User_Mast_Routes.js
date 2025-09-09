@@ -6,6 +6,8 @@ import {
   loginInfoForBusinessUser,
   fetchAllUsersWithBalance,
   fetchUserWithBalance,
+  fetchUsersByHotelGroup,
+  fetchGuestDetailsAgainstHotelgroupid,
 } from "./Loyalty_User_Mast_Controller.js";
 
 const router = express.Router();
@@ -26,6 +28,12 @@ router.get("/alluserdetails", fetchAllUsersWithBalance);
 
 router.get("/fetchdetailsbyguestid/:guestId", fetchUserWithBalance);
 
+router.get("/hotel-group/:hotelGroupId", fetchUsersByHotelGroup);
+
 // router.post("/logInWithWallet", loginWithWallet);
 
+router.get(
+  "/hotel-group/:hotelGroupId/users/:email/details",
+  fetchGuestDetailsAgainstHotelgroupid
+);
 export default router;

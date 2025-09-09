@@ -88,6 +88,7 @@ export const loginInfoForBusinessUser = async (req, res) => {
     const token = generateToken(user);
 
     // Check if the user is a "Business User"
+
     if (user.role === "End User") {
       return res.status(403).json({
         loyalty_end_user_login_rs: {
@@ -124,8 +125,10 @@ export const loginInfoForBusinessUser = async (req, res) => {
     }));
 
     // Fetch wallet transactions
+    console.log(user.user_id);
+
     const transactions = await LoyaltyUserWalletTransaction.find({
-      user_id: user.user_id,
+      user_id: user._id,
     });
     const walletInfo = {
       ada_balance: 1200,
@@ -452,6 +455,307 @@ export const fetchUserWithBalance = async (req, res) => {
     return res.status(500).json({
       status: "failure",
       message: "An error occurred while fetching the user balance",
+    });
+  }
+};
+
+export const fetchUsersByHotelGroup = async (req, res) => {
+  try {
+    const { hotelGroupId } = req.params;
+
+    if (!hotelGroupId) {
+      return res.status(400).json({
+        status: "failure",
+        message: "hotelGroupId is required",
+      });
+    }
+
+    const users = await User.find({ hotel_group_id: hotelGroupId });
+
+    if (users.length === 0) {
+      return res.status(404).json({
+        status: "failure",
+        message: "No users found for this hotelGroupId",
+      });
+    }
+
+    // Prepare user details with tier + balance info
+    const userInfoList = [];
+
+    for (const user of users) {
+      // --- Tier details ---
+      const tierMap = await LoyaltyEndUserTierMap.findOne({
+        user_id: user.user_id,
+      });
+
+      const tier = tierMap
+        ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
+        : null;
+
+      // --- Wallet transactions ---
+
+      const transactions = await LoyaltyUserWalletTransaction.find({
+        user_id: user._id,
+      });
+
+      const totalCredited = transactions
+        .filter((tx) => tx.transaction_type === "credit")
+        .reduce((sum, tx) => sum + tx.transaction_amount, 0);
+
+      const totalSpent = transactions
+        .filter(
+          (tx) =>
+            tx.transaction_type === "debit" ||
+            tx.transaction_type === "transfer"
+        )
+        .reduce((sum, tx) => sum + tx.transaction_amount, 0);
+
+      const lastCreditedTx = transactions
+        .filter((tx) => tx.transaction_type === "credit")
+        .sort((a, b) => b.transaction_date - a.transaction_date)[0];
+
+      // --- Prepare response object ---
+      const userData = {
+        user_id: user.user_id,
+        email: user.email,
+        username: user.first_name
+          ? `${user.first_name} ${user.last_name || ""}`
+          : "No Name",
+        role: user.role,
+        hotel_group_id: user.hotel_group_id,
+        hotel_ids: user.hotel_ids,
+        tier: tier
+          ? {
+              tier_id: tier.tier_id,
+              tier_name: tier.tier_name,
+            }
+          : {
+              tier_id: null,
+              tier_name: "No Tier",
+            },
+        balance: {
+          totalBalance: totalCredited - totalSpent,
+          creditedOn: lastCreditedTx ? lastCreditedTx.created_at : null,
+          earned: totalCredited,
+          spent: totalSpent,
+        },
+      };
+
+      userInfoList.push(userData);
+    }
+
+    return res.status(200).json({
+      status: "success",
+      total_users: users.length,
+      hotel_group_id: hotelGroupId,
+      users: userInfoList,
+    });
+  } catch (error) {
+    console.error("Error fetching users by hotelGroupId:", error);
+    return res.status(500).json({
+      status: "failure",
+      message: "An error occurred while fetching users",
+    });
+  }
+};
+
+// export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
+//   try {
+//     const { hotelGroupId, userId } = req.params;
+
+//     if (!hotelGroupId || !userId) {
+//       return res.status(400).json({
+//         status: "failure",
+//         message: "hotelGroupId and userId are required",
+//       });
+//     }
+
+//     // Find user in this hotel group
+//     const user = await User.findOne({
+//       _id: userId,
+//       hotel_group_id: hotelGroupId,
+//     });
+
+//     if (!user) {
+//       return res.status(404).json({
+//         status: "failure",
+//         message: "User not found in this hotel group",
+//       });
+//     }
+
+//     // --- Tier details ---
+//     const tierMap = await LoyaltyEndUserTierMap.findOne({
+//       user_id: user.user_id,
+//     });
+//     const tier = tierMap
+//       ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
+//       : null;
+
+//     // --- Wallet transactions ---
+//     const transactions = await LoyaltyUserWalletTransaction.find({
+//       user_id: user._id,
+//     });
+
+//     const totalCredited = transactions
+//       .filter((tx) => tx.transaction_type === "credit")
+//       .reduce((sum, tx) => sum + tx.transaction_amount, 0);
+
+//     const totalSpent = transactions
+//       .filter(
+//         (tx) =>
+//           tx.transaction_type === "debit" || tx.transaction_type === "transfer"
+//       )
+//       .reduce((sum, tx) => sum + tx.transaction_amount, 0);
+
+//     const lastCreditedTx = transactions
+//       .filter((tx) => tx.transaction_type === "credit")
+//       .sort((a, b) => b.transaction_date - a.transaction_date)[0];
+
+//     // --- Prepare detailed response ---
+//     const guestDetails = {
+//       user_id: user.user_id,
+//       email: user.email,
+//       username: user.first_name
+//         ? `${user.first_name} ${user.last_name || ""}`
+//         : "No Name",
+//       role: user.role,
+//       hotel_group_id: user.hotel_group_id,
+//       hotel_ids: user.hotel_ids,
+//       tier: tier
+//         ? {
+//             tier_id: tier.tier_id,
+//             tier_name: tier.tier_name,
+//           }
+//         : {
+//             tier_id: null,
+//             tier_name: "No Tier",
+//           },
+//       balance: {
+//         totalBalance: totalCredited - totalSpent,
+//         creditedOn: lastCreditedTx ? lastCreditedTx.created_at : null,
+//         earned: totalCredited,
+//         spent: totalSpent,
+//       },
+//       transactions: transactions.map((tx) => ({
+//         transaction_id: tx.transaction_id,
+//         date: tx.transaction_date,
+//         amount: tx.transaction_amount,
+//         type: tx.transaction_type,
+//         desc: tx.transaction_desc,
+//         status: tx.status,
+//       })),
+//     };
+
+//     return res.status(200).json({
+//       status: "success",
+//       guest: guestDetails,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching guest details:", error);
+//     return res.status(500).json({
+//       status: "failure",
+//       message: "An error occurred while fetching guest details",
+//     });
+//   }
+// };
+
+export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
+  try {
+    const { hotelGroupId, email } = req.params;
+    console.log("Inside: ", hotelGroupId, email);
+
+    if (!hotelGroupId || !email) {
+      return res.status(400).json({
+        status: "failure",
+        message: "hotelGroupId and email are required",
+      });
+    }
+
+    // Find user by email and hotel_group_id
+    const user = await User.findOne({
+      email,
+      hotel_group_id: hotelGroupId,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "failure",
+        message: "User not found in this hotel group with given email",
+      });
+    }
+
+    // --- Tier details ---
+    const tierMap = await LoyaltyEndUserTierMap.findOne({
+      user_id: user.user_id,
+    });
+    const tier = tierMap
+      ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
+      : null;
+
+    // --- Wallet transactions ---
+    const transactions = await LoyaltyUserWalletTransaction.find({
+      user_id: user._id,
+    });
+
+    const totalCredited = transactions
+      .filter((tx) => tx.transaction_type === "credit")
+      .reduce((sum, tx) => sum + tx.transaction_amount, 0);
+
+    const totalSpent = transactions
+      .filter(
+        (tx) =>
+          tx.transaction_type === "debit" || tx.transaction_type === "transfer"
+      )
+      .reduce((sum, tx) => sum + tx.transaction_amount, 0);
+
+    const lastCreditedTx = transactions
+      .filter((tx) => tx.transaction_type === "credit")
+      .sort((a, b) => b.transaction_date - a.transaction_date)[0];
+
+    // --- Prepare detailed response ---
+    const guestDetails = {
+      user_id: user.user_id,
+      email: user.email,
+      username: user.first_name
+        ? `${user.first_name} ${user.last_name || ""}`
+        : "No Name",
+      role: user.role,
+      hotel_group_id: user.hotel_group_id,
+      hotel_ids: user.hotel_ids,
+      tier: tier
+        ? {
+            tier_id: tier.tier_id,
+            tier_name: tier.tier_name,
+          }
+        : {
+            tier_id: null,
+            tier_name: "No Tier",
+          },
+      balance: {
+        totalBalance: totalCredited - totalSpent,
+        creditedOn: lastCreditedTx ? lastCreditedTx.created_at : null,
+        earned: totalCredited,
+        spent: totalSpent,
+      },
+      transactions: transactions.map((tx) => ({
+        transaction_id: tx.transaction_id,
+        date: tx.transaction_date,
+        amount: tx.transaction_amount,
+        type: tx.transaction_type,
+        desc: tx.transaction_desc,
+        status: tx.status,
+      })),
+    };
+
+    return res.status(200).json({
+      status: "success",
+      guest: guestDetails,
+    });
+  } catch (error) {
+    console.error("Error fetching guest details:", error);
+    return res.status(500).json({
+      status: "failure",
+      message: "An error occurred while fetching guest details",
     });
   }
 };
