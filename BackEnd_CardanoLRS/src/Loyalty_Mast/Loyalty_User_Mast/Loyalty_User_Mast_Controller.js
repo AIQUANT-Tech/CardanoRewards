@@ -677,8 +677,10 @@ export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
       hotel_group_id: hotelGroupId,
     });
 
+    console.log("USERS: ", user);
+
     if (!user) {
-      return res.status(404).json({
+      return res.status(200).json({
         status: "failure",
         message: "User not found in this hotel group with given email",
       });
@@ -728,7 +730,7 @@ export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
             tier_name: tier.tier_name,
           }
         : {
-            tier_id: null,
+            tier_id: tier.tier_id,
             tier_name: "No Tier",
           },
       balance: {

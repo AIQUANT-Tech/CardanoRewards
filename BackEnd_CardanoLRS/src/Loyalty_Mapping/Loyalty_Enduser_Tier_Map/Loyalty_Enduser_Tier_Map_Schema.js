@@ -5,18 +5,18 @@ const AutoIncrement = mongooseSequence(mongoose);
 
 const loyaltyEndUserTierMapSchema = new mongoose.Schema({
   mapping_id: {
-    type: Number,
+    type: String,
     // unique: true,
     index: true,
     // required: true,
   },
   tier_id: {
-    type: Number,
+    type: String,
     // required: true,
     ref: "LoyaltyTier",
   },
   user_id: {
-    type: Number,
+    type: String,
     // required: true,
     ref: "User",
   },

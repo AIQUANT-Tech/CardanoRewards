@@ -2,10 +2,6 @@ import GuestInfo from "./Hbs_Guest_Info_Schema.js";
 import BookingInfo from "./Hbs_Booking_Info_Schema.js";
 import axios from "axios";
 
-/**
- * Fetches the conversion rate to convert the given currency to USD.
- * For example, if the API returns that 1 USD = 82.5 INR, then this function returns 1/82.5.
- */
 async function getCurrencyToUSDRate(currency) {
   try {
     console.log(`Fetching USD/${currency.toUpperCase()} exchange rate...`);
@@ -21,9 +17,7 @@ async function getCurrencyToUSDRate(currency) {
       console.error("Invalid exchange rate response", response.data);
       return null;
     }
-    // If the API returns: rates: { INR: 82.5, ... } then 1 USD = 82.5 INR.
-    // To convert from INR to USD: amount_in_usd = original_amount / 82.5.
-    // We return the conversion factor: 1 / rate.
+
     const rate = response.data.rates[currency.toUpperCase()];
     return 1 / rate;
   } catch (error) {
@@ -51,6 +45,7 @@ export const processGuestBookingInfo = async (req, res) => {
         phone_number,
         tier_id,
         reward_balance,
+        hotel_group_id,
         booking_id,
         check_in_date,
         check_out_date,
@@ -73,6 +68,7 @@ export const processGuestBookingInfo = async (req, res) => {
           phone_number,
           tier_id,
           reward_balance,
+          hotel_group_id,
           created_at: new Date(),
         });
         await guest.save();
