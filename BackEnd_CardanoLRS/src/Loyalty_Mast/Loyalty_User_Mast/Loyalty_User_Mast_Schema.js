@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
 import mongooseSequence from "mongoose-sequence";
+import { v4 as uuidv4 } from "uuid";
 
 const AutoIncrement = mongooseSequence(mongoose);
 
 const userSchema = new mongoose.Schema({
   user_id: {
-    type: Number,
+    type: String,
     index: true,
     // unique: true,
+    default: uuidv4,
   },
   hotel_group_id: {
     type: String,
@@ -61,7 +63,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.plugin(AutoIncrement, { inc_field: "user_id" });
+// userSchema.plugin(AutoIncrement, { inc_field: "user_id" });
 
 const User = mongoose.model("User", userSchema);
 
