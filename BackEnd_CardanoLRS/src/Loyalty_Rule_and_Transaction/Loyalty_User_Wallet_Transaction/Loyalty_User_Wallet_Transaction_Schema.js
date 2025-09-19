@@ -7,9 +7,9 @@ const loyaltyUserWalletTransactionSchema = new mongoose.Schema({
     unique: true,
   },
   user_id: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'User', 
+    ref: "User",
   },
   transaction_date: {
     type: Date,
@@ -17,11 +17,11 @@ const loyaltyUserWalletTransactionSchema = new mongoose.Schema({
   },
   transaction_amount: {
     type: Number,
-    required: false, 
+    required: false,
   },
   transaction_type: {
     type: String,
-    enum: ['credit', 'debit', 'transfer'], 
+    enum: ["credit", "debit", "transfer"],
     required: true,
   },
   transaction_desc: {
@@ -39,11 +39,14 @@ const loyaltyUserWalletTransactionSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['A', 'I'], // Active, Inactive
+    enum: ["A", "I"], // Active, Inactive
     required: true,
   },
 });
 
-const LoyaltyUserWalletTransaction = mongoose.model('LoyaltyUserWalletTransaction', loyaltyUserWalletTransactionSchema);
+const LoyaltyUserWalletTransaction = mongoose.model(
+  "LoyaltyUserWalletTransaction",
+  loyaltyUserWalletTransactionSchema
+);
 
 export default LoyaltyUserWalletTransaction;

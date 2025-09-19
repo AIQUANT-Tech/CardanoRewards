@@ -14,12 +14,16 @@ import transactionRoutes from "../../Cardano_Smartcontract/ChainRoute.js";
 import rewardTransactionRoute from "../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRoute.js";
 import rewardbalance from "../Total_Reward/Reward_Balance.js";
 import reward from "../../Reward_Spending/Apply_Reward_Route.js";
+import { startScheduler } from "../Scheduler/scheduler.js";
+
+import userTransaction from "../Loyalty_Rule_and_Transaction/Loyalty_User_Wallet_Transaction/Loyalty_User_Wallet_Transaction_Routes.js";
 
 dotenv.config();
 
 const app = express();
 
 dbConnection();
+startScheduler();
 
 app.use(express.json());
 app.use(cors());
@@ -37,6 +41,7 @@ app.use("/api/transaction", transactionRoutes);
 app.use("/api/rewardTransaction", rewardTransactionRoute);
 
 app.use("/api/rewardBalanceTotal", rewardbalance);
+app.use("/api/usertransaction", userTransaction);
 
 app.use("/api/reward", reward);
 

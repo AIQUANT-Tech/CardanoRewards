@@ -13,6 +13,7 @@ import {
   scriptAddress,
 } from "../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRewardGen.js";
 import { Constr } from "lucid-cardano";
+import LoyaltyUserWalletTransaction from "../Loyalty_Rule_and_Transaction/Loyalty_User_Wallet_Transaction/Loyalty_User_Wallet_Transaction_Schema.js";
 
 async function getCurrencyToADARate(currency) {
   try {
@@ -73,7 +74,9 @@ export const processUserMappingFeed = async () => {
         }
 
         // 2. Find or create a user based on the guest's email
-        let user = await User.findOne({ email: guest.email });
+
+        let user = await User.findOne({ email: guest?.email });
+
         const isNewUser = !user;
         if (isNewUser) {
           const hashedPassword = await bcrypt.hash("password", 10);
@@ -86,6 +89,7 @@ export const processUserMappingFeed = async () => {
             role: "End User",
             last_login: new Date(),
             reward_balance: 0, // Reward balance will be stored in ADA
+            hotel_group_id: guest?.hotel_group_id,
           });
           await user.save();
           console.log(
@@ -259,6 +263,25 @@ export const processUserMappingFeed = async () => {
           guest.reward_balance = (guest.reward_balance || 0) + rewardAda;
           guest.tier_id = eligibleRule.tier_id;
           await guest.save();
+
+          const latestTx = await LoyaltyUserWalletTransaction.findOne().sort({
+            transaction_id: -1,
+          });
+          const newTransactionId = latestTx ? latestTx.transaction_id + 1 : 1;
+
+          const transaction = new LoyaltyUserWalletTransaction({
+            transaction_id: newTransactionId,
+            user_id: user._id,
+            transaction_date: new Date(),
+            transaction_amount: rewardAda, // ADA amount credited
+            transaction_type: "credit",
+            transaction_desc: `Reward credited for booking_id: ${booking.booking_id}`,
+            created_by: "System",
+            status: "A",
+          });
+
+          await transaction.save();
+
           console.log(
             `Reward of ${rewardAda} ADA (from ${rewardUsd} USD) added to user ${user.email} for booking_id: ${booking.booking_id}`
           );
