@@ -355,19 +355,19 @@ export const fetchAllUsersWithBalance = async (req, res) => {
       });
 
       const totalCredited = transactions
-        .filter((tx) => tx.type === "credit")
-        .reduce((sum, tx) => sum + tx.amount, 0);
+        .filter((tx) => tx.transaction_type === "credit")
+        .reduce((sum, tx) => sum + tx.transaction_amount, 0);
 
       const totalRedeemed = transactions
-        .filter((tx) => tx.type === "debit")
-        .reduce((sum, tx) => sum + tx.amount, 0);
+        .filter((tx) => tx.transaction_type === "debit")
+        .reduce((sum, tx) => sum + tx.transaction_amount, 0);
 
       const pending = transactions
-        .filter((tx) => tx.status === "pending")
-        .reduce((sum, tx) => sum + tx.amount, 0);
+        .filter((tx) => tx.status === "A")
+        .reduce((sum, tx) => sum + tx.transaction_amount, 0);
 
       const lastCreditedTx = transactions
-        .filter((tx) => tx.type === "credit")
+        .filter((tx) => tx.transaction_type === "credit")
         .sort((a, b) => b.date - a.date)[0];
 
       results.push({
@@ -397,7 +397,7 @@ export const fetchAllUsersWithBalance = async (req, res) => {
 // Fetch PARTICULAR user by user_id
 export const fetchUserWithBalance = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.params.userId || req.params.guestId;
 
     console.log("From FetchUSerByGuestId: ", userId);
 
@@ -422,21 +422,27 @@ export const fetchUserWithBalance = async (req, res) => {
       user_id: user.user_id,
     });
 
+    console.log("TRANSACTION: ", transactions);
+
     const totalCredited = transactions
-      .filter((tx) => tx.type === "credit")
-      .reduce((sum, tx) => sum + tx.amount, 0);
+      .filter((tx) => tx.transaction_type === "credit")
+      .reduce((sum, tx) => sum + tx.transaction_amount, 0);
 
     const totalRedeemed = transactions
-      .filter((tx) => tx.type === "debit")
-      .reduce((sum, tx) => sum + tx.amount, 0);
+      .filter((tx) => tx.transaction_type === "debit")
+      .reduce((sum, tx) => sum + tx.transaction_amount, 0);
 
     const pending = transactions
-      .filter((tx) => tx.status === "pending")
-      .reduce((sum, tx) => sum + tx.amount, 0);
+      .filter((tx) => tx.status === "A")
+      .reduce((sum, tx) => sum + tx.transaction_amount, 0);
 
     const lastCreditedTx = transactions
-      .filter((tx) => tx.type === "credit")
-      .sort((a, b) => b.date - a.date)[0];
+      .filter((tx) => tx.transaction_type === "credit")
+      .sort(
+        (a, b) => new Date(b.transaction_date) - new Date(a.transaction_date)
+      )[0];
+
+    console.log("LST CREDIT:", lastCreditedTx);
 
     return res.status(200).json({
       status: "success",
@@ -445,7 +451,7 @@ export const fetchUserWithBalance = async (req, res) => {
         email: user.email,
         tierName: tier ? tier.tier_name : "No Tier",
         totalBalance: totalCredited - totalRedeemed,
-        creditedOn: lastCreditedTx ? lastCreditedTx.date : null,
+        creditedOn: lastCreditedTx ? lastCreditedTx.transaction_date : null,
         redeemed: totalRedeemed,
         pending,
       },
@@ -472,6 +478,8 @@ export const fetchUsersByHotelGroup = async (req, res) => {
 
     const users = await User.find({ hotel_group_id: hotelGroupId });
 
+    console.log("USERS: ", users);
+
     if (users.length === 0) {
       return res.status(404).json({
         status: "failure",
@@ -491,6 +499,8 @@ export const fetchUsersByHotelGroup = async (req, res) => {
       const tier = tierMap
         ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
         : null;
+
+      console.log("TIER: ", tier);
 
       // --- Wallet transactions ---
 

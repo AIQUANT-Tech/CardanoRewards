@@ -88,8 +88,9 @@ export const processUserMappingFeed = async () => {
             wallet_address: "wallet_address",
             role: "End User",
             last_login: new Date(),
-            reward_balance: 0, // Reward balance will be stored in ADA
+            reward_balance: 0,
             hotel_group_id: guest?.hotel_group_id,
+            user_id: guest?.guest_id,
           });
           await user.save();
           console.log(
