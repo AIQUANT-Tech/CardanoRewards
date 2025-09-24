@@ -345,9 +345,13 @@ export const fetchAllUsersWithBalance = async (req, res) => {
       const tierMap = await LoyaltyEndUserTierMap.findOne({
         user_id: user.user_id,
       });
+      console.log(tierMap);
+
       const tier = tierMap
-        ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
+        ? await LoyaltyTier.findOne({ _id: tierMap.tier_id })
         : null;
+
+      console.log(tier);
 
       // Get wallet transactions
       const transactions = await LoyaltyUserWalletTransaction.find({
@@ -701,12 +705,14 @@ export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
       user_id: user.user_id,
     });
     const tier = tierMap
-      ? await LoyaltyTier.findOne({ tier_id: tierMap.tier_id })
+      ? await LoyaltyTier.findOne({ _id: tierMap.tier_id })
       : null;
+
+    console.log(tier);
 
     // --- Wallet transactions ---
     const transactions = await LoyaltyUserWalletTransaction.find({
-      user_id: user._id,
+      user_id: user.user_id,
     });
 
     const totalCredited = transactions
@@ -740,7 +746,7 @@ export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
             tier_name: tier.tier_name,
           }
         : {
-            tier_id: tier.tier_id,
+            tier_id: tier.tier_id || tier._id,
             tier_name: "No Tier",
           },
       balance: {
