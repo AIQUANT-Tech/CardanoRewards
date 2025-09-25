@@ -50,11 +50,11 @@
 import mongoose from "mongoose";
 
 const loyaltyTierSchema = new mongoose.Schema({
-  tier_id: {
-    type: String,
-    unique: true,
-    required: true,
-  },
+  // tier_id: {
+  //   type: String,
+  //   unique: true,
+  //   required: true,
+  // },
   tier_name: {
     type: String,
     required: true,

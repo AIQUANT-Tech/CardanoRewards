@@ -345,7 +345,6 @@ export const fetchAllUsersWithBalance = async (req, res) => {
       const tierMap = await LoyaltyEndUserTierMap.findOne({
         user_id: user.user_id,
       });
-      console.log(tierMap);
 
       const tier = tierMap
         ? await LoyaltyTier.findOne({ _id: tierMap.tier_id })
@@ -375,9 +374,12 @@ export const fetchAllUsersWithBalance = async (req, res) => {
         .sort((a, b) => b.date - a.date)[0];
 
       results.push({
+        user_name: user?.first_name + " " + user?.last_name,
         user_id: user.user_id,
         email: user.email,
         tierName: tier ? tier.tier_name : "No Tier",
+        tier_id: tier ? tier._id : null,
+        tier_desc: tier?.tier_desc,
         totalBalance: totalCredited - totalRedeemed,
         creditedOn: lastCreditedTx ? lastCreditedTx.date : null,
         redeemed: totalRedeemed,
@@ -704,13 +706,14 @@ export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
     const tierMap = await LoyaltyEndUserTierMap.findOne({
       user_id: user.user_id,
     });
+    console.log(tierMap);
+
     const tier = tierMap
       ? await LoyaltyTier.findOne({ _id: tierMap.tier_id })
       : null;
 
     console.log(tier);
 
-    // --- Wallet transactions ---
     const transactions = await LoyaltyUserWalletTransaction.find({
       user_id: user.user_id,
     });
@@ -774,6 +777,152 @@ export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
     return res.status(500).json({
       status: "failure",
       message: "An error occurred while fetching guest details",
+    });
+  }
+};
+
+export const changeUserTier = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const { newTierId } = req.body;
+
+    if (!userId || !newTierId) {
+      return res.status(400).json({
+        status: "failure",
+        message: "userId and newTierId are required",
+      });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ user_id: userId });
+    if (!user) {
+      return res.status(404).json({
+        status: "failure",
+        message: "User not found",
+      });
+    }
+
+    // Check if tier exists
+    const tier = await LoyaltyTier.findOne({ _id: newTierId });
+    if (!tier) {
+      return res.status(404).json({
+        status: "failure",
+        message: "Tier not found",
+      });
+    }
+
+    // Update or create mapping in LoyaltyEndUserTierMap
+    let tierMap = await LoyaltyEndUserTierMap.findOne({
+      user_id: user.user_id,
+    });
+
+    if (tierMap) {
+      tierMap.tier_id = newTierId;
+      tierMap.updated_at = new Date();
+      await tierMap.save();
+    } else {
+      tierMap = new LoyaltyEndUserTierMap({
+        user_id: user.user_id,
+        tier_id: newTierId,
+        created_at: new Date(),
+      });
+      await tierMap.save();
+    }
+
+    return res.status(200).json({
+      status: "success",
+      message: "User tier updated successfully",
+      user: {
+        user_id: user.user_id,
+        email: user.email,
+        new_tier: {
+          tier_id: tier.tier_id,
+          tier_name: tier.tier_name,
+          tier_desc: tier.tier_desc,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error changing user tier:", error);
+    return res.status(500).json({
+      status: "failure",
+      message: "An error occurred while changing user tier",
+    });
+  }
+};
+
+export const batchChangeUserTier = async (req, res) => {
+  try {
+    const { userIds, newTierId } = req.body;
+
+    if (
+      !userIds ||
+      !Array.isArray(userIds) ||
+      userIds.length === 0 ||
+      !newTierId
+    ) {
+      return res.status(400).json({
+        status: "failure",
+        message: "userIds (non-empty array) and newTierId are required",
+      });
+    }
+
+    // Check if tier exists
+    const tier = await LoyaltyTier.findOne({ _id: newTierId });
+    if (!tier) {
+      return res.status(404).json({
+        status: "failure",
+        message: "Tier not found",
+      });
+    }
+
+    const results = [];
+
+    for (const userId of userIds) {
+      const user = await User.findOne({ user_id: userId });
+      if (!user) {
+        results.push({ userId, status: "failure", message: "User not found" });
+        continue;
+      }
+
+      // Update or create mapping
+      let tierMap = await LoyaltyEndUserTierMap.findOne({
+        user_id: user.user_id,
+      });
+      if (tierMap) {
+        tierMap.tier_id = newTierId;
+        tierMap.updated_at = new Date();
+        await tierMap.save();
+      } else {
+        tierMap = new LoyaltyEndUserTierMap({
+          user_id: user.user_id,
+          tier_id: newTierId,
+          created_at: new Date(),
+        });
+        await tierMap.save();
+      }
+
+      results.push({
+        userId: user.user_id,
+        status: "success",
+        newTier: {
+          tier_id: tier.tier_id,
+          tier_name: tier.tier_name,
+          tier_desc: tier.tier_desc,
+        },
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      message: "Batch tier update completed",
+      results,
+    });
+  } catch (error) {
+    console.error("Error in batchChangeUserTier:", error);
+    return res.status(500).json({
+      status: "failure",
+      message: "An error occurred while changing user tiers in batch",
     });
   }
 };

@@ -8,6 +8,8 @@ import {
   fetchUserWithBalance,
   fetchUsersByHotelGroup,
   fetchGuestDetailsAgainstHotelgroupid,
+  changeUserTier,
+  batchChangeUserTier,
 } from "./Loyalty_User_Mast_Controller.js";
 
 const router = express.Router();
@@ -36,4 +38,9 @@ router.get(
   "/hotel-group/:hotelGroupId/users/:email/details",
   fetchGuestDetailsAgainstHotelgroupid
 );
+
+router.post("/change-tier", changeUserTier);
+
+router.post("/batch-change-tier", batchChangeUserTier);
+
 export default router;

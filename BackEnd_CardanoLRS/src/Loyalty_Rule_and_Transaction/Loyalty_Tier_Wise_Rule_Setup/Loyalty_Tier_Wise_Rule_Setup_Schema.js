@@ -4,14 +4,8 @@ import mongooseSequence from "mongoose-sequence";
 const AutoIncrement = mongooseSequence(mongoose);
 
 const loyaltyTierWiseRuleSetupSchema = new mongoose.Schema({
-  rule_id: {
-    type: Number,
-    // unique: true,
-    index: true,
-  },
   tier_id: {
-    type: Number,
-    // required: true,
+    type: String,
     ref: "LoyaltyTier",
   },
   rule_desc: {

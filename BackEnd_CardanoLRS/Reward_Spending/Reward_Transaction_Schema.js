@@ -5,7 +5,7 @@ const AutoIncrement = mongooseSequence(mongoose);
 
 const RewardTransactionSchema = new mongoose.Schema({
   transaction_id: { type: Number, unique: true },
-  user_id: { type: Number, required: true, ref: "User" },
+  user_id: { type: String, required: true, ref: "User" },
   lock_tx: { type: String, required: true },
   redeem_tx: { type: String, default: "" },
   status: { type: String, default: "pending" },
