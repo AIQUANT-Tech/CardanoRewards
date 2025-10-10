@@ -28,7 +28,7 @@ router.post("/loginInfoForEndUser", loginInfoForEndUser);
 
 router.get("/alluserdetails", fetchAllUsersWithBalance);
 
-router.get("/fetchdetailsbyguestid/:guestId", fetchUserWithBalance);
+router.get("/fetchdetailsbyguestid/:user_email", fetchUserWithBalance);
 
 router.get("/hotel-group/:hotelGroupId", fetchUsersByHotelGroup);
 

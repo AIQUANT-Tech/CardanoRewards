@@ -403,11 +403,12 @@ export const fetchAllUsersWithBalance = async (req, res) => {
 // Fetch PARTICULAR user by user_id
 export const fetchUserWithBalance = async (req, res) => {
   try {
-    const userId = req.params.userId || req.params.guestId;
+    // const userId = req.params.userId || req.params.guestId;
+    const email = req.params.user_email;
 
-    console.log("From FetchUSerByGuestId: ", userId);
+    console.log("From FetchUSerByGuestId: ", email);
 
-    const user = await User.findOne({ user_id: userId });
+    const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(404).json({
         status: "failure",

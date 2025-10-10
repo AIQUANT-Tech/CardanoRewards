@@ -11,6 +11,10 @@ const loyaltyUserWalletTransactionSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
+  username: {
+    type: String,
+    required: true,
+  },
   transaction_date: {
     type: Date,
     required: true,

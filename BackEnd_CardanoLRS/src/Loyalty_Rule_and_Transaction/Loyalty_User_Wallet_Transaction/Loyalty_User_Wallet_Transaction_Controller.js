@@ -2,10 +2,12 @@ import LoyaltyUserWalletTransaction from "./Loyalty_User_Wallet_Transaction_Sche
 
 export const getTransactionsByUserId = async (req, res) => {
   try {
-    const { user_id } = req.params;
+    const { username } = req.params;
+
+    console.log("I am before transaction: ", username);
 
     const transactions = await LoyaltyUserWalletTransaction.find({
-      user_id,
+      username,
     }).sort({ transaction_date: -1 });
 
     if (!transactions || transactions.length === 0) {

@@ -273,6 +273,7 @@ export const processUserMappingFeed = async () => {
           const transaction = new LoyaltyUserWalletTransaction({
             transaction_id: newTransactionId,
             user_id: user.user_id,
+            username: guest.email,
             transaction_date: new Date(),
             transaction_amount: rewardAda, // ADA amount credited
             transaction_type: "credit",

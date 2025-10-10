@@ -5,6 +5,6 @@ import { getTransactionsByUserId } from "./Loyalty_User_Wallet_Transaction_Contr
 const router = express.Router();
 
 // GET /api/transactions/user/:user_id
-router.get("/user/:user_id", getTransactionsByUserId);
+router.get("/user/:username", getTransactionsByUserId);
 
 export default router;
