@@ -230,6 +230,7 @@ export const applyReward = async (req, res) => {
         const walletTx = new LoyaltyUserWalletTransaction({
           transaction_id: Date.now(), // or use a sequence generator
           user_id: user.user_id, // ref to User objectId
+          username: user.email,
           transaction_date: new Date(),
           transaction_amount: reward_usage,
           transaction_type: "debit",
