@@ -28,22 +28,22 @@ startScheduler();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/offers", loyaltyOfferRoutes);
-app.use("/api/tier", LoyaltyTierRoutes);
-app.use("/api/map", LoyaltyMapOfferTier);
-app.use("/api/rule", LoyaltyRuleTransaction);
-app.use("/api/user", LoyaltyUser);
-app.use("/api/map/user", LoyaltyOfferUserMap);
-app.use("/api/hotel_booking_system/", HbsRoutes);
-app.use("/api/scheduler", schedulerRoutes);
+app.use("/lrs/api/offers", loyaltyOfferRoutes);
+app.use("/lrs/api/tier", LoyaltyTierRoutes);
+app.use("/lrs/api/map", LoyaltyMapOfferTier);
+app.use("/lrs/api/rule", LoyaltyRuleTransaction);
+app.use("/lrs/api/user", LoyaltyUser);
+app.use("/lrs/api/map/user", LoyaltyOfferUserMap);
+app.use("/lrs/api/hotel_booking_system/", HbsRoutes);
+app.use("/lrs/api/scheduler", schedulerRoutes);
 
-app.use("/api/transaction", transactionRoutes);
-app.use("/api/rewardTransaction", rewardTransactionRoute);
+app.use("/lrs/api/transaction", transactionRoutes);
+app.use("/lrs/api/rewardTransaction", rewardTransactionRoute);
 
-app.use("/api/rewardBalanceTotal", rewardbalance);
-app.use("/api/usertransaction", userTransaction);
+app.use("/lrs/api/rewardBalanceTotal", rewardbalance);
+app.use("/lrs/api/usertransaction", userTransaction);
 
-app.use("/api/reward", reward);
+app.use("/lrs/api/reward", reward);
 
 app.listen(5003, () => {
   console.log(`Server is running on port 5003`);
