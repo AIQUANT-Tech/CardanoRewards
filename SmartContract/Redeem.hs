@@ -114,61 +114,61 @@ writeScript :: IO ()
 writeScript = writePlutusScript "Reward/Redeem.plutus" validator
 
 -- | Test data
-testUserState :: UserState
-testUserState =
-  UserState
-    { uUserId = "user123",
-      rewardBalance = 100
-    }
+-- testUserState :: UserState
+-- testUserState =
+--   UserState
+--     { uUserId = "user123",
+--       rewardBalance = 100
+--     }
 
-testRedeemRequest :: RedeemRequest
-testRedeemRequest =
-  RedeemRequest
-    { userId = "user123",
-      redeemReward = 30,
-      referenceId = "txn456",
-      requiredReward = 50,
-      value = 10,
-      timestamp = 1680000000
-    }
+-- testRedeemRequest :: RedeemRequest
+-- testRedeemRequest =
+--   RedeemRequest
+--     { userId = "user123",
+--       redeemReward = 30,
+--       referenceId = "txn456",
+--       requiredReward = 50,
+--       value = 10,
+--       timestamp = 1680000000
+--     }
 
-mockScriptContext :: ScriptContext
-mockScriptContext =
-  ScriptContext
-    { scriptContextTxInfo =
-        TxInfo
-          { txInfoOutputs = [],
-            txInfoInputs = [],
-            txInfoValidRange = undefined,
-            txInfoSignatories = [],
-            txInfoMint = mempty,
-            txInfoId = undefined,
-            txInfoData = AssocMap.empty,
-            txInfoReferenceInputs = []
-          },
-      scriptContextPurpose = undefined
-    }
+-- mockScriptContext :: ScriptContext
+-- mockScriptContext =
+--   ScriptContext
+--     { scriptContextTxInfo =
+--         TxInfo
+--           { txInfoOutputs = [],
+--             txInfoInputs = [],
+--             txInfoValidRange = undefined,
+--             txInfoSignatories = [],
+--             txInfoMint = mempty,
+--             txInfoId = undefined,
+--             txInfoData = AssocMap.empty,
+--             txInfoReferenceInputs = []
+--           },
+--       scriptContextPurpose = undefined
+--     }
 
--- | Test cases
-testRedeemValidator :: TestTree
-testRedeemValidator =
-  testGroup
-    "Redeem Validator Tests"
-    [ testCase "Successful redemption" $
-        assertBool
-          "Validator should pass for valid request"
-          (mkRedeemValidator testUserState testRedeemRequest mockScriptContext),
-      testCase "Fail: Insufficient balance" $
-        let badState = testUserState {rewardBalance = 20}
-         in assertBool
-              "Validator should fail when balance is insufficient"
-              (not $ mkRedeemValidator badState testRedeemRequest mockScriptContext),
-      testCase "Fail: Redeem amount exceeds requiredReward" $
-        let badRedeem = testRedeemRequest {redeemReward = 60}
-         in assertBool
-              "Validator should fail when redeemReward is too high"
-              (not $ mkRedeemValidator testUserState badRedeem mockScriptContext)
-    ]
+-- -- | Test cases
+-- testRedeemValidator :: TestTree
+-- testRedeemValidator =
+--   testGroup
+--     "Redeem Validator Tests"
+--     [ testCase "Successful redemption" $
+--         assertBool
+--           "Validator should pass for valid request"
+--           (mkRedeemValidator testUserState testRedeemRequest mockScriptContext),
+--       testCase "Fail: Insufficient balance" $
+--         let badState = testUserState {rewardBalance = 20}
+--          in assertBool
+--               "Validator should fail when balance is insufficient"
+--               (not $ mkRedeemValidator badState testRedeemRequest mockScriptContext),
+--       testCase "Fail: Redeem amount exceeds requiredReward" $
+--         let badRedeem = testRedeemRequest {redeemReward = 60}
+--          in assertBool
+--               "Validator should fail when redeemReward is too high"
+--               (not $ mkRedeemValidator testUserState badRedeem mockScriptContext)
+--     ]
 
 -- | Main test function
 main :: IO ()

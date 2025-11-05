@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     const fetchTotalMembers = async () => {
       try {
-        setLoading(true);
+        // setLoading(true);
         const response = await fetch(
           `${API_BASE_URL}/api/user/fetchEndUsersInfo`,
           {
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
     const fetchTotalRewardBalance = async () => {
       try {
-        setLoadingReward(true);
+        // setLoadingReward(true);
         const response = await fetch(
           `${API_BASE_URL}/api/rewardBalanceTotal/total-reward-balance`
         );
@@ -103,21 +103,25 @@ const Dashboard = () => {
             <Card
               icon={<Gauge style={{ width: "40px", height: "40px" }} />}
               primaryText="Total Members:"
-              secondaryText={loading ? "Loading..." : totalMembers.toString()}
+              secondaryText={
+                loading ? "Loading..." : totalMembers.toString() || 0
+              }
               backgroundColor={"#f8d6d6"}
             />
             <Card
               icon={<Bitcoin style={{ width: "40px", height: "40px" }} />}
               primaryText="Rewards Given:"
               secondaryText={
-                loadingReward ? "Loading..." : totalRewardBalance.toString()
+                loadingReward
+                  ? "Loading..."
+                  : totalRewardBalance.toString() || 0
               }
               backgroundColor={"#f8d6d6"}
             />
             <Card
               icon={<Clock style={{ width: "40px", height: "40px" }} />}
               primaryText="Pending Rewards:"
-              secondaryText="8000"
+              secondaryText="0"
               backgroundColor={"#f8d6d6"}
             />
           </div>
