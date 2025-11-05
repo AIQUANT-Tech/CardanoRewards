@@ -64,7 +64,6 @@ export async function waitForUTxOWithTimeout(
   );
 }
 
-
 export const lockFundsRewardGen = async (dataToLock) => {
   if (typeof dataToLock !== "object" || dataToLock === null) {
     throw new Error("Datum must be a valid JSON object");
@@ -204,7 +203,7 @@ export async function redeemFundsRewardGen(datumToRedeem, redeemer) {
     // Step 2: Rebuild the transaction with the correct output.
     // ----------------------------
     // Calculate the new amount to lock: total input minus fee.
-    const totalInput = utxoToRedeem.assets.lovelace; // BigInt
+    const totalInput = utxoToRedeem.assets.lovelace;
     const feeBigInt = BigInt(draftTx.fee);
     const newLockedAmount = totalInput - feeBigInt;
     if (newLockedAmount <= 0n) {

@@ -17,9 +17,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-ssm": "^3.921.0",
     "@blockfrost/blockfrost-js": "^6.0.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^14.1.1",
     "all": "^0.0.0",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "cbor": "^10.0.3",

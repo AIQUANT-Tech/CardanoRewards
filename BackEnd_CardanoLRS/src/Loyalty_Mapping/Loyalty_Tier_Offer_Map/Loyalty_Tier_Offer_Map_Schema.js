@@ -10,7 +10,7 @@ const loyaltyTierOfferMapSchema = new mongoose.Schema({
     // unique: true,
   },
   tier_id: {
-    type: Number,
+    type: String,
     // required: true,
     ref: "LoyaltyTier",
   },

@@ -13,12 +13,12 @@ const userSchema = new mongoose.Schema({
   },
   hotel_group_id: {
     type: String,
-    required: true,
+    // required: true,
   },
   hotel_ids: [
     {
       type: String,
-      required: true,
+      // required: true,
     },
   ],
   email: {

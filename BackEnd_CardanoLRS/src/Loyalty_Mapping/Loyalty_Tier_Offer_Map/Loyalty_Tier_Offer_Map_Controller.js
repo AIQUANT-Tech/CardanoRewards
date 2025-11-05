@@ -10,8 +10,10 @@ export const mappingLoyaltyOffersTiers = async (req, res) => {
 
     const mappingPromises = mapping_info_offer_tier.map(async (mapping) => {
       const { offer_id, tier_id, Status } = mapping;
+      console.log(offer_id, tier_id);
 
-      const loyaltyTier = await LoyaltyTier.findOne({ tier_id });
+      const loyaltyTier = await LoyaltyTier.findOne({ _id: tier_id });
+      console.log(`Loyalty Tier: ${loyaltyTier}`);
       const loyaltyOffer = await LoyaltyOffer.findOne({ offer_id });
 
       if (!loyaltyTier) {
@@ -26,7 +28,7 @@ export const mappingLoyaltyOffersTiers = async (req, res) => {
         offer_id,
       });
 
-      console.log(existingMapping);
+      console.log("This is existing: ", existingMapping);
 
       if (existingMapping) {
         existingMapping.status = Status;

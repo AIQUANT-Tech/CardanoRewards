@@ -707,13 +707,13 @@ export const fetchGuestDetailsAgainstHotelgroupid = async (req, res) => {
     const tierMap = await LoyaltyEndUserTierMap.findOne({
       user_id: user.user_id,
     });
-    console.log(tierMap);
+    console.log("This is Tiker map: ", tierMap);
 
-    const tier = tierMap
-      ? await LoyaltyTier.findOne({ _id: tierMap.tier_id })
+    const tier = tierMap 
+      ? await LoyaltyTier.findOne({ _id: tierMap.tier_id || tierMap._id })
       : null;
 
-    console.log(tier);
+    console.log("tier:-", tier);
 
     const transactions = await LoyaltyUserWalletTransaction.find({
       user_id: user.user_id,
