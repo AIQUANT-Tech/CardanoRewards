@@ -127,8 +127,6 @@ export const getLoyaltyTiersInfo = async (req, res) => {
   try {
     const { loyalty_tier_fetch_rq } = req.body;
 
-    console.log("I am inside");
-
     const tiers = await LoyaltyTier.find();
 
     const tierList = tiers.map((tier) => ({

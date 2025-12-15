@@ -11,8 +11,16 @@ import { generateToken } from "../../auth/jwtUtil.js";
 //Create user
 export const createUser = async (req, res) => {
   try {
-    const { email, password, first_name, last_name, wallet_address, role } =
-      req.body;
+    const {
+      email,
+      password,
+      first_name,
+      last_name,
+      wallet_address,
+      role,
+      hotel_group_id,
+      hotel_ids,
+    } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -36,6 +44,8 @@ export const createUser = async (req, res) => {
       role,
       last_login: new Date(),
       Status: true,
+      hotel_group_id,
+      hotel_ids
     });
 
     await newUser.save();
@@ -50,6 +60,8 @@ export const createUser = async (req, res) => {
         wallet_address: newUser.wallet_address,
         role: newUser.role,
         created_at: newUser.created_at,
+        hotel_group_id: newUser.hotel_group_id,
+        hotel_ids: newUser.hotel_ids,
       },
     });
   } catch (error) {

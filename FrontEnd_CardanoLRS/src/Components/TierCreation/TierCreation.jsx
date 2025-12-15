@@ -40,8 +40,8 @@ const TierCreation = ({ showNext = true }) => {
         const tierData = await tierResponse.json();
         const offerData = await offerResponse.json();
 
-        setTiers(tierData.loyalty_tier_fetch_rs.tier_list || []);
-        setOffers(offerData.loyalty_offer_fetch_rs.offer_list || []);
+        setTiers(tierData.loyalty_tier_fetch_rs.tier_list);
+        setOffers(offerData.loyalty_offer_fetch_rs.offer_list);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Failed to fetch tiers or offers. Please try again.");
@@ -67,6 +67,7 @@ const TierCreation = ({ showNext = true }) => {
     const selectedTierObj = tiers.find(
       (tier) => String(tier.tier_id) === String(selectedTier)
     );
+    
 
     if (!selectedTierObj) {
       toast.error("Selected tier not found.");
@@ -124,7 +125,7 @@ const TierCreation = ({ showNext = true }) => {
           body: JSON.stringify({
             loyalty_offer_tier_mapping_rq: {
               mapping_info_offer_tier: mappings,
-              header: { user_name: "businessuser" },
+              header: { user_name: "Business User" },
             },
           }),
         }

@@ -6,19 +6,31 @@ import LoyaltyOffer from "../../Loyalty_Mast/Loyalty_Offer_Mast/Loyalty_Offer_Ma
 export const mappingLoyaltyOffersTiers = async (req, res) => {
   try {
     const { loyalty_offer_tier_mapping_rq } = req.body;
-    const { mapping_info_offer_tier } = loyalty_offer_tier_mapping_rq;
+    const { mapping_info_offer_tier, header } = loyalty_offer_tier_mapping_rq;
 
-    const mappingPromises = mapping_info_offer_tier.map(async (mapping) => {
+    for (const mapping of mapping_info_offer_tier) {
       const { offer_id, tier_id, Status } = mapping;
 
-      const loyaltyTier = await LoyaltyTier.findOne({ tier_id });
-      const loyaltyOffer = await LoyaltyOffer.findOne({ offer_id });
-
+      const loyaltyTier = await LoyaltyTier.findById(tier_id);
       if (!loyaltyTier) {
-        throw new Error(`Loyalty Tier with tier_id ${tier_id} not found`);
+        return res.status(404).json({
+          loyalty_offer_tier_mapping_rs: {
+            status: "failure",
+            message: "Loyalty Tier not found",
+          },
+        });
       }
+
+      const loyaltyOffer = await LoyaltyOffer.findOne({
+        offer_id: Number(offer_id),
+      });
       if (!loyaltyOffer) {
-        throw new Error(`Loyalty Offer with offer_id ${offer_id} not found`);
+        return res.status(404).json({
+          loyalty_offer_tier_mapping_rs: {
+            status: "failure",
+            message: "Loyalty Offer not found",
+          },
+        });
       }
 
       let existingMapping = await LoyaltyTierOfferMap.findOne({
@@ -26,43 +38,39 @@ export const mappingLoyaltyOffersTiers = async (req, res) => {
         offer_id,
       });
 
-      console.log(existingMapping);
-
       if (existingMapping) {
-        existingMapping.status = Status;
+        existingMapping.Status = Status;
         existingMapping.modified_at = new Date();
-        existingMapping.modified_by =
-          loyalty_offer_tier_mapping_rq.header.user_name;
+        existingMapping.modified_by = header.user_name;
         await existingMapping.save();
       } else {
-        const newMapping = new LoyaltyTierOfferMap({
+        await LoyaltyTierOfferMap.create({
           tier_id,
           offer_id,
-          created_by: loyalty_offer_tier_mapping_rq.header.user_name,
-          modified_by: loyalty_offer_tier_mapping_rq.header.user_name,
+          Status,
+          created_by: header.user_name,
+          modified_by: header.user_name,
           modified_at: new Date(),
-          Status: Status,
         });
-        await newMapping.save();
       }
-    });
+    }
 
-    await Promise.all(mappingPromises);
-
-    res.status(200).json({
+    return res.status(200).json({
       loyalty_offer_tier_mapping_rs: {
         status: "success",
       },
     });
   } catch (error) {
-    console.error("Error mapping loyalty offers and tiers:", error);
-    res.status(500).json({
+    console.error("Mapping error:", error);
+    return res.status(500).json({
       loyalty_offer_tier_mapping_rs: {
         status: "failure",
+        error: error.message,
       },
     });
   }
 };
+
 
 //Edit existing map with offer and tiers
 export const editMappingLoyaltyOffersTiers = async (req, res) => {
