@@ -194,7 +194,7 @@ export const fetchEndUsersInfo = async (req, res) => {
         user_id: user.user_id,
       });
 
-      const tier = await LoyaltyTier.find({ tier_id: tier_details.tier_id });
+      const tier = await LoyaltyTier.findOne({ tier_id: tier_details.tier_id });
 
       const rule = await LoyaltyTierWiseRuleSetup.findOne({
         tier_id: tier_details.tier_id,
