@@ -180,7 +180,7 @@ const CustomerList = () => {
     { key: "name", label: "Name" },
     { key: "currentTier", label: "Tier" },
     { key: "email", label: "Email" },
-    { key: "walletBalance", label: "Balance" },
+    { key: "walletBalance", label: "Rewards" },
   ];
 
   const actions = [
