@@ -242,7 +242,25 @@ export const fetchEndUsersInfo = async (req, res) => {
       //     ada_balance: user.wallet_info?.ada_balance || 0,
       //   },
       // };
+  //Adding individual user rewards balance
+  const aggregator = await LoyaltyUserWalletTransaction.aggregate([
+    
+  {
+    '$match': {
+      'username': user.email
+    }
+  }, {
+    '$group': {
+      '_id': null, 
+      'total_amount': {
+        '$sum': '$transaction_amount'
+      }
+    }
+  }
 
+  ])
+  console.log(aggregator);
+  console.log(aggregator[0].total_amount);
       const userData = {
   user_id: user.user_id,
   email: user.email,
@@ -270,7 +288,7 @@ export const fetchEndUsersInfo = async (req, res) => {
   })),
 
   wallet_info: {
-    ada_balance: user.wallet_info?.ada_balance || 0,
+    ada_balance: aggregator[0].total_amount || 0,
   },
 };
 
