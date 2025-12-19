@@ -7,6 +7,7 @@ import LoyaltyTierWiseRuleSetup from "../../Loyalty_Rule_and_Transaction/Loyalty
 import LoyaltyEndUserTierMap from "../../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Schema.js";
 
 import { generateToken } from "../../auth/jwtUtil.js";
+import mongoose from "mongoose";
 
 //Create user
 export const createUser = async (req, res) => {
@@ -193,9 +194,20 @@ export const fetchEndUsersInfo = async (req, res) => {
       const tier_details = await LoyaltyEndUserTierMap.findOne({
         user_id: user.user_id,
       });
+      if (!tier_details) {
+    console.warn(`No tier mapping found for user_id: ${user.user_id}`);
+    continue; // or handle default tier
+  }
 
-      const tier = await LoyaltyTier.findOne({ tier_id: tier_details.tier_id });
+  const tier = await LoyaltyTier.findById(tier_details.tier_id);
 
+  if (!tier) {
+    console.warn(`Tier not found for tier_id: ${tier_details.tier_id}`);
+    continue;
+  }
+
+  console.log("TIER_DETAILS:", tier_details);
+  console.log("TIER:", tier);
       const rule = await LoyaltyTierWiseRuleSetup.findOne({
         tier_id: tier_details.tier_id,
       });
@@ -204,32 +216,64 @@ export const fetchEndUsersInfo = async (req, res) => {
         _id: { $in: user.assigned_offers || [] },
       });
 
+      // const userData = {
+      //   user_id: user.user_id,
+      //   email: user.email,
+      //   user_name: user.first_name || "End User",
+      //   last_name: user.last_name || "Last Name",
+      //   tier_editable: true,
+      //   tier: {
+      //     tier_id: tier ? tier[0].tier_id : null,
+      //     tier_name: tier ? tier[0].tier_name : "No Tier",
+      //     rule_applied: rule
+      //       ? {
+      //           rule_id: rule.rule_id,
+      //           rule_desc: rule.rule_desc || " ",
+      //           conversion_rules: rule.conversion_rules || null,
+      //         }
+      //       : null,
+      //   },
+      //   assigned_offers: offers.map((offer) => ({
+      //     offer_id: offer.offer_id,
+      //     offer_name: offer.offer_name,
+      //     offer_desc: offer.offer_desc,
+      //   })),
+      //   wallet_info: {
+      //     ada_balance: user.wallet_info?.ada_balance || 0,
+      //   },
+      // };
+
       const userData = {
-        user_id: user.user_id,
-        email: user.email,
-        user_name: user.first_name || "End User",
-        last_name: user.last_name || "Last Name",
-        tier_editable: true,
-        tier: {
-          tier_id: tier ? tier[0].tier_id : null,
-          tier_name: tier ? tier[0].tier_name : "No Tier",
-          rule_applied: rule
-            ? {
-                rule_id: rule.rule_id,
-                rule_desc: rule.rule_desc || " ",
-                conversion_rules: rule.conversion_rules || null,
-              }
-            : null,
-        },
-        assigned_offers: offers.map((offer) => ({
-          offer_id: offer.offer_id,
-          offer_name: offer.offer_name,
-          offer_desc: offer.offer_desc,
-        })),
-        wallet_info: {
-          ada_balance: user.wallet_info?.ada_balance || 0,
-        },
-      };
+  user_id: user.user_id,
+  email: user.email,
+  user_name: user.first_name || "End User",
+  last_name: user.last_name || "Last Name",
+  tier_editable: true,
+
+  tier: {
+    tier_id: tier ? tier._id : null,
+    tier_name: tier ? tier.tier_name : "No Tier",
+
+    rule_applied: rule
+      ? {
+          rule_id: rule.rule_id,
+          rule_desc: rule.rule_desc || " ",
+          conversion_rules: rule.conversion_rules || null,
+        }
+      : null,
+  },
+
+  assigned_offers: offers.map((offer) => ({
+    offer_id: offer.offer_id,
+    offer_name: offer.offer_name,
+    offer_desc: offer.offer_desc,
+  })),
+
+  wallet_info: {
+    ada_balance: user.wallet_info?.ada_balance || 0,
+  },
+};
+
 
       userInfoList.push(userData);
     }
