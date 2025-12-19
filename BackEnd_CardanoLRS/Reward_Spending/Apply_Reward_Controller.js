@@ -231,6 +231,7 @@ export const applyReward = async (req, res) => {
           transaction_id: Date.now(), // or use a sequence generator
           user_id: user.user_id, // ref to User objectId
           username: user.email,
+          booking_id: rewardTx.transaction_id,
           transaction_date: new Date(),
           transaction_amount: reward_usage,
           transaction_type: "debit",

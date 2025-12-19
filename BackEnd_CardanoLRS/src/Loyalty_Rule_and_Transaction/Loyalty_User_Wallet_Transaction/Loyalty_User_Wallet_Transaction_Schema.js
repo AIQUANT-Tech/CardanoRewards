@@ -19,6 +19,11 @@ const loyaltyUserWalletTransactionSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  booking_id: {
+    type: String,
+    required: false,
+    unique: true,
+  },
   transaction_amount: {
     type: Number,
     required: false,
