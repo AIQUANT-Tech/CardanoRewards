@@ -10,15 +10,14 @@ import LoyaltyUser from "../Loyalty_Mast/Loyalty_User_Mast/Loyalty_User_Mast_Rou
 import LoyaltyOfferUserMap from "../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Route.js";
 import HbsRoutes from "../../Hotel_Booking_System/Hbs_Routes.js";
 import schedulerRoutes from "../Scheduler/schedulerRoutes.js";
-import transactionRoutes from "../../Cardano_Smartcontract/ChainRoute.js";
-import rewardTransactionRoute from "../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRoute.js";
 import rewardbalance from "../Total_Reward/Reward_Balance.js";
-import reward from "../../Reward_Spending/Apply_Reward_Route.js";
 import { startScheduler } from "../Scheduler/scheduler.js";
 
 import userTransaction from "../Loyalty_Rule_and_Transaction/Loyalty_User_Wallet_Transaction/Loyalty_User_Wallet_Transaction_Routes.js";
 
 dotenv.config();
+
+const DEMO_MODE = process.env.DEMO_MODE === "true";
 
 const app = express();
 
@@ -37,13 +36,17 @@ app.use("/lrs/api/map/user", LoyaltyOfferUserMap);
 app.use("/lrs/api/hotel_booking_system/", HbsRoutes);
 app.use("/lrs/api/scheduler", schedulerRoutes);
 
-app.use("/lrs/api/transaction", transactionRoutes);
-app.use("/lrs/api/rewardTransaction", rewardTransactionRoute);
-
 app.use("/lrs/api/rewardBalanceTotal", rewardbalance);
 app.use("/lrs/api/usertransaction", userTransaction);
 
-app.use("/lrs/api/reward", reward);
+if (!DEMO_MODE) {
+  const { default: transactionRoutes } = await import("../../Cardano_Smartcontract/ChainRoute.js");
+  const { default: rewardTransactionRoute } = await import("../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRoute.js");
+  const { default: reward } = await import("../../Reward_Spending/Apply_Reward_Route.js");
+  app.use("/lrs/api/transaction", transactionRoutes);
+  app.use("/lrs/api/rewardTransaction", rewardTransactionRoute);
+  app.use("/lrs/api/reward", reward);
+}
 
 app.listen(5003, () => {
   console.log(`Server is running on port 5003`);

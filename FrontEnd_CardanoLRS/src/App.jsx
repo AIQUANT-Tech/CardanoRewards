@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./Pages/BusinessEnd/SignInPage/LandingPage.jsx";
 
 import SignUpPage from "./Pages/BusinessEnd/SignUpPage/SignUpPage.jsx";
@@ -25,6 +25,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/Business" replace />} />
         <Route path="/Business" element={<LandingPage />} />
         <Route path="/SignInPage" element={<SignInPage />} />
         <Route path="/SignUpPage" element={<SignUpPage />} />

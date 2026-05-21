@@ -1,18 +1,26 @@
 import axios from "axios";
 import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
 import BookingInfo from "../../Hotel_Booking_System/Hbs_Booking_Info_Schema.js";
 import GuestInfo from "../../Hotel_Booking_System/Hbs_Guest_Info_Schema.js";
 import User from "../Loyalty_Mast/Loyalty_User_Mast/Loyalty_User_Mast_Schema.js";
 import UserGuestMap from "./UserGuestMap.js";
 import LoyaltyEndUserTierMap from "../Loyalty_Mapping/Loyalty_Enduser_Tier_Map/Loyalty_Enduser_Tier_Map_Schema.js";
 import LoyaltyTierWiseRuleSetup from "../Loyalty_Rule_and_Transaction/Loyalty_Tier_Wise_Rule_Setup/Loyalty_Tier_Wise_Rule_Setup_Schema.js";
-import {
-  lockFundsRewardGen,
-  waitForUTxOWithTimeout,
-  redeemFundsRewardGen,
-  scriptAddress,
-} from "../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRewardGen.js";
-import { Constr } from "lucid-cardano";
+
+dotenv.config();
+const DEMO_MODE = process.env.DEMO_MODE === "true";
+
+let Constr, lockFundsRewardGen, waitForUTxOWithTimeout, redeemFundsRewardGen, scriptAddress;
+if (!DEMO_MODE) {
+  const bc = await import("../../Cardano_Smartcontract_RewardGeneration/CardanoLucidRewardGen.js");
+  const lucidCardano = await import("lucid-cardano");
+  Constr = lucidCardano.Constr;
+  lockFundsRewardGen = bc.lockFundsRewardGen;
+  waitForUTxOWithTimeout = bc.waitForUTxOWithTimeout;
+  redeemFundsRewardGen = bc.redeemFundsRewardGen;
+  scriptAddress = bc.scriptAddress;
+}
 import LoyaltyUserWalletTransaction from "../Loyalty_Rule_and_Transaction/Loyalty_User_Wallet_Transaction/Loyalty_User_Wallet_Transaction_Schema.js";
 
 async function getCurrencyToADARate(currency) {
@@ -237,27 +245,25 @@ export const processUserMappingFeed = async () => {
             timestamp: Date.now(),
           };
 
-          const txHash = await lockFundsRewardGen(datum);
-          console.log(`✅ Locked reward for ${user.email}. TX: ${txHash}`);
+          if (DEMO_MODE) {
+            console.log(`[DEMO] Skipping blockchain. Crediting ${rewardAda} ADA directly to ${user.email}`);
+          } else {
+            const txHash = await lockFundsRewardGen(datum);
+            console.log(`✅ Locked reward for ${user.email}. TX: ${txHash}`);
 
-          try {
-            const constrDatum = new Constr(0, [
-              BigInt(datum.amount),
-              BigInt(datum.existingBalance),
-              BigInt(datum.timestamp),
-            ]);
-            // Wait for UTxO to appear
-            await waitForUTxOWithTimeout(scriptAddress, constrDatum, txHash);
-
-            // Redeem immediately
-            const redeemHash = await redeemFundsRewardGen(datum, {});
-            console.log(`🔓 Redeemed reward TX: ${redeemHash}`);
-          } catch (redeemError) {
-            console.error(
-              "❌ Redemption failed, aborting further processing:",
-              redeemError
-            );
-            break;
+            try {
+              const constrDatum = new Constr(0, [
+                BigInt(datum.amount),
+                BigInt(datum.existingBalance),
+                BigInt(datum.timestamp),
+              ]);
+              await waitForUTxOWithTimeout(scriptAddress, constrDatum, txHash);
+              const redeemHash = await redeemFundsRewardGen(datum, {});
+              console.log(`🔓 Redeemed reward TX: ${redeemHash}`);
+            } catch (redeemError) {
+              console.error("❌ Redemption failed, aborting further processing:", redeemError);
+              break;
+            }
           }
 
           // Update guest.reward_balance (stored in ADA) and record the assigned tier.

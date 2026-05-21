@@ -8,10 +8,10 @@ import Notifications from "../Notification/Notification";
 
 const Header = ({
   title,
-  backgroundColor,
-  showWalletIcon,
-  showBellIcon,
-  children,
+  backgroundColor = "#f0c6c6",
+  showWalletIcon = true,
+  showBellIcon = true,
+  children = <LogoutButton />,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -49,11 +49,5 @@ Header.propTypes = {
   children: PropTypes.node,
 };
 
-Header.defaultProps = {
-  backgroundColor: "#f0c6c6",
-  showWalletIcon: true,
-  showBellIcon: true,
-  children: <LogoutButton />,
-};
 
 export default Header;
